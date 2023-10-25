@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.7.34009.444
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RefferalLinks.API", "RefferalLinks.API\RefferalLinks.API.csproj", "{CC0F6C77-3593-42E1-8EA9-B6911D7345CA}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{CC0F6C77-3593-42E1-8EA9-B6911D7345CA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CC0F6C77-3593-42E1-8EA9-B6911D7345CA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CC0F6C77-3593-42E1-8EA9-B6911D7345CA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CC0F6C77-3593-42E1-8EA9-B6911D7345CA}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {50F8199F-E796-4242-8773-2ED26A6F8A62}
+	EndGlobalSection
+EndGlobal
