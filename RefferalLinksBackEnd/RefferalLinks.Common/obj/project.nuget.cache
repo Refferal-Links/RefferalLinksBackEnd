@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "JyhakJkLHZANmvLS+/NT7dPowgXMkhcFyKVYtCHMOeotL+23OUk/rD2lVIwLhaPBh041y8gbku/MfeOGC/ugaw==",
+  "dgSpecHash": "d00+9sZPAThKPtkJx3oqET/oKw7D16o3LUDAYl8jbDJVX7YGnRewZOY9mQhjHgWF3Js2CgHYEtvnSVMuHSYyIQ==",
   "success": true,
-  "projectFilePath": "D:\\GitHub\\RefferalLinksBackEnd\\RefferalLinksBackEnd\\RefferalLinks.Common\\RefferalLinks.Common.csproj",
+  "projectFilePath": "D:\\binh\\projects\\refferal\\RefferalLinksBackEnd\\RefferalLinksBackEnd\\RefferalLinks.Common\\RefferalLinks.Common.csproj",
   "expectedPackageFiles": [],
   "logs": []
 }

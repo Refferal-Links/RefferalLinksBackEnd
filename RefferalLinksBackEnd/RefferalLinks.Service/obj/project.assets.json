@@ -121,24 +121,19 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\ANH KIET\\.nuget\\packages\\": {},
-    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
+    "C:\\Users\\ITEL\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\GitHub\\RefferalLinksBackEnd\\RefferalLinksBackEnd\\RefferalLinks.Service\\RefferalLinks.Service.csproj",
+      "projectUniqueName": "D:\\binh\\projects\\refferal\\RefferalLinksBackEnd\\RefferalLinksBackEnd\\RefferalLinks.Service\\RefferalLinks.Service.csproj",
       "projectName": "RefferalLinks.Service",
-      "projectPath": "D:\\GitHub\\RefferalLinksBackEnd\\RefferalLinksBackEnd\\RefferalLinks.Service\\RefferalLinks.Service.csproj",
-      "packagesPath": "C:\\Users\\ANH KIET\\.nuget\\packages\\",
-      "outputPath": "D:\\GitHub\\RefferalLinksBackEnd\\RefferalLinksBackEnd\\RefferalLinks.Service\\obj\\",
+      "projectPath": "D:\\binh\\projects\\refferal\\RefferalLinksBackEnd\\RefferalLinksBackEnd\\RefferalLinks.Service\\RefferalLinks.Service.csproj",
+      "packagesPath": "C:\\Users\\ITEL\\.nuget\\packages\\",
+      "outputPath": "D:\\binh\\projects\\refferal\\RefferalLinksBackEnd\\RefferalLinksBackEnd\\RefferalLinks.Service\\obj\\",
       "projectStyle": "PackageReference",
-      "fallbackFolders": [
-        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
-      ],
       "configFilePaths": [
-        "C:\\Users\\ANH KIET\\AppData\\Roaming\\NuGet\\NuGet.Config",
-        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+        "C:\\Users\\ITEL\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -185,7 +180,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.400\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.304\\RuntimeIdentifierGraph.json"
       }
     }
   }
