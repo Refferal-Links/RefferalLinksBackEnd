@@ -3,7 +3,19 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.7.34009.444
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RefferalLinks.API", "RefferalLinks.API\RefferalLinks.API.csproj", "{CC0F6C77-3593-42E1-8EA9-B6911D7345CA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RefferalLinks.API", "RefferalLinks.API\RefferalLinks.API.csproj", "{CC0F6C77-3593-42E1-8EA9-B6911D7345CA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RefferalLinks.DAL", "RefferalLinks.DAL\RefferalLinks.DAL.csproj", "{8197C03B-662D-4668-A76A-384BD80C509E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RefferalLinks.Models", "RefferalLinks.Models\RefferalLinks.Models.csproj", "{5742BFDB-4FB0-4296-ABA8-EECA75F1E7C2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RefferalLinks.Common", "RefferalLinks.Common\RefferalLinks.Common.csproj", "{2F795356-0624-4C3A-8C21-4D4182A3510D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RefferalLinks.Service", "RefferalLinks.Service\RefferalLinks.Service.csproj", "{6EE6F8B1-4843-468E-96D2-9932DF405210}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RefferalLinks.TransferCronjob", "RefferalLinks.TransferCronjob\RefferalLinks.TransferCronjob.csproj", "{468FB21F-A42B-475F-81E7-EB8CD3866E33}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Maynghien.Common", "Maynghien.Common\Maynghien.Common.csproj", "{F8F7C8CA-359E-4EBC-B909-7409657A9316}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +27,30 @@ Global
 		{CC0F6C77-3593-42E1-8EA9-B6911D7345CA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CC0F6C77-3593-42E1-8EA9-B6911D7345CA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CC0F6C77-3593-42E1-8EA9-B6911D7345CA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8197C03B-662D-4668-A76A-384BD80C509E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8197C03B-662D-4668-A76A-384BD80C509E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8197C03B-662D-4668-A76A-384BD80C509E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8197C03B-662D-4668-A76A-384BD80C509E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5742BFDB-4FB0-4296-ABA8-EECA75F1E7C2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5742BFDB-4FB0-4296-ABA8-EECA75F1E7C2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5742BFDB-4FB0-4296-ABA8-EECA75F1E7C2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5742BFDB-4FB0-4296-ABA8-EECA75F1E7C2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2F795356-0624-4C3A-8C21-4D4182A3510D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2F795356-0624-4C3A-8C21-4D4182A3510D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2F795356-0624-4C3A-8C21-4D4182A3510D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2F795356-0624-4C3A-8C21-4D4182A3510D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6EE6F8B1-4843-468E-96D2-9932DF405210}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6EE6F8B1-4843-468E-96D2-9932DF405210}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6EE6F8B1-4843-468E-96D2-9932DF405210}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6EE6F8B1-4843-468E-96D2-9932DF405210}.Release|Any CPU.Build.0 = Release|Any CPU
+		{468FB21F-A42B-475F-81E7-EB8CD3866E33}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{468FB21F-A42B-475F-81E7-EB8CD3866E33}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{468FB21F-A42B-475F-81E7-EB8CD3866E33}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{468FB21F-A42B-475F-81E7-EB8CD3866E33}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F8F7C8CA-359E-4EBC-B909-7409657A9316}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F8F7C8CA-359E-4EBC-B909-7409657A9316}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F8F7C8CA-359E-4EBC-B909-7409657A9316}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F8F7C8CA-359E-4EBC-B909-7409657A9316}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

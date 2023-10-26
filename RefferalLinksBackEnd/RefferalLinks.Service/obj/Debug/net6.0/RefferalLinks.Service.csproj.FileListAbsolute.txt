@@ -1,0 +1,11 @@
+D:\GitHub\RefferalLinksBackEnd\RefferalLinksBackEnd\RefferalLinks.Service\bin\Debug\net6.0\RefferalLinks.Service.deps.json
+D:\GitHub\RefferalLinksBackEnd\RefferalLinksBackEnd\RefferalLinks.Service\bin\Debug\net6.0\RefferalLinks.Service.dll
+D:\GitHub\RefferalLinksBackEnd\RefferalLinksBackEnd\RefferalLinks.Service\bin\Debug\net6.0\RefferalLinks.Service.pdb
+D:\GitHub\RefferalLinksBackEnd\RefferalLinksBackEnd\RefferalLinks.Service\obj\Debug\net6.0\RefferalLinks.Service.GeneratedMSBuildEditorConfig.editorconfig
+D:\GitHub\RefferalLinksBackEnd\RefferalLinksBackEnd\RefferalLinks.Service\obj\Debug\net6.0\RefferalLinks.Service.AssemblyInfoInputs.cache
+D:\GitHub\RefferalLinksBackEnd\RefferalLinksBackEnd\RefferalLinks.Service\obj\Debug\net6.0\RefferalLinks.Service.AssemblyInfo.cs
+D:\GitHub\RefferalLinksBackEnd\RefferalLinksBackEnd\RefferalLinks.Service\obj\Debug\net6.0\RefferalLinks.Service.csproj.CoreCompileInputs.cache
+D:\GitHub\RefferalLinksBackEnd\RefferalLinksBackEnd\RefferalLinks.Service\obj\Debug\net6.0\RefferalLinks.Service.dll
+D:\GitHub\RefferalLinksBackEnd\RefferalLinksBackEnd\RefferalLinks.Service\obj\Debug\net6.0\refint\RefferalLinks.Service.dll
+D:\GitHub\RefferalLinksBackEnd\RefferalLinksBackEnd\RefferalLinks.Service\obj\Debug\net6.0\RefferalLinks.Service.pdb
+D:\GitHub\RefferalLinksBackEnd\RefferalLinksBackEnd\RefferalLinks.Service\obj\Debug\net6.0\ref\RefferalLinks.Service.dll

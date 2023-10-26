@@ -1,0 +1,11 @@
+D:\GitHub\RefferalLinksBackEnd\RefferalLinksBackEnd\RefferalLinks.Models\bin\Debug\net6.0\RefferalLinks.Models.deps.json
+D:\GitHub\RefferalLinksBackEnd\RefferalLinksBackEnd\RefferalLinks.Models\bin\Debug\net6.0\RefferalLinks.Models.dll
+D:\GitHub\RefferalLinksBackEnd\RefferalLinksBackEnd\RefferalLinks.Models\bin\Debug\net6.0\RefferalLinks.Models.pdb
+D:\GitHub\RefferalLinksBackEnd\RefferalLinksBackEnd\RefferalLinks.Models\obj\Debug\net6.0\RefferalLinks.Models.GeneratedMSBuildEditorConfig.editorconfig
+D:\GitHub\RefferalLinksBackEnd\RefferalLinksBackEnd\RefferalLinks.Models\obj\Debug\net6.0\RefferalLinks.Models.AssemblyInfoInputs.cache
+D:\GitHub\RefferalLinksBackEnd\RefferalLinksBackEnd\RefferalLinks.Models\obj\Debug\net6.0\RefferalLinks.Models.AssemblyInfo.cs
+D:\GitHub\RefferalLinksBackEnd\RefferalLinksBackEnd\RefferalLinks.Models\obj\Debug\net6.0\RefferalLinks.Models.csproj.CoreCompileInputs.cache
+D:\GitHub\RefferalLinksBackEnd\RefferalLinksBackEnd\RefferalLinks.Models\obj\Debug\net6.0\RefferalLinks.Models.dll
+D:\GitHub\RefferalLinksBackEnd\RefferalLinksBackEnd\RefferalLinks.Models\obj\Debug\net6.0\refint\RefferalLinks.Models.dll
+D:\GitHub\RefferalLinksBackEnd\RefferalLinksBackEnd\RefferalLinks.Models\obj\Debug\net6.0\RefferalLinks.Models.pdb
+D:\GitHub\RefferalLinksBackEnd\RefferalLinksBackEnd\RefferalLinks.Models\obj\Debug\net6.0\ref\RefferalLinks.Models.dll

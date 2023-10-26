@@ -1,0 +1,15 @@
+D:\GitHub\RefferalLinksBackEnd\RefferalLinksBackEnd\RefferalLinks.DAL\bin\Debug\net6.0\RefferalLinks.DAL.deps.json
+D:\GitHub\RefferalLinksBackEnd\RefferalLinksBackEnd\RefferalLinks.DAL\bin\Debug\net6.0\RefferalLinks.DAL.dll
+D:\GitHub\RefferalLinksBackEnd\RefferalLinksBackEnd\RefferalLinks.DAL\bin\Debug\net6.0\RefferalLinks.DAL.pdb
+D:\GitHub\RefferalLinksBackEnd\RefferalLinksBackEnd\RefferalLinks.DAL\bin\Debug\net6.0\Maynghien.Common.dll
+D:\GitHub\RefferalLinksBackEnd\RefferalLinksBackEnd\RefferalLinks.DAL\bin\Debug\net6.0\Maynghien.Common.pdb
+D:\GitHub\RefferalLinksBackEnd\RefferalLinksBackEnd\RefferalLinks.DAL\obj\Debug\net6.0\RefferalLinks.DAL.csproj.AssemblyReference.cache
+D:\GitHub\RefferalLinksBackEnd\RefferalLinksBackEnd\RefferalLinks.DAL\obj\Debug\net6.0\RefferalLinks.DAL.GeneratedMSBuildEditorConfig.editorconfig
+D:\GitHub\RefferalLinksBackEnd\RefferalLinksBackEnd\RefferalLinks.DAL\obj\Debug\net6.0\RefferalLinks.DAL.AssemblyInfoInputs.cache
+D:\GitHub\RefferalLinksBackEnd\RefferalLinksBackEnd\RefferalLinks.DAL\obj\Debug\net6.0\RefferalLinks.DAL.AssemblyInfo.cs
+D:\GitHub\RefferalLinksBackEnd\RefferalLinksBackEnd\RefferalLinks.DAL\obj\Debug\net6.0\RefferalLinks.DAL.csproj.CoreCompileInputs.cache
+D:\GitHub\RefferalLinksBackEnd\RefferalLinksBackEnd\RefferalLinks.DAL\obj\Debug\net6.0\RefferalLinks.DAL.csproj.CopyComplete
+D:\GitHub\RefferalLinksBackEnd\RefferalLinksBackEnd\RefferalLinks.DAL\obj\Debug\net6.0\RefferalLinks.DAL.dll
+D:\GitHub\RefferalLinksBackEnd\RefferalLinksBackEnd\RefferalLinks.DAL\obj\Debug\net6.0\refint\RefferalLinks.DAL.dll
+D:\GitHub\RefferalLinksBackEnd\RefferalLinksBackEnd\RefferalLinks.DAL\obj\Debug\net6.0\RefferalLinks.DAL.pdb
+D:\GitHub\RefferalLinksBackEnd\RefferalLinksBackEnd\RefferalLinks.DAL\obj\Debug\net6.0\ref\RefferalLinks.DAL.dll

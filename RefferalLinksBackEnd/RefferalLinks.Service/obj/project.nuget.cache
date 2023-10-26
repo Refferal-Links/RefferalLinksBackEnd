@@ -1,0 +1,11 @@
+{
+  "version": 2,
+  "dgSpecHash": "DOr0lbF8ziC3nihusZ88JnyXOfo71alVpK9wY9YUVu4c9dsOvJWs1Ocdm+xJiz4Kf3bXKNGXxQ+Xp2q0MKNtEg==",
+  "success": true,
+  "projectFilePath": "D:\\GitHub\\RefferalLinksBackEnd\\RefferalLinksBackEnd\\RefferalLinks.Service\\RefferalLinks.Service.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\ANH KIET\\.nuget\\packages\\automapper\\12.0.1\\automapper.12.0.1.nupkg.sha512",
+    "C:\\Users\\ANH KIET\\.nuget\\packages\\microsoft.csharp\\4.7.0\\microsoft.csharp.4.7.0.nupkg.sha512"
+  ],
+  "logs": []
+}
