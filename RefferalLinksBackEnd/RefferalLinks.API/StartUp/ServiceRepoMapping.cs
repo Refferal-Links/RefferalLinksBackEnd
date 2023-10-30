@@ -11,9 +11,11 @@ namespace RefferalLinks.API.StartUp
 		public void Mapping(WebApplicationBuilder builder)
 		{
 			builder.Services.AddScoped<IBankService, BankService>();
+			builder.Services.AddScoped<ICampaignService, CampaignService>();
 
 
 			builder.Services.AddScoped<IBankRepository, BankRepository>();
+			builder.Services.AddScoped<ICampaignRepository, CampaignRepository>();
 		}
 	}
 }
