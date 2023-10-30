@@ -5,6 +5,8 @@ using System.Runtime;
 using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
+using RefferalLinks.DAL.Models.Entity;
+using RefferalLinks.Models.Dto;
 
 namespace RefferalLinks.Service.Mapper
 {
@@ -17,7 +19,7 @@ namespace RefferalLinks.Service.Mapper
 
 		public void CreateMap()
 		{
-			
+			CreateMap<Bank, BankDto>().ReverseMap();
 		}
 	}
 }

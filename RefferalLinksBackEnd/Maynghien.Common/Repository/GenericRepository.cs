@@ -144,7 +144,7 @@ namespace Maynghien.Common.Repository
             _context.ChangeTracker.Clear();
         }
 
-        public TEntity? Get(int id)
+        public TEntity? Get(Guid id)
         {
             return GetSet().Find(id);
         }
