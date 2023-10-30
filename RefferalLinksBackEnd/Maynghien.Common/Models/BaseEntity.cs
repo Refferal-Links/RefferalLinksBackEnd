@@ -10,8 +10,7 @@ namespace MayNghien.Common.Models.Entity
 {
     public class BaseEntity
     {
-        [DatabaseGeneratedAttribute(DatabaseGeneratedOption.Identity),Key]
-        public int Id { get; set; }
+        public Guid Id { get; set; }
         public DateTime? CreatedOn { get; set; }
         public string? CreatedBy { get; set; }
         public DateTime? ModifiedOn { get; set; }
