@@ -9,3 +9,7 @@ D:\GitHub\RefferalLinksBackEnd\RefferalLinksBackEnd\RefferalLinks.Models\obj\Deb
 D:\GitHub\RefferalLinksBackEnd\RefferalLinksBackEnd\RefferalLinks.Models\obj\Debug\net6.0\refint\RefferalLinks.Models.dll
 D:\GitHub\RefferalLinksBackEnd\RefferalLinksBackEnd\RefferalLinks.Models\obj\Debug\net6.0\RefferalLinks.Models.pdb
 D:\GitHub\RefferalLinksBackEnd\RefferalLinksBackEnd\RefferalLinks.Models\obj\Debug\net6.0\ref\RefferalLinks.Models.dll
+D:\GitHub\RefferalLinksBackEnd\RefferalLinksBackEnd\RefferalLinks.Models\bin\Debug\net6.0\Maynghien.Common.dll
+D:\GitHub\RefferalLinksBackEnd\RefferalLinksBackEnd\RefferalLinks.Models\bin\Debug\net6.0\Maynghien.Common.pdb
+D:\GitHub\RefferalLinksBackEnd\RefferalLinksBackEnd\RefferalLinks.Models\obj\Debug\net6.0\RefferalLinks.Models.csproj.AssemblyReference.cache
+D:\GitHub\RefferalLinksBackEnd\RefferalLinksBackEnd\RefferalLinks.Models\obj\Debug\net6.0\RefferalLinks.Models.csproj.CopyComplete

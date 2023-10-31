@@ -98,3 +98,15 @@ D:\GitHub\RefferalLinksBackEnd\RefferalLinksBackEnd\RefferalLinks.API\obj\Debug\
 D:\GitHub\RefferalLinksBackEnd\RefferalLinksBackEnd\RefferalLinks.API\obj\Debug\net6.0\RefferalLinks.API.pdb
 D:\GitHub\RefferalLinksBackEnd\RefferalLinksBackEnd\RefferalLinks.API\obj\Debug\net6.0\RefferalLinks.API.genruntimeconfig.cache
 D:\GitHub\RefferalLinksBackEnd\RefferalLinksBackEnd\RefferalLinks.API\obj\Debug\net6.0\ref\RefferalLinks.API.dll
+D:\GitHub\RefferalLinksBackEnd\RefferalLinksBackEnd\RefferalLinks.API\bin\Debug\net6.0\AutoMapper.dll
+D:\GitHub\RefferalLinksBackEnd\RefferalLinksBackEnd\RefferalLinks.API\bin\Debug\net6.0\AutoMapper.Extensions.Microsoft.DependencyInjection.dll
+D:\GitHub\RefferalLinksBackEnd\RefferalLinksBackEnd\RefferalLinks.API\bin\Debug\net6.0\EntityFramework.SqlServer.dll
+D:\GitHub\RefferalLinksBackEnd\RefferalLinksBackEnd\RefferalLinks.API\bin\Debug\net6.0\EntityFramework.dll
+D:\GitHub\RefferalLinksBackEnd\RefferalLinksBackEnd\RefferalLinks.API\bin\Debug\net6.0\LinqKit.dll
+D:\GitHub\RefferalLinksBackEnd\RefferalLinksBackEnd\RefferalLinks.API\bin\Debug\net6.0\LinqKit.Core.dll
+D:\GitHub\RefferalLinksBackEnd\RefferalLinksBackEnd\RefferalLinks.API\bin\Debug\net6.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
+D:\GitHub\RefferalLinksBackEnd\RefferalLinksBackEnd\RefferalLinks.API\bin\Debug\net6.0\System.CodeDom.dll
+D:\GitHub\RefferalLinksBackEnd\RefferalLinksBackEnd\RefferalLinks.API\bin\Debug\net6.0\RefferalLinks.Models.dll
+D:\GitHub\RefferalLinksBackEnd\RefferalLinksBackEnd\RefferalLinks.API\bin\Debug\net6.0\RefferalLinks.Service.dll
+D:\GitHub\RefferalLinksBackEnd\RefferalLinksBackEnd\RefferalLinks.API\bin\Debug\net6.0\RefferalLinks.Service.pdb
+D:\GitHub\RefferalLinksBackEnd\RefferalLinksBackEnd\RefferalLinks.API\bin\Debug\net6.0\RefferalLinks.Models.pdb

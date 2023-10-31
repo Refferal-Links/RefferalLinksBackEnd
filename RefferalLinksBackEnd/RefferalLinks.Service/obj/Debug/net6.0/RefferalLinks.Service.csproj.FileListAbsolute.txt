@@ -9,3 +9,11 @@ D:\GitHub\RefferalLinksBackEnd\RefferalLinksBackEnd\RefferalLinks.Service\obj\De
 D:\GitHub\RefferalLinksBackEnd\RefferalLinksBackEnd\RefferalLinks.Service\obj\Debug\net6.0\refint\RefferalLinks.Service.dll
 D:\GitHub\RefferalLinksBackEnd\RefferalLinksBackEnd\RefferalLinks.Service\obj\Debug\net6.0\RefferalLinks.Service.pdb
 D:\GitHub\RefferalLinksBackEnd\RefferalLinksBackEnd\RefferalLinks.Service\obj\Debug\net6.0\ref\RefferalLinks.Service.dll
+D:\GitHub\RefferalLinksBackEnd\RefferalLinksBackEnd\RefferalLinks.Service\obj\Debug\net6.0\RefferalLinks.Service.csproj.AssemblyReference.cache
+D:\GitHub\RefferalLinksBackEnd\RefferalLinksBackEnd\RefferalLinks.Service\bin\Debug\net6.0\Maynghien.Common.dll
+D:\GitHub\RefferalLinksBackEnd\RefferalLinksBackEnd\RefferalLinks.Service\bin\Debug\net6.0\RefferalLinks.DAL.dll
+D:\GitHub\RefferalLinksBackEnd\RefferalLinksBackEnd\RefferalLinks.Service\bin\Debug\net6.0\RefferalLinks.Models.dll
+D:\GitHub\RefferalLinksBackEnd\RefferalLinksBackEnd\RefferalLinks.Service\bin\Debug\net6.0\Maynghien.Common.pdb
+D:\GitHub\RefferalLinksBackEnd\RefferalLinksBackEnd\RefferalLinks.Service\bin\Debug\net6.0\RefferalLinks.DAL.pdb
+D:\GitHub\RefferalLinksBackEnd\RefferalLinksBackEnd\RefferalLinks.Service\bin\Debug\net6.0\RefferalLinks.Models.pdb
+D:\GitHub\RefferalLinksBackEnd\RefferalLinksBackEnd\RefferalLinks.Service\obj\Debug\net6.0\RefferalLinks.Service.csproj.CopyComplete
