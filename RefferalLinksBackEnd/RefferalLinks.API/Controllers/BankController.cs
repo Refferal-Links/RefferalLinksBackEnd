@@ -43,7 +43,7 @@ namespace RefferalLinks.API.Controllers
 			return Ok(result);
 		}
 		[HttpPut]
-		[Route("{Id}")]
+		//[Route("{Id}")]
 		public IActionResult Edit(BankDto request)
 		{
 			var reuslt = _bankService.EditBank(request);

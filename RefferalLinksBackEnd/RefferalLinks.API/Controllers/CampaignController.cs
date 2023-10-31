@@ -43,7 +43,7 @@ namespace RefferalLinks.API.Controllers
 			return Ok(result);
 		}
 		[HttpPut]
-		[Route("{Id}")]
+		//[Route("{Id}")]
 		public IActionResult Edit(CampaignDto request)
 		{
 			var reuslt = _campaignService.Edit(request);
