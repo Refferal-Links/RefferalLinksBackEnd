@@ -152,7 +152,7 @@ namespace RefferalLinks.Service.Implementation
 					{
 						switch (filter.FieldName)
 						{
-							case "Name":
+							case "name":
 								predicate = predicate.And(m => m.Name.Contains(filter.Value));
 								break;
 							//case "IsDelete":
