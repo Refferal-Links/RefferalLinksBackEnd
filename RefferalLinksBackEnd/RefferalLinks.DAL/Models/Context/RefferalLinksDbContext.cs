@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using MayNghien.Common.Models;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 
 namespace RefferalLinks.DAL.Models.Context
 {
@@ -18,5 +19,15 @@ namespace RefferalLinks.DAL.Models.Context
 		{
 
 		}
-	}
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            if (!optionsBuilder.IsConfigured)
+            {
+                var appSetting = JsonConvert.DeserializeObject<AppSetting>(File.ReadAllText("appsettings.json"));
+                optionsBuilder.UseSqlServer(appSetting.ConnectionString);
+            }
+
+
+        }
+    }
 }

@@ -7,14 +7,28 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Contract\" />
-    <Folder Include="Implementation\" />
     <Folder Include="Migrations\" />
     <Folder Include="Models\Entity\" />
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.24" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="6.0.24">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="6.0.24" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.24" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="6.0.24">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\Maynghien.Common\Maynghien.Common.csproj" />
+    <ProjectReference Include="..\RefferalLinks.Common\RefferalLinks.Common.csproj" />
   </ItemGroup>
 
 </Project>

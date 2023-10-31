@@ -11,7 +11,7 @@ namespace Maynghien.Common.Repository
     {
         void ClearTracker();
         DbSet<T> GetSet();
-        T? Get(int id);
+        T? Get(Guid id);
         void Add(T entity);
 
         void Delete(T entity);
