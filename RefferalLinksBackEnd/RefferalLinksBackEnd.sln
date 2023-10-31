@@ -4,18 +4,24 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 17.7.34009.444
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RefferalLinks.API", "RefferalLinks.API\RefferalLinks.API.csproj", "{CC0F6C77-3593-42E1-8EA9-B6911D7345CA}"
+	ProjectSection(ProjectDependencies) = postProject
+		{2F795356-0624-4C3A-8C21-4D4182A3510D} = {2F795356-0624-4C3A-8C21-4D4182A3510D}
+		{468FB21F-A42B-475F-81E7-EB8CD3866E33} = {468FB21F-A42B-475F-81E7-EB8CD3866E33}
+		{5742BFDB-4FB0-4296-ABA8-EECA75F1E7C2} = {5742BFDB-4FB0-4296-ABA8-EECA75F1E7C2}
+		{F8F7C8CA-359E-4EBC-B909-7409657A9316} = {F8F7C8CA-359E-4EBC-B909-7409657A9316}
+	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RefferalLinks.DAL", "RefferalLinks.DAL\RefferalLinks.DAL.csproj", "{8197C03B-662D-4668-A76A-384BD80C509E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RefferalLinks.DAL", "RefferalLinks.DAL\RefferalLinks.DAL.csproj", "{8197C03B-662D-4668-A76A-384BD80C509E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RefferalLinks.Models", "RefferalLinks.Models\RefferalLinks.Models.csproj", "{5742BFDB-4FB0-4296-ABA8-EECA75F1E7C2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RefferalLinks.Models", "RefferalLinks.Models\RefferalLinks.Models.csproj", "{5742BFDB-4FB0-4296-ABA8-EECA75F1E7C2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RefferalLinks.Common", "RefferalLinks.Common\RefferalLinks.Common.csproj", "{2F795356-0624-4C3A-8C21-4D4182A3510D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RefferalLinks.Common", "RefferalLinks.Common\RefferalLinks.Common.csproj", "{2F795356-0624-4C3A-8C21-4D4182A3510D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RefferalLinks.Service", "RefferalLinks.Service\RefferalLinks.Service.csproj", "{6EE6F8B1-4843-468E-96D2-9932DF405210}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RefferalLinks.Service", "RefferalLinks.Service\RefferalLinks.Service.csproj", "{6EE6F8B1-4843-468E-96D2-9932DF405210}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RefferalLinks.TransferCronjob", "RefferalLinks.TransferCronjob\RefferalLinks.TransferCronjob.csproj", "{468FB21F-A42B-475F-81E7-EB8CD3866E33}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RefferalLinks.TransferCronjob", "RefferalLinks.TransferCronjob\RefferalLinks.TransferCronjob.csproj", "{468FB21F-A42B-475F-81E7-EB8CD3866E33}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Maynghien.Common", "Maynghien.Common\Maynghien.Common.csproj", "{F8F7C8CA-359E-4EBC-B909-7409657A9316}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Maynghien.Common", "Maynghien.Common\Maynghien.Common.csproj", "{F8F7C8CA-359E-4EBC-B909-7409657A9316}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
