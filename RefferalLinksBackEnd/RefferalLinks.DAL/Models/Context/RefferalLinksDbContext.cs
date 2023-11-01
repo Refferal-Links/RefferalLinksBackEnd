@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using MayNghien.Common.Models;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
+using RefferalLinks.DAL.Models.Entity;
 
 namespace RefferalLinks.DAL.Models.Context
 {
@@ -19,6 +20,7 @@ namespace RefferalLinks.DAL.Models.Context
 		{
 
 		}
+        public DbSet<TeamManagement> TeamManagement { get;set; }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)

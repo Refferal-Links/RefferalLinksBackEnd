@@ -10,7 +10,7 @@ namespace RefferalLinks.DAL.Models.Entity
 {
   public class TeamManagement : BaseEntity
     {
-        public Guid id {  get; set; }
-        public string name { get; set; }    
+        public string? name { get; set; }
+        public string? RefferalCode { get; set; }
     }
 }

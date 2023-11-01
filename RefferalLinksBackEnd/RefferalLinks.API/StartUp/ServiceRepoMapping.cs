@@ -12,6 +12,8 @@ namespace RefferalLinks.API.StartUp
 		{
          builder.Services.AddScoped<IUsermanagementService , UsermanagementService>();
 	     builder.Services.AddScoped<IUserespository, UserRespository>();
+			builder.Services.AddScoped<ITeamRespository, TeamRespository>();
+		builder.Services.AddScoped<ITeamService, TeamService>();
           builder.Services.AddScoped<ILoginService, LoginService>();
 			builder.Services.AddTransient<RestSharp.IHttpResponse, RestSharp.HttpResponse>();
         }
