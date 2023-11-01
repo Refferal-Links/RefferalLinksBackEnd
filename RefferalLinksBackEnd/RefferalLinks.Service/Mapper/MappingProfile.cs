@@ -15,6 +15,7 @@ namespace RefferalLinks.Service.Mapper
 		{
 			CreateMap<Bank, BankDto>().ReverseMap();
 			CreateMap<Campaign, CampaignDto>().ReverseMap();
+			CreateMap<Province, ProvinceDto>().ReverseMap();
 		}
 	}
 }

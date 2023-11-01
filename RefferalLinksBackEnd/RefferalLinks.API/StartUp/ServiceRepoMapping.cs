@@ -12,10 +12,12 @@ namespace RefferalLinks.API.StartUp
 		{
 			builder.Services.AddScoped<IBankService, BankService>();
 			builder.Services.AddScoped<ICampaignService, CampaignService>();
+			builder.Services.AddScoped<IProvinceService, ProvinceService>();
 
 
 			builder.Services.AddScoped<IBankRepository, BankRepository>();
 			builder.Services.AddScoped<ICampaignRepository, CampaignRepository>();
+			builder.Services.AddScoped<IProvinceRepository, ProvinceRepository>();
 		}
 	}
 }

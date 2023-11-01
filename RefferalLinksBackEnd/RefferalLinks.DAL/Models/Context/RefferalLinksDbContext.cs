@@ -21,6 +21,8 @@ namespace RefferalLinks.DAL.Models.Context
 
 		}
 		public DbSet<Bank>? Bank { get; set; }
+		public DbSet<Campaign>? Campaign { get; set; }
+		public DbSet<Province>? Province { get; set; }
 
 		protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 		{
