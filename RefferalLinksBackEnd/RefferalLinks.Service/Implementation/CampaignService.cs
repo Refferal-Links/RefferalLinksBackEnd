@@ -115,7 +115,7 @@ namespace RefferalLinks.Service.Implementation
 			{
 				var query = BuildFilterExpression(request.Filters);
 				var numOfRecords = _campaignRepository.CountRecordsByPredicate(query);
-				var model = _campaignRepository.FindByPredicate(query);
+				var model = _campaignRepository.FindByPredicate(query).OrderByDescending(p => p.CreatedOn);
 				int pageIndex = request.PageIndex ?? 1;
 				int pageSize = request.PageSize ?? 1;
 				int startIndex = (pageIndex - 1) * (int)pageSize;
