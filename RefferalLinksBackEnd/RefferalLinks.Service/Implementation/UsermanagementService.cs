@@ -1,59 +1,60 @@
 ﻿using AutoMapper;
+using LinqKit;
+using Maynghien.Common.Models;
 using MayNghien.Models.Request.Base;
 using MayNghien.Models.Response.Base;
-using MayNghien.Common.Helpers;
 using Microsoft.AspNetCore.Identity;
 using RefferalLinks.DAL.Contract;
-using RefferalLinks.DAL.Implementation;
 using RefferalLinks.DAL.Models.Context;
 using RefferalLinks.Models.Dto;
 using RefferalLinks.Service.Contract;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using LinqKit;
 using static MayNghien.Common.CommonMessage.AuthResponseMessage;
+
 namespace RefferalLinks.Service.Implementation
 {
-    public class UsermanagementService : IUsermanagementService
+	public class UsermanagementService : IUsermanagementService
     {
-        private readonly UserManager<IdentityUser> _userManager;
+        private readonly UserManager<AspNetUser> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
-        private RefferalLinksDbContext _context;
         private readonly IMapper _mapper;
         private readonly IUserespository _userRepository;
 
-        public UsermanagementService(UserManager<IdentityUser> userManager , RoleManager<IdentityRole> roleManager , RefferalLinksDbContext context , IMapper mapper , IUserespository userespository) {
+        public UsermanagementService(UserManager<AspNetUser> userManager , RoleManager<IdentityRole> roleManager , RefferalLinksDbContext context , IMapper mapper , IUserespository userespository) {
 
             _userManager = userManager;
             _roleManager = roleManager;
-            _context = context;
             _mapper = mapper;
             _userRepository = userespository;
         }
-        public AppResponse<List<IdentityUser>> GetAllUser()
-        {
+		public async Task<AppResponse<List<UserModel>>> GetAllUser()
+		{
+			var result = new AppResponse<List<UserModel>>();
+			try
+			{
+				List<Filter> Filters = new List<Filter>();
+				var query =  BuildFilterExpression(Filters);
+				var users = _userRepository.FindByPredicate(query);
+				var UserList = users.ToList();
+				var dtoList = _mapper.Map<List<UserModel>>(UserList);
+				if (dtoList != null && dtoList.Count > 0)
+				{
+					for (int i = 0; i < UserList.Count; i++)
+					{
+						var dtouser = dtoList[i];
+						var identityUser = UserList[i];
+						dtouser.Role = (await _userManager.GetRolesAsync(identityUser)).First();
+					}
+				}
+				return result.BuildResult(dtoList);
+			}
+			catch (Exception ex)
+			{
 
+				return result.BuildError(ex.ToString());
+			}
 
-            var result = new AppResponse<List<IdentityUser>>();
-            try
-            {
-                var list = _userRepository.GetAll();
-
-                result.IsSuccess = true;
-                result.Data = list;
-                return result;
-            }
-            catch (Exception ex)
-            {
-                result.IsSuccess = false;
-                result.Message = ex.Message + " " + ex.StackTrace;
-                return result;
-            }
-        }
-        public async Task<AppResponse<string>> ResetPassWordUser(string Id)
+		}
+		public async Task<AppResponse<string>> ResetPassWordUser(string Id)
         {
             var result = new AppResponse<string>();
             try
@@ -106,7 +107,7 @@ namespace RefferalLinks.Service.Implementation
                 {
                     return result.BuildError(ERR_MSG_UserExisted);
                 }
-                var newIdentityUser = new IdentityUser { Email = user.Email, UserName = user.Email };
+                var newIdentityUser = new AspNetUser { Email = user.Email, UserName = user.Email };
 
                 var createResult = await _userManager.CreateAsync(newIdentityUser);
                 await _userManager.AddPasswordAsync(newIdentityUser, user.Password);
@@ -128,7 +129,7 @@ namespace RefferalLinks.Service.Implementation
             try
             {
 
-                IdentityUser identityUser = new IdentityUser();
+                AspNetUser identityUser = new AspNetUser();
 
                 identityUser = await _userManager.FindByIdAsync(id);
                 if (identityUser != null)
@@ -136,14 +137,13 @@ namespace RefferalLinks.Service.Implementation
                     if (await _userManager.IsInRoleAsync(identityUser, "tenant"))
                     {
 
-                        var user = _context.Users.FirstOrDefault(x => x.Id == id);
-                        _context.Users.Remove(user);
-                        //_userManager.DeleteAsync(user);
+                        var user = _userRepository.FindUser(id);
+                        _userManager.DeleteAsync(user);
                     }
                     else
                     {
-                        var user = _context.Users.FirstOrDefault(x => x.Id == id);
-                        await _userManager.DeleteAsync(user);
+						var user = _userRepository.FindUser(id);
+						await _userManager.DeleteAsync(user);
 
                     }
 
@@ -167,7 +167,7 @@ namespace RefferalLinks.Service.Implementation
             try
             {
                 var identityUser = await _userManager.FindByIdAsync(model.Email);
-
+                
                 if (identityUser != null)
                 {
 
@@ -217,9 +217,9 @@ namespace RefferalLinks.Service.Implementation
 
 
         // Get identityuser
-        public async Task<AppResponse<IdentityUser>> GetUserIdentity(string Id)
+        public async Task<AppResponse<UserModel>> GetUserIdentity(string Id)
         {
-            var result = new AppResponse<IdentityUser>();
+            var result = new AppResponse<UserModel>();
             try
             {
                 List<Filter> Filters = new List<Filter>();
@@ -232,7 +232,7 @@ namespace RefferalLinks.Service.Implementation
                 {
                     return result.BuildError("User not found");
                 }
-                var dtouser = _mapper.Map<IdentityUser>(identityUser);
+                var dtouser = _mapper.Map<UserModel>(identityUser);
 
 
                 return result.BuildResult(dtouser);
@@ -243,11 +243,11 @@ namespace RefferalLinks.Service.Implementation
                 return result.BuildError(ex.ToString());
             }
         }
-        private ExpressionStarter<IdentityUser> BuildFilterExpression(IList<Filter>? Filters)
+        private ExpressionStarter<AspNetUser> BuildFilterExpression(IList<Filter>? Filters)
         {
             try
             {
-                var predicate = PredicateBuilder.New<IdentityUser>(true);
+                var predicate = PredicateBuilder.New<AspNetUser>(true);
                 if (Filters != null)
                 {
 

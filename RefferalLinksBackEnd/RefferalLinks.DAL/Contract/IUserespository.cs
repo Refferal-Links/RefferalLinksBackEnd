@@ -1,20 +1,15 @@
-﻿using Microsoft.AspNetCore.Identity;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Linq.Expressions;
+using Maynghien.Common.Models;
 
 namespace RefferalLinks.DAL.Contract
 {
-    public interface IUserespository
+	public interface IUserespository
     {
-        public int CountRecordsByPredicate(Expression<Func<IdentityUser, bool>> predicate);
-        public IQueryable<IdentityUser> FindByPredicate(Expression<Func<IdentityUser, bool>> predicate);
-        public IdentityUser FindById(string id);
-        public IdentityUser FindUser(string Id);
-        public List<IdentityUser> GetAll();
-        public IdentityUser FindByEmail(string? email);
+        public int CountRecordsByPredicate(Expression<Func<AspNetUser, bool>> predicate);
+        public IQueryable<AspNetUser> FindByPredicate(Expression<Func<AspNetUser, bool>> predicate);
+        public AspNetUser FindById(string id);
+        public AspNetUser FindUser(string Id);
+        public List<AspNetUser> GetAll();
+        public AspNetUser FindByEmail(string? email);
     }
 }

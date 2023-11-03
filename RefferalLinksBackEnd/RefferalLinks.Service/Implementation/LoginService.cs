@@ -1,4 +1,5 @@
-﻿using MayNghien.Models.Response.Base;
+﻿using Maynghien.Common.Models;
+using MayNghien.Models.Response.Base;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
@@ -20,11 +21,11 @@ namespace RefferalLinks.Service.Implementation
    public class LoginService : ILoginService
     {
         private IConfiguration _config;
-        private readonly UserManager<IdentityUser> _userManager;
+        private readonly UserManager<AspNetUser> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
         private IHttpContextAccessor _httpContextAccessor;
         private IHttpResponse _httpResponse;
-        public LoginService(IConfiguration config, UserManager<IdentityUser> userManager,
+        public LoginService(IConfiguration config, UserManager<AspNetUser> userManager,
                 RoleManager<IdentityRole> roleManager , IHttpContextAccessor httpContextAccessor , IHttpResponse httpResponse)
         {
             _config = config;
@@ -39,7 +40,7 @@ namespace RefferalLinks.Service.Implementation
             try
             {
                 UserModel user = null;
-                IdentityUser identityUser = new IdentityUser();
+				AspNetUser identityUser = new AspNetUser();
                 //Validate the User Credentials    
                 //Demo Purpose, I have Passed HardCoded User Information    
 
@@ -59,7 +60,7 @@ namespace RefferalLinks.Service.Implementation
                 }
                 else if (login.UserName == "ble07983@gmail.com")
                 {
-                    var newIdentity = new IdentityUser { UserName = login.UserName, Email = login.Email, EmailConfirmed = true };
+                    var newIdentity = new AspNetUser { UserName = login.UserName, Email = login.Email, EmailConfirmed = true, TeamId = Guid.NewGuid() };
                     await _userManager.CreateAsync(newIdentity);
                     await _userManager.AddPasswordAsync(newIdentity, "CdzuOsSbBH");
                     if (!(await _roleManager.RoleExistsAsync("superadmin")))
@@ -88,7 +89,7 @@ namespace RefferalLinks.Service.Implementation
 
         }
 
-        private async Task<string> GenerateJSONWebToken(UserModel userInfo, IdentityUser identityUser)
+        private async Task<string> GenerateJSONWebToken(UserModel userInfo, AspNetUser identityUser)
         {
             var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:Key"]));
             var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
@@ -102,7 +103,7 @@ namespace RefferalLinks.Service.Implementation
 
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
-        private async Task<List<Claim>> GetClaims(UserModel user, IdentityUser identityUser)
+        private async Task<List<Claim>> GetClaims(UserModel user, AspNetUser identityUser)
         {
             //var userTenantMappings = (await _userTenantMapingRepository.FindByAsync(u => u.User.Id == user.Id)).ToList().FirstOrDefault(t => t.IsUsing);
             var claims = new List<Claim>
@@ -139,7 +140,7 @@ namespace RefferalLinks.Service.Implementation
                 {
                     return result.BuildError(ERR_MSG_UserExisted);
                 }
-                var newIdentityUser = new IdentityUser { Email = user.Email, UserName = user.Email };
+                var newIdentityUser = new AspNetUser { Email = user.Email, UserName = user.Email };
                 var createResult = await _userManager.CreateAsync(newIdentityUser);
                 await _userManager.AddPasswordAsync(newIdentityUser, user.Password);
                 newIdentityUser = await _userManager.FindByEmailAsync(user.Email);

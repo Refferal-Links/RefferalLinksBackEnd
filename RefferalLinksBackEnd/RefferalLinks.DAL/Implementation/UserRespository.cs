@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Maynghien.Common.Models;
+using Microsoft.AspNetCore.Identity;
 using RefferalLinks.DAL.Contract;
 using RefferalLinks.DAL.Models.Context;
 using System;
@@ -17,34 +18,34 @@ namespace RefferalLinks.DAL.Implementation
         {
             _context = context;
         }
-        public List<IdentityUser> GetAll()
+        public List<AspNetUser> GetAll()
         {
             return _context.Users.ToList();
         }
 
-        public int CountRecordsByPredicate(Expression<Func<IdentityUser, bool>> predicate)
+        public int CountRecordsByPredicate(Expression<Func<AspNetUser, bool>> predicate)
         {
             return _context.Users.Where(predicate).Count();
         }
 
-        public IdentityUser FindById(string id)
+        public AspNetUser FindById(string id)
         {
             return _context.Users.Where(m => m.Id == id).FirstOrDefault();
         }
 
-        public IQueryable<IdentityUser> FindByPredicate(Expression<Func<IdentityUser, bool>> predicate)
+        public IQueryable<AspNetUser> FindByPredicate(Expression<Func<AspNetUser, bool>> predicate)
         {
             return _context.Users.Where(predicate).AsQueryable();
         }
 
-        public IdentityUser FindUser(string? Id)
+        public AspNetUser FindUser(string? Id)
         {
             return _context.Users.FirstOrDefault(m => m.Id == Id);
         }
-        public IdentityUser FindByEmail(string? email)
+        public AspNetUser FindByEmail(string? email)
         {
 
-            IdentityUser user = _context.Users.Where(n => n.Email == email).FirstOrDefault();
+			AspNetUser user = _context.Users.Where(n => n.Email == email).FirstOrDefault();
 
             return user;
         }

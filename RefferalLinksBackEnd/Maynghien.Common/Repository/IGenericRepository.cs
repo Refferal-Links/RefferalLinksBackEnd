@@ -1,4 +1,5 @@
 ﻿
+using Maynghien.Common.Models;
 using MayNghien.Common.Models;
 using MayNghien.Common.Models.Entity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
@@ -7,7 +8,7 @@ using System.Linq.Expressions;
 
 namespace Maynghien.Common.Repository
 {
-    public interface IGenericRepository<T, C> where T : BaseEntity where C : BaseContext
+    public interface IGenericRepository<T, C> where T : BaseEntity where C : BaseContext<AspNetUser>
     {
         void ClearTracker();
         DbSet<T> GetSet();

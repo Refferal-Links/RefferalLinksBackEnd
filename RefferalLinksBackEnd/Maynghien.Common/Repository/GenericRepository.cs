@@ -1,5 +1,6 @@
 ﻿
 using EFCore.BulkExtensions;
+using Maynghien.Common.Models;
 using MayNghien.Common.Models;
 using MayNghien.Common.Models.Entity;
 using Microsoft.EntityFrameworkCore;
@@ -8,7 +9,7 @@ using System.Linq.Expressions;
 namespace Maynghien.Common.Repository
 {
     public class GenericRepository<TEntity, TContext> : IGenericRepository<TEntity, TContext>
-        where TEntity : BaseEntity where TContext : BaseContext
+        where TEntity : BaseEntity where TContext : BaseContext<AspNetUser>
     {
         #region Properties
         public TContext _context;

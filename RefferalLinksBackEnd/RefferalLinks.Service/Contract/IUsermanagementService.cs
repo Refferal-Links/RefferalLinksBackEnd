@@ -11,13 +11,13 @@ namespace RefferalLinks.Service.Contract
 {
     public interface IUsermanagementService
     {
-        public AppResponse<List<IdentityUser>> GetAllUser();
-        public Task<AppResponse<string>> ResetPassWordUser(string Id);
+		public Task<AppResponse<List<UserModel>>> GetAllUser();
+		public Task<AppResponse<string>> ResetPassWordUser(string Id);
         public Task<AppResponse<string>> Password(UserModel user);
         public Task<AppResponse<string>> CreateUser(UserModel model);
         public Task<AppResponse<string>> DeleteUser(string id);
         public Task<AppResponse<UserModel>> GetUser(string email);
-        public Task<AppResponse<IdentityUser>> GetUserIdentity(string Id);
+        public Task<AppResponse<UserModel>> GetUserIdentity(string Id);
 
     }
 }

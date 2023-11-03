@@ -10,7 +10,7 @@ using Newtonsoft.Json;
 
 namespace MayNghien.Common.Models
 {
-    public class BaseContext : IdentityDbContext<IdentityUser, IdentityRole, string>
+    public class BaseContext<TUser> : IdentityDbContext<TUser, IdentityRole, string> where TUser : IdentityUser
     {
         public BaseContext() { }
         public BaseContext(DbContextOptions options) : base(options)
