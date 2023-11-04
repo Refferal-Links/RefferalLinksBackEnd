@@ -1,20 +1,18 @@
 ﻿using AutoMapper;
+using LinqKit;
 using MayNghien.Common.Helpers;
+using MayNghien.Models.Request.Base;
 using MayNghien.Models.Response.Base;
 using Microsoft.AspNetCore.Http;
 using RefferalLinks.DAL.Contract;
 using RefferalLinks.DAL.Models.Entity;
 using RefferalLinks.Models.Dto;
 using RefferalLinks.Service.Contract;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using static Maynghien.Common.Helpers.SearchHelper;
 
 namespace RefferalLinks.Service.Implementation
 {
-   public class TeamService : ITeamService
+	public class TeamService : ITeamService
     {
         private readonly  ITeamRespository _teamRespository;
         private readonly IMapper _mapper;
@@ -151,5 +149,78 @@ namespace RefferalLinks.Service.Implementation
 
             }
         }
-    }
+
+		public AppResponse<SearchResponse<TeamDto>> Search(SearchRequest request)
+		{
+			var result = new AppResponse<SearchResponse<TeamDto>>();
+			try
+			{
+				var query = BuildFilterExpression(request.Filters);
+				var numOfRecords = _teamRespository.CountRecordsByPredicate(query);
+				var model = _teamRespository.FindByPredicate(query).OrderByDescending(x => x.CreatedOn);
+				int pageIndex = request.PageIndex ?? 1;
+				int pageSize = request.PageSize ?? 1;
+				int startIndex = (pageIndex - 1) * (int)pageSize;
+				var List = model.Skip(startIndex).Take(pageSize)
+					.Select(x => new TeamDto
+					{
+						Id = x.Id,
+						name = x.name,
+                        RefferalCode = x.RefferalCode
+					})
+					.ToList();
+
+
+				var searchUserResult = new SearchResponse<TeamDto>
+				{
+					TotalRows = numOfRecords,
+					TotalPages = CalculateNumOfPages(numOfRecords, pageSize),
+					CurrentPage = pageIndex,
+					Data = List,
+				};
+				result.BuildResult(searchUserResult);
+			}
+			catch (Exception ex)
+			{
+				result.BuildError(ex.Message);
+			}
+			return result;
+		}
+		private ExpressionStarter<TeamManagement> BuildFilterExpression(IList<Filter> Filters)
+		{
+			try
+			{
+				var predicate = PredicateBuilder.New<TeamManagement>(true);
+				if (Filters != null)
+					foreach (var filter in Filters)
+					{
+						switch (filter.FieldName)
+						{
+							case "name":
+								predicate = predicate.And(m => m.name.Contains(filter.Value));
+								break;
+							//case "IsDelete":
+							//	{
+							//		bool isDetete = false;
+							//		if (filter.Value == "True" || filter.Value == "true")
+							//		{
+							//			isDetete = true;
+							//		}
+							//		predicate = predicate.And(m => m.IsDeleted == isDetete);
+							//	}
+							//	break;
+							default:
+								break;
+						}
+					}
+				predicate = predicate.And(m => m.IsDeleted == false);
+				return predicate;
+			}
+			catch (Exception)
+			{
+
+				throw;
+			}
+		}
+	}
 }

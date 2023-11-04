@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using RefferalLinks.Models.Dto;
 using RefferalLinks.Service.Contract;
+using RefferalLinks.Service.Implementation;
 
 namespace RefferalLinks.API.Controllers
 {
@@ -52,6 +53,12 @@ namespace RefferalLinks.API.Controllers
             return Ok(result);
 
         }
-       
-    }
+		[HttpPost]
+		[Route("search")]
+		public IActionResult Search(SearchRequest request)
+		{
+			var result = _TeamService.Search(request);
+			return Ok(result);
+		}
+	}
 }

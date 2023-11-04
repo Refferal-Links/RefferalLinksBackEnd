@@ -27,9 +27,9 @@ namespace RefferalLinks.API.Controllers
         }
         [HttpPut]
         [Route("{Id}")]
-        public async Task<IActionResult> RestPassWordUser(UserModel Id)
+        public async Task<IActionResult> RestPassWordUser(string Id)
         {
-            var result = await _usermanagementService.Password(Id);
+            var result = await _usermanagementService.ResetPassWordUser(Id);
 
             return Ok(result);
         }
@@ -54,10 +54,16 @@ namespace RefferalLinks.API.Controllers
         [Route("{id}")]
         public async Task<IActionResult> GetUserIdentity(string id)
         {
-            var result = await _usermanagementService.GetUserIdentity(id);
+            var result = await _usermanagementService.GetUser(id);
 
             return Ok(result);
         }
-        
-    }
+		[HttpPost]
+		[Route("search")]
+		public IActionResult Search(SearchRequest request)
+		{
+			var result = _usermanagementService.Search(request);
+			return Ok(result);
+		}
+	}
 }

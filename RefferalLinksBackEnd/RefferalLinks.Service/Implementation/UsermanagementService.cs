@@ -9,6 +9,7 @@ using RefferalLinks.DAL.Models.Entity;
 using RefferalLinks.Models.Dto;
 using RefferalLinks.Service.Contract;
 using static MayNghien.Common.CommonMessage.AuthResponseMessage;
+using static Maynghien.Common.Helpers.SearchHelper;
 
 namespace RefferalLinks.Service.Implementation
 {
@@ -64,25 +65,6 @@ namespace RefferalLinks.Service.Implementation
                 await _userManager.AddPasswordAsync(user, "dungroi");
                 result.IsSuccess = true;
                 result.Data = "dungroi";
-                return result;
-            }
-            catch (Exception ex)
-            {
-                result.IsSuccess = false;
-                result.Message = ex.Message + " " + ex.StackTrace;
-                return result;
-            }
-        }
-        public async Task<AppResponse<string>> Password(UserModel user)
-        {
-            var result = new AppResponse<string>();
-            try
-            {
-                var userid = _userRepository.FindById(user.Id.ToString());
-                await _userManager.RemovePasswordAsync(userid);
-                await _userManager.AddPasswordAsync(userid, user.Password);
-                result.IsSuccess = true;
-                result.Data = user.Password;
                 return result;
             }
             catch (Exception ex)
@@ -214,63 +196,80 @@ namespace RefferalLinks.Service.Implementation
                 return result.BuildError(ex.ToString());
             }
         }
+		public async Task<AppResponse<SearchResponse<UserModel>>> Search(SearchRequest request)
+		{
+			var result = new AppResponse<SearchResponse<UserModel>> ();
+			try
+			{
+				var query = BuildFilterExpression(request.Filters);
+				var numOfRecords = _userRepository.CountRecordsByPredicate(query);
+
+				var users = _userRepository.FindByPredicate(query);
+				int pageIndex = request.PageIndex ?? 1;
+				int pageSize = request.PageSize ?? 1;
+				int startIndex = (pageIndex - 1) * (int)pageSize;
+				var UserList = users.Skip(startIndex).Take(pageSize).ToList();
+				var dtoList = UserList.Select(x => new UserModel
+				{
+					Email = x.Email,
+					UserName = x.UserName,
+				}).ToList();
+				if (dtoList != null && dtoList.Count > 0)
+				{
+					for (int i = 0; i < UserList.Count; i++)
+					{
+						var dtouser = dtoList[i];
+						var identityUser = UserList[i];
+						dtouser.Role = (await _userManager.GetRolesAsync(identityUser)).First();
+					}
+				}
+				var searchUserResult = new SearchResponse<UserModel>
+				{
+					TotalRows = numOfRecords,
+					TotalPages = CalculateNumOfPages(numOfRecords, pageSize),
+					CurrentPage = pageIndex,
+					Data = dtoList,
+				};
+
+				result.Data = searchUserResult;
+				result.IsSuccess = true;
+
+				return result;
+
+			}
+			catch (Exception ex)
+			{
+
+				return result.BuildError(ex.ToString());
+			}
+		}
 
 
-        // Get identityuser
-        public async Task<AppResponse<UserModel>> GetUserIdentity(string Id)
-        {
-            var result = new AppResponse<UserModel>();
-            try
-            {
-                List<Filter> Filters = new List<Filter>();
-                var query = BuildFilterExpression(Filters);
+		private ExpressionStarter<ApplicationUser> BuildFilterExpression(List<Filter> Filters)
+		{
+			try
+			{
+				var predicate = PredicateBuilder.New<ApplicationUser>(true);
+				if (Filters != null)
+					foreach (var filter in Filters)
+					{
+						switch (filter.FieldName)
+						{
+							case "userName":
+								predicate = predicate.And(m => m.Email.Equals(filter.Value));
+								break;
 
-                //var identityUser = _userRepository.FindById(id);
-                var identityUser = _userRepository.FindById(Id);
+							default:
+								break;
+						}
+					}
+				return predicate;
+			}
+			catch (Exception)
+			{
 
-                if (identityUser == null)
-                {
-                    return result.BuildError("User not found");
-                }
-                var dtouser = _mapper.Map<UserModel>(identityUser);
-
-
-                return result.BuildResult(dtouser);
-            }
-            catch (Exception ex)
-            {
-
-                return result.BuildError(ex.ToString());
-            }
-        }
-        private ExpressionStarter<ApplicationUser> BuildFilterExpression(IList<Filter>? Filters)
-        {
-            try
-            {
-                var predicate = PredicateBuilder.New<ApplicationUser>(true);
-                if (Filters != null)
-                {
-
-                    foreach (var filter in Filters)
-                    {
-                        switch (filter.FieldName)
-                        {
-                            case "userName":
-                                predicate = predicate.And(m => m.UserName.Equals(filter.Value));
-                                break;
-
-                            default:
-                                break;
-                        }
-                    }
-                }
-                return predicate;
-            }
-            catch (Exception)
-            {
-
-                throw;
-            }
-        }
-    }
+				throw;
+			}
+		}
+	}
 }

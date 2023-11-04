@@ -1,4 +1,5 @@
-﻿using MayNghien.Models.Response.Base;
+﻿using MayNghien.Models.Request.Base;
+using MayNghien.Models.Response.Base;
 using Microsoft.AspNetCore.Identity;
 using RefferalLinks.Models.Dto;
 using System;
@@ -13,11 +14,10 @@ namespace RefferalLinks.Service.Contract
     {
 		public Task<AppResponse<List<UserModel>>> GetAllUser();
 		public Task<AppResponse<string>> ResetPassWordUser(string Id);
-        public Task<AppResponse<string>> Password(UserModel user);
         public Task<AppResponse<string>> CreateUser(UserModel model);
         public Task<AppResponse<string>> DeleteUser(string id);
         public Task<AppResponse<UserModel>> GetUser(string email);
-        public Task<AppResponse<UserModel>> GetUserIdentity(string Id);
+        Task<AppResponse<SearchResponse<UserModel>>> Search(SearchRequest request);
 
-    }
+	}
 }

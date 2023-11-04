@@ -156,16 +156,6 @@ namespace RefferalLinks.Service.Implementation
 							case "name":
 								predicate = predicate.And(m => m.Name.Contains(filter.Value));
 								break;
-							//case "IsDelete":
-							//	{
-							//		bool isDetete = false;
-							//		if (filter.Value == "True" || filter.Value == "true")
-							//		{
-							//			isDetete = true;
-							//		}
-							//		predicate = predicate.And(m => m.IsDeleted == isDetete);
-							//	}
-							//	break;
 							default:
 								break;
 						}

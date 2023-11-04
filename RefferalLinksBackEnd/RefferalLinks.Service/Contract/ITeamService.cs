@@ -16,6 +16,6 @@ namespace RefferalLinks.Service.Contract
         AppResponse<TeamDto> CreateTeam( TeamDto request);
         AppResponse<TeamDto> EditTeam(TeamDto request);
         AppResponse<string> DeleteTeam(Guid Id);
-       
-    }
+		AppResponse<SearchResponse<TeamDto>> Search(SearchRequest request);
+	}
 }
