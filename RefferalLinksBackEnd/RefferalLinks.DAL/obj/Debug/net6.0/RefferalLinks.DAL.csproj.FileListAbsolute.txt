@@ -13,3 +13,8 @@ D:\GitHub\RefferalLinksBackEnd\RefferalLinksBackEnd\RefferalLinks.DAL\obj\Debug\
 D:\GitHub\RefferalLinksBackEnd\RefferalLinksBackEnd\RefferalLinks.DAL\obj\Debug\net6.0\refint\RefferalLinks.DAL.dll
 D:\GitHub\RefferalLinksBackEnd\RefferalLinksBackEnd\RefferalLinks.DAL\obj\Debug\net6.0\RefferalLinks.DAL.pdb
 D:\GitHub\RefferalLinksBackEnd\RefferalLinksBackEnd\RefferalLinks.DAL\obj\Debug\net6.0\ref\RefferalLinks.DAL.dll
+D:\GitHub\RefferalLinksBackEnd\RefferalLinksBackEnd\RefferalLinks.DAL\bin\Debug\net6.0\appsettings.json
+D:\GitHub\RefferalLinksBackEnd\RefferalLinksBackEnd\RefferalLinks.DAL\bin\Debug\net6.0\RefferalLinks.DAL.runtimeconfig.json
+D:\GitHub\RefferalLinksBackEnd\RefferalLinksBackEnd\RefferalLinks.DAL\bin\Debug\net6.0\RefferalLinks.Common.dll
+D:\GitHub\RefferalLinksBackEnd\RefferalLinksBackEnd\RefferalLinks.DAL\bin\Debug\net6.0\RefferalLinks.Common.pdb
+D:\GitHub\RefferalLinksBackEnd\RefferalLinksBackEnd\RefferalLinks.DAL\obj\Debug\net6.0\RefferalLinks.DAL.genruntimeconfig.cache
