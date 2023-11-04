@@ -1,15 +1,15 @@
 ﻿
 using EFCore.BulkExtensions;
-using Maynghien.Common.Models;
 using MayNghien.Common.Models;
 using MayNghien.Common.Models.Entity;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 
 namespace Maynghien.Common.Repository
 {
-    public class GenericRepository<TEntity, TContext> : IGenericRepository<TEntity, TContext>
-        where TEntity : BaseEntity where TContext : BaseContext<AspNetUser>
+    public class GenericRepository<TEntity, TContext, TUser> : IGenericRepository<TEntity, TContext, TUser>
+        where TEntity : BaseEntity where TContext : BaseContext<TUser> where TUser : IdentityUser
     {
         #region Properties
         public TContext _context;

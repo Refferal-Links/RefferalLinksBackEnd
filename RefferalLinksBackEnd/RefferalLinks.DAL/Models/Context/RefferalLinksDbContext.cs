@@ -5,13 +5,14 @@ using System.Text;
 using System.Threading.Tasks;
 using Maynghien.Common.Models;
 using MayNghien.Common.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using RefferalLinks.DAL.Models.Entity;
 
 namespace RefferalLinks.DAL.Models.Context
 {
-	public class RefferalLinksDbContext : BaseContext<AspNetUser>
+	public class RefferalLinksDbContext : BaseContext<ApplicationUser>
 	{
 		public RefferalLinksDbContext()
 		{

@@ -2,13 +2,15 @@
 using Maynghien.Common.Models;
 using MayNghien.Common.Models;
 using MayNghien.Common.Models.Entity;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 
 namespace Maynghien.Common.Repository
 {
-    public interface IGenericRepository<T, C> where T : BaseEntity where C : BaseContext<AspNetUser>
+    public interface IGenericRepository<T, C, TUser> where T : BaseEntity 
+        where C : BaseContext<TUser> where TUser:IdentityUser
     {
         void ClearTracker();
         DbSet<T> GetSet();
@@ -29,7 +31,7 @@ namespace Maynghien.Common.Repository
         Task BulkUpdate(IList<T> entities, CancellationToken cancellationToken);
         IQueryable<T> FindBy(Expression<Func<T, bool>> predicate);
         IQueryable<T> GetAll();
-		IQueryable<T> FindByPredicate(Expression<Func<T, bool>> predicate);
-		int CountRecordsByPredicate(Expression<Func<T, bool>> predicate);
-	}
+        IQueryable<T> FindByPredicate(Expression<Func<T, bool>> predicate);
+        int CountRecordsByPredicate(Expression<Func<T, bool>> predicate);
+    }
 }

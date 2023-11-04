@@ -1,4 +1,5 @@
 ﻿using Maynghien.Common.Repository;
+using Microsoft.AspNetCore.Identity;
 using RefferalLinks.DAL.Contract;
 using RefferalLinks.DAL.Models.Context;
 using RefferalLinks.DAL.Models.Entity;
@@ -11,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace RefferalLinks.DAL.Implementation
 {
-    public class TeamRespository : GenericRepository<TeamManagement, RefferalLinksDbContext>, ITeamRespository
+    public class TeamRespository : GenericRepository<TeamManagement, RefferalLinksDbContext, ApplicationUser>, ITeamRespository
     {
         public TeamRespository(RefferalLinksDbContext unitOfWork) : base(unitOfWork)
         {
