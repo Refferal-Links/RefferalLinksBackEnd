@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Maynghien.Common.Models;
 using MayNghien.Common.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -23,7 +22,9 @@ namespace RefferalLinks.DAL.Models.Context
 
 		}
         public DbSet<TeamManagement> TeamManagement { get;set; }
-
+		public DbSet<Bank> Bank { get;set; }
+		public DbSet<Province> Province { get;set; }
+		public DbSet<Campaign> Campaign { get;set; }
 
 		protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 		{

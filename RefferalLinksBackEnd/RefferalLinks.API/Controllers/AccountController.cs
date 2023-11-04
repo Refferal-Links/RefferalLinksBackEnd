@@ -34,12 +34,5 @@ namespace RefferalLinks.API.Controllers
 
             return Ok(result);
         }
-        [AllowAnonymous]
-        [HttpPost("logout")]
-        public async Task<ActionResult> Logout()
-        {
-            var result = await _iloginService.LogoutUser();
-            return Ok(result);
-        }
     }
 }

@@ -10,7 +10,7 @@ using RefferalLinks.DAL.Models.Entity;
 
 namespace RefferalLinks.DAL.Implementation
 {
-	public class BankRepository : GenericRepository<Bank, RefferalLinksDbContext>, IBankRepository
+	public class BankRepository : GenericRepository<Bank, RefferalLinksDbContext, ApplicationUser>, IBankRepository
 	{
 		public BankRepository(RefferalLinksDbContext unitOfWork) : base(unitOfWork)
 		{

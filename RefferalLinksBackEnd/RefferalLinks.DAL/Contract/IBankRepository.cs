@@ -9,7 +9,7 @@ using RefferalLinks.DAL.Models.Entity;
 
 namespace RefferalLinks.DAL.Contract
 {
-	public interface IBankRepository : IGenericRepository<Bank, RefferalLinksDbContext>
+	public interface IBankRepository : IGenericRepository<Bank, RefferalLinksDbContext, ApplicationUser>
 	{
 	}
 }

@@ -1,13 +1,13 @@
-using Microsoft.AspNetCore.Identity;
+using System.Text;
 using System.Text.Json.Serialization;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using RefferalLinks.API.StartUp;
 using RefferalLinks.DAL.Models.Context;
+using RefferalLinks.DAL.Models.Entity;
 using RefferalLinks.Service.Mapper;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.IdentityModel.Tokens;
-using System.Text;
-using Maynghien.Common.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -46,7 +46,7 @@ builder.Services.AddCors(options =>
 //})
 //	.AddEntityFrameworkStores<RefferalLinksDbContext>()
 //	.AddDefaultTokenProviders();
-builder.Services.AddIdentity<AspNetUser, IdentityRole>(options =>
+builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
 {
 	options.User.RequireUniqueEmail = false;
 	options.Password.RequireDigit = false;
@@ -56,8 +56,8 @@ builder.Services.AddIdentity<AspNetUser, IdentityRole>(options =>
 })
 	.AddEntityFrameworkStores<RefferalLinksDbContext>()
 	.AddDefaultTokenProviders();
-builder.Services.AddScoped<UserManager<AspNetUser>>();
-builder.Services.AddScoped<SignInManager<AspNetUser>>();
+builder.Services.AddScoped<UserManager<ApplicationUser>>();
+builder.Services.AddScoped<SignInManager<ApplicationUser>>();
 builder.Services.AddAuthentication(opt =>
 {
 	opt.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;

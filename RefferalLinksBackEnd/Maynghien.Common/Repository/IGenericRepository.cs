@@ -1,6 +1,4 @@
-﻿
-using Maynghien.Common.Models;
-using MayNghien.Common.Models;
+﻿using MayNghien.Common.Models;
 using MayNghien.Common.Models.Entity;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;

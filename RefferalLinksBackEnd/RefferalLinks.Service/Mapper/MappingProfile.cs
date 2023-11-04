@@ -22,7 +22,9 @@ namespace RefferalLinks.Service.Mapper
 		{
 			CreateMap<IdentityUser, UserModel>().ReverseMap();
 			CreateMap<TeamManagement, TeamDto>().ReverseMap();	
-
+			CreateMap<Bank,BankDto>().ReverseMap();
+			CreateMap<Campaign,CampaignDto>().ReverseMap();
+			CreateMap<Province, ProvinceDto>().ReverseMap();
 		}
 	}
 }

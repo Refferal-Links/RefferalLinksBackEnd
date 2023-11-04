@@ -5,7 +5,7 @@ using RefferalLinks.DAL.Models.Entity;
 
 namespace RefferalLinks.DAL.Implementation
 {
-	public class ProvinceRepository : GenericRepository<Province, RefferalLinksDbContext>, IProvinceRepository
+	public class ProvinceRepository : GenericRepository<Province, RefferalLinksDbContext, ApplicationUser>, IProvinceRepository
 	{
 		public ProvinceRepository(RefferalLinksDbContext unitOfWork) : base(unitOfWork)
 		{

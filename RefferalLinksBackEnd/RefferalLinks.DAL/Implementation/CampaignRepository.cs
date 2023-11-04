@@ -10,7 +10,7 @@ using RefferalLinks.DAL.Models.Entity;
 
 namespace RefferalLinks.DAL.Implementation
 {
-	public class CampaignRepository : GenericRepository<Campaign, RefferalLinksDbContext>, ICampaignRepository
+	public class CampaignRepository : GenericRepository<Campaign, RefferalLinksDbContext, ApplicationUser>, ICampaignRepository
 	{
 		public CampaignRepository(RefferalLinksDbContext unitOfWork) : base(unitOfWork)
 		{

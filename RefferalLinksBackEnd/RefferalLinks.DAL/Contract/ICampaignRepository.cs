@@ -9,7 +9,7 @@ using RefferalLinks.DAL.Models.Entity;
 
 namespace RefferalLinks.DAL.Contract
 {
-	public interface ICampaignRepository : IGenericRepository<Campaign,RefferalLinksDbContext>
+	public interface ICampaignRepository : IGenericRepository<Campaign, RefferalLinksDbContext, ApplicationUser>
 	{
 	}
 }

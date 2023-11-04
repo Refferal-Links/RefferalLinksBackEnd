@@ -1,11 +1,11 @@
 ﻿using AutoMapper;
 using LinqKit;
-using Maynghien.Common.Models;
 using MayNghien.Models.Request.Base;
 using MayNghien.Models.Response.Base;
 using Microsoft.AspNetCore.Identity;
 using RefferalLinks.DAL.Contract;
 using RefferalLinks.DAL.Models.Context;
+using RefferalLinks.DAL.Models.Entity;
 using RefferalLinks.Models.Dto;
 using RefferalLinks.Service.Contract;
 using static MayNghien.Common.CommonMessage.AuthResponseMessage;
@@ -14,12 +14,12 @@ namespace RefferalLinks.Service.Implementation
 {
 	public class UsermanagementService : IUsermanagementService
     {
-        private readonly UserManager<AspNetUser> _userManager;
+        private readonly UserManager<ApplicationUser> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly IMapper _mapper;
         private readonly IUserespository _userRepository;
 
-        public UsermanagementService(UserManager<AspNetUser> userManager , RoleManager<IdentityRole> roleManager , RefferalLinksDbContext context , IMapper mapper , IUserespository userespository) {
+        public UsermanagementService(UserManager<ApplicationUser> userManager , RoleManager<IdentityRole> roleManager , RefferalLinksDbContext context , IMapper mapper , IUserespository userespository) {
 
             _userManager = userManager;
             _roleManager = roleManager;
@@ -107,7 +107,7 @@ namespace RefferalLinks.Service.Implementation
                 {
                     return result.BuildError(ERR_MSG_UserExisted);
                 }
-                var newIdentityUser = new AspNetUser { Email = user.Email, UserName = user.Email };
+                var newIdentityUser = new ApplicationUser { Email = user.Email, UserName = user.Email };
 
                 var createResult = await _userManager.CreateAsync(newIdentityUser);
                 await _userManager.AddPasswordAsync(newIdentityUser, user.Password);
@@ -129,7 +129,7 @@ namespace RefferalLinks.Service.Implementation
             try
             {
 
-                AspNetUser identityUser = new AspNetUser();
+				ApplicationUser identityUser = new ApplicationUser();
 
                 identityUser = await _userManager.FindByIdAsync(id);
                 if (identityUser != null)
@@ -243,11 +243,11 @@ namespace RefferalLinks.Service.Implementation
                 return result.BuildError(ex.ToString());
             }
         }
-        private ExpressionStarter<AspNetUser> BuildFilterExpression(IList<Filter>? Filters)
+        private ExpressionStarter<ApplicationUser> BuildFilterExpression(IList<Filter>? Filters)
         {
             try
             {
-                var predicate = PredicateBuilder.New<AspNetUser>(true);
+                var predicate = PredicateBuilder.New<ApplicationUser>(true);
                 if (Filters != null)
                 {
 

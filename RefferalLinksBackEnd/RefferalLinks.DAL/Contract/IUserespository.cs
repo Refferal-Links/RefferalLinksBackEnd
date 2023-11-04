@@ -1,15 +1,15 @@
 ﻿using System.Linq.Expressions;
-using Maynghien.Common.Models;
+using RefferalLinks.DAL.Models.Entity;
 
 namespace RefferalLinks.DAL.Contract
 {
 	public interface IUserespository
     {
-        public int CountRecordsByPredicate(Expression<Func<AspNetUser, bool>> predicate);
-        public IQueryable<AspNetUser> FindByPredicate(Expression<Func<AspNetUser, bool>> predicate);
-        public AspNetUser FindById(string id);
-        public AspNetUser FindUser(string Id);
-        public List<AspNetUser> GetAll();
-        public AspNetUser FindByEmail(string? email);
+        public int CountRecordsByPredicate(Expression<Func<ApplicationUser, bool>> predicate);
+        public IQueryable<ApplicationUser> FindByPredicate(Expression<Func<ApplicationUser, bool>> predicate);
+        public ApplicationUser FindById(string id);
+        public ApplicationUser FindUser(string Id);
+        public List<ApplicationUser> GetAll();
+        public ApplicationUser FindByEmail(string? email);
     }
 }

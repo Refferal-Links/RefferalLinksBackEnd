@@ -9,7 +9,7 @@ using RefferalLinks.DAL.Models.Entity;
 
 namespace RefferalLinks.DAL.Contract
 {
-	public interface IProvinceRepository :IGenericRepository<Province, RefferalLinksDbContext>
+	public interface IProvinceRepository :IGenericRepository<Province, RefferalLinksDbContext, ApplicationUser>
 	{
 	}
 }
