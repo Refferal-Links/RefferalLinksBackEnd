@@ -125,7 +125,7 @@ namespace RefferalLinks.Service.Implementation
                     {
 
                         var user = _userRepository.FindUser(id);
-                        _userManager.DeleteAsync(user);
+                        await _userManager.DeleteAsync(user);
                     }
                     else
                     {
