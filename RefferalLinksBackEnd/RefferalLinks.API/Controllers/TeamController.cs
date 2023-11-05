@@ -38,14 +38,14 @@ namespace RefferalLinks.API.Controllers
             return Ok(result);
         }
         [HttpPut]
-        [Route("{Id}")]
         public IActionResult EditTeam(TeamDto request)
         {
             var result = _TeamService.EditTeam(request);
             return Ok(result);
         }
         [HttpDelete]
-        public IActionResult DeleteTeam(Guid id)
+		[Route("{Id}")]
+		public IActionResult DeleteTeam(Guid id)
         {
 
             var result = _TeamService.DeleteTeam(id);
