@@ -93,8 +93,13 @@ namespace RefferalLinks.Service.Implementation
 
                 var createResult = await _userManager.CreateAsync(newIdentityUser);
                 await _userManager.AddPasswordAsync(newIdentityUser, user.Password);
-
-                newIdentityUser = await _userManager.FindByEmailAsync(user.Email);
+				if (!(await _roleManager.RoleExistsAsync(user.Role)))
+				{
+					IdentityRole role = new IdentityRole { Name = user.Role };
+					await _roleManager.CreateAsync(role);
+				}
+				await _userManager.AddToRoleAsync(newIdentityUser, user.Role);
+				newIdentityUser = await _userManager.FindByEmailAsync(user.Email);
                 return result.BuildResult(INFO_MSG_UserCreated);
             }
             catch (Exception ex)
