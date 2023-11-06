@@ -10,6 +10,7 @@ using RefferalLinks.Models.Dto;
 using RefferalLinks.Service.Contract;
 using static MayNghien.Common.CommonMessage.AuthResponseMessage;
 using static Maynghien.Common.Helpers.SearchHelper;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace RefferalLinks.Service.Implementation
 {
@@ -213,7 +214,17 @@ namespace RefferalLinks.Service.Implementation
 				var query = BuildFilterExpression(request.Filters);
 				var numOfRecords = _userRepository.CountRecordsByPredicate(query);
 
-				var users = _userRepository.FindByPredicate(query);
+				var users = _userRepository.FindByPredicate(query).ToList();
+
+                for(int i=0;i<users.Count; i++)
+                {
+                    if((await _userManager.GetRolesAsync(users[i])).First() == "superadmin")
+                    {
+                        users.Remove(users[i]);
+                        i--;
+                    }
+                }
+
 				int pageIndex = request.PageIndex ?? 1;
 				int pageSize = request.PageSize ?? 1;
 				int startIndex = (pageIndex - 1) * (int)pageSize;
@@ -266,13 +277,14 @@ namespace RefferalLinks.Service.Implementation
 						switch (filter.FieldName)
 						{
 							case "userName":
-								predicate = predicate.And(m => m.Email.Equals(filter.Value));
+								predicate = predicate.And(m => m.UserName.Equals(filter.Value));
 								break;
 
 							default:
 								break;
 						}
 					}
+				
 				return predicate;
 			}
 			catch (Exception)

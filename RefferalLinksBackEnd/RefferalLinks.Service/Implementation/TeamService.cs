@@ -79,19 +79,22 @@ namespace RefferalLinks.Service.Implementation
 
 
 
-        public AppResponse<TeamDto> EditTeam(TeamDto tuyendung)
+        public AppResponse<TeamDto> EditTeam(TeamDto request)
         {
             var result = new AppResponse<TeamDto>();
             try
             {
                 var UserName = ClaimHelper.GetClainByName(_httpContextAccessor, "UserName");
-                var request = new TeamManagement();
-                request = _mapper.Map<TeamManagement>(tuyendung);
-                request.CreatedBy = UserName;
-                _teamRespository.Edit(request);
+                var team = _teamRespository.Get(request.Id.Value);
+                team.ModifiedOn = DateTime.UtcNow;
+                team.Modifiedby = UserName;
+                team.name = request.name;
+                team.RefferalCode = request.RefferalCode;
+
+				_teamRespository.Edit(team);
 
                 result.IsSuccess = true;
-                result.Data = tuyendung;
+                result.Data = request;
                 return result;
             }
             catch (Exception ex)
