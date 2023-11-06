@@ -123,8 +123,12 @@ namespace RefferalLinks.Service.Implementation
                 {
                     if (await _userManager.IsInRoleAsync(identityUser, "tenant"))
                     {
-
-                        var user = _userRepository.FindUser(id);
+						//var userRoles = await _userManager.GetRolesAsync(identityUser);
+      //                  foreach(var role in userRoles)
+      //                  {
+						//	await _userManager.RemoveFromRoleAsync(identityUser, role);
+						//}
+						var user = _userRepository.FindUser(id);
                         await _userManager.DeleteAsync(user);
                     }
                     else
@@ -214,11 +218,12 @@ namespace RefferalLinks.Service.Implementation
 				int pageSize = request.PageSize ?? 1;
 				int startIndex = (pageIndex - 1) * (int)pageSize;
 				var UserList = users.Skip(startIndex).Take(pageSize).ToList();
-				var dtoList = UserList.Select(x => new UserModel
-				{
-					Email = x.Email,
-					UserName = x.UserName,
-				}).ToList();
+                var dtoList = UserList.Select(x => new UserModel
+                {
+                    Email = x.Email,
+                    UserName = x.UserName,
+                    Id = Guid.Parse(x.Id)
+                }).ToList();
 				if (dtoList != null && dtoList.Count > 0)
 				{
 					for (int i = 0; i < UserList.Count; i++)
