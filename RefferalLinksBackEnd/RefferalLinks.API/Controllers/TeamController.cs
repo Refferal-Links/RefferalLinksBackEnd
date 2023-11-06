@@ -45,10 +45,10 @@ namespace RefferalLinks.API.Controllers
         }
         [HttpDelete]
 		[Route("{Id}")]
-		public IActionResult DeleteTeam(Guid id)
+		public IActionResult DeleteTeam(Guid Id)
         {
 
-            var result = _TeamService.DeleteTeam(id);
+            var result = _TeamService.DeleteTeam(Id);
 
             return Ok(result);
 
