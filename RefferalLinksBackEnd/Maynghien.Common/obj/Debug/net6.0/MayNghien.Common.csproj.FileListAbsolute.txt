@@ -34,3 +34,15 @@ D:\GitHub\RefferalLinksBackEnd\RefferalLinksBackEnd\Maynghien.Common\obj\Debug\n
 D:\GitHub\RefferalLinksBackEnd\RefferalLinksBackEnd\Maynghien.Common\obj\Debug\net6.0\refint\Maynghien.Common.dll
 D:\GitHub\RefferalLinksBackEnd\RefferalLinksBackEnd\Maynghien.Common\obj\Debug\net6.0\Maynghien.Common.pdb
 D:\GitHub\RefferalLinksBackEnd\RefferalLinksBackEnd\Maynghien.Common\obj\Debug\net6.0\ref\Maynghien.Common.dll
+D:\DoAn3\RefferalLinksBackEnd\RefferalLinksBackEnd\Maynghien.Common\bin\Debug\net6.0\Maynghien.Common.deps.json
+D:\DoAn3\RefferalLinksBackEnd\RefferalLinksBackEnd\Maynghien.Common\bin\Debug\net6.0\Maynghien.Common.dll
+D:\DoAn3\RefferalLinksBackEnd\RefferalLinksBackEnd\Maynghien.Common\bin\Debug\net6.0\Maynghien.Common.pdb
+D:\DoAn3\RefferalLinksBackEnd\RefferalLinksBackEnd\Maynghien.Common\obj\Debug\net6.0\Maynghien.Common.csproj.AssemblyReference.cache
+D:\DoAn3\RefferalLinksBackEnd\RefferalLinksBackEnd\Maynghien.Common\obj\Debug\net6.0\Maynghien.Common.GeneratedMSBuildEditorConfig.editorconfig
+D:\DoAn3\RefferalLinksBackEnd\RefferalLinksBackEnd\Maynghien.Common\obj\Debug\net6.0\Maynghien.Common.AssemblyInfoInputs.cache
+D:\DoAn3\RefferalLinksBackEnd\RefferalLinksBackEnd\Maynghien.Common\obj\Debug\net6.0\Maynghien.Common.AssemblyInfo.cs
+D:\DoAn3\RefferalLinksBackEnd\RefferalLinksBackEnd\Maynghien.Common\obj\Debug\net6.0\Maynghien.Common.csproj.CoreCompileInputs.cache
+D:\DoAn3\RefferalLinksBackEnd\RefferalLinksBackEnd\Maynghien.Common\obj\Debug\net6.0\Maynghien.Common.dll
+D:\DoAn3\RefferalLinksBackEnd\RefferalLinksBackEnd\Maynghien.Common\obj\Debug\net6.0\refint\Maynghien.Common.dll
+D:\DoAn3\RefferalLinksBackEnd\RefferalLinksBackEnd\Maynghien.Common\obj\Debug\net6.0\Maynghien.Common.pdb
+D:\DoAn3\RefferalLinksBackEnd\RefferalLinksBackEnd\Maynghien.Common\obj\Debug\net6.0\ref\Maynghien.Common.dll

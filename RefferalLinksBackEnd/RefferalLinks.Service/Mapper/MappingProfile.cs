@@ -21,10 +21,11 @@ namespace RefferalLinks.Service.Mapper
 		public void CreateMap()
 		{
 			CreateMap<IdentityUser, UserModel>().ReverseMap();
-			CreateMap<TeamManagement, TeamDto>().ReverseMap();	
+			CreateMap<Team, TeamDto>().ReverseMap();	
 			CreateMap<Bank,BankDto>().ReverseMap();
 			CreateMap<Campaign,CampaignDto>().ReverseMap();
 			CreateMap<Province, ProvinceDto>().ReverseMap();
+			CreateMap<Customer, CustomerDto>().ReverseMap();
 		}
 	}
 }

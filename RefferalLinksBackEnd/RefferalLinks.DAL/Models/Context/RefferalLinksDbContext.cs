@@ -21,10 +21,11 @@ namespace RefferalLinks.DAL.Models.Context
 		{
 
 		}
-        public DbSet<TeamManagement> TeamManagement { get;set; }
+        public DbSet<Team> Team{ get;set; }
 		public DbSet<Bank> Bank { get;set; }
 		public DbSet<Province> Province { get;set; }
 		public DbSet<Campaign> Campaign { get;set; }
+		public DbSet<Customer> Customer { get;set; }
 
 		protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 		{

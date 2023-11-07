@@ -12,19 +12,19 @@ using System.Threading.Tasks;
 
 namespace RefferalLinks.DAL.Implementation
 {
-    public class TeamRespository : GenericRepository<TeamManagement, RefferalLinksDbContext, ApplicationUser>, ITeamRespository
+    public class TeamRespository : GenericRepository<Team, RefferalLinksDbContext, ApplicationUser>, ITeamRespository
     {
         public TeamRespository(RefferalLinksDbContext unitOfWork) : base(unitOfWork)
         {
             _context = unitOfWork;
         }
-        public int CountRecordsByPredicate(Expression<Func<TeamManagement, bool>> predicate)
+        public int CountRecordsByPredicate(Expression<Func<Team, bool>> predicate)
         {
-            return _context.TeamManagement.Where(predicate).Count();
+            return _context.Team.Where(predicate).Count();
         }
-        public IQueryable<TeamManagement> FindByPredicate(Expression<Func<TeamManagement, bool>> predicate)
+        public IQueryable<Team> FindByPredicate(Expression<Func<Team, bool>> predicate)
         {
-            return _context.TeamManagement.Where(predicate).AsQueryable();
+            return _context.Team.Where(predicate).AsQueryable();
         }
     }
 }

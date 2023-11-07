@@ -9,3 +9,15 @@ D:\GitHub\RefferalLinksBackEnd\RefferalLinksBackEnd\RefferalLinks.TransferCronjo
 D:\GitHub\RefferalLinksBackEnd\RefferalLinksBackEnd\RefferalLinks.TransferCronjob\obj\Debug\net6.0\refint\RefferalLinks.TransferCronjob.dll
 D:\GitHub\RefferalLinksBackEnd\RefferalLinksBackEnd\RefferalLinks.TransferCronjob\obj\Debug\net6.0\RefferalLinks.TransferCronjob.pdb
 D:\GitHub\RefferalLinksBackEnd\RefferalLinksBackEnd\RefferalLinks.TransferCronjob\obj\Debug\net6.0\ref\RefferalLinks.TransferCronjob.dll
+D:\DoAn3\RefferalLinksBackEnd\RefferalLinksBackEnd\RefferalLinks.TransferCronjob\bin\Debug\net6.0\RefferalLinks.TransferCronjob.deps.json
+D:\DoAn3\RefferalLinksBackEnd\RefferalLinksBackEnd\RefferalLinks.TransferCronjob\bin\Debug\net6.0\RefferalLinks.TransferCronjob.dll
+D:\DoAn3\RefferalLinksBackEnd\RefferalLinksBackEnd\RefferalLinks.TransferCronjob\bin\Debug\net6.0\RefferalLinks.TransferCronjob.pdb
+D:\DoAn3\RefferalLinksBackEnd\RefferalLinksBackEnd\RefferalLinks.TransferCronjob\obj\Debug\net6.0\RefferalLinks.TransferCronjob.csproj.AssemblyReference.cache
+D:\DoAn3\RefferalLinksBackEnd\RefferalLinksBackEnd\RefferalLinks.TransferCronjob\obj\Debug\net6.0\RefferalLinks.TransferCronjob.GeneratedMSBuildEditorConfig.editorconfig
+D:\DoAn3\RefferalLinksBackEnd\RefferalLinksBackEnd\RefferalLinks.TransferCronjob\obj\Debug\net6.0\RefferalLinks.TransferCronjob.AssemblyInfoInputs.cache
+D:\DoAn3\RefferalLinksBackEnd\RefferalLinksBackEnd\RefferalLinks.TransferCronjob\obj\Debug\net6.0\RefferalLinks.TransferCronjob.AssemblyInfo.cs
+D:\DoAn3\RefferalLinksBackEnd\RefferalLinksBackEnd\RefferalLinks.TransferCronjob\obj\Debug\net6.0\RefferalLinks.TransferCronjob.csproj.CoreCompileInputs.cache
+D:\DoAn3\RefferalLinksBackEnd\RefferalLinksBackEnd\RefferalLinks.TransferCronjob\obj\Debug\net6.0\RefferalLinks.TransferCronjob.dll
+D:\DoAn3\RefferalLinksBackEnd\RefferalLinksBackEnd\RefferalLinks.TransferCronjob\obj\Debug\net6.0\refint\RefferalLinks.TransferCronjob.dll
+D:\DoAn3\RefferalLinksBackEnd\RefferalLinksBackEnd\RefferalLinks.TransferCronjob\obj\Debug\net6.0\RefferalLinks.TransferCronjob.pdb
+D:\DoAn3\RefferalLinksBackEnd\RefferalLinksBackEnd\RefferalLinks.TransferCronjob\obj\Debug\net6.0\ref\RefferalLinks.TransferCronjob.dll
