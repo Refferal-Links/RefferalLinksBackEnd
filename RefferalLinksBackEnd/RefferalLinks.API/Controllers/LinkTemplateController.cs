@@ -57,5 +57,12 @@ namespace RefferalLinks.API.Controllers
             var result = _templateService.Search(request);
             return Ok(result);
         }
+        [HttpPut]
+        [Route("{Id}")]
+        public IActionResult StatusChange(Guid Id)
+        {
+            var reuslt = _templateService.StatusChange(Id);
+            return Ok(reuslt);
+        }
     }
 }

@@ -11,6 +11,7 @@ namespace RefferalLinks.DAL.Models.Entity
     public class LinkTemplate : BaseEntity
     {
         public string Url { get; set; }
+        public bool IsActive { get; set; }
 
         [ForeignKey("Bank")]
         public Guid BankId { get; set; }

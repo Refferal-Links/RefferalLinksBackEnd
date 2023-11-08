@@ -11,9 +11,8 @@ namespace RefferalLinks.Models.Dto
     public class LinkTemplateDto : BaseDto
     {
         public string Url { get; set; }
-
+        public bool IsActive { get; set; }
         public Guid BankId { get; set; }
-
         public Guid CampaignId { get; set; }
     }
 }

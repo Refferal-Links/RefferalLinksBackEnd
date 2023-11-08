@@ -13,5 +13,6 @@ namespace RefferalLinks.Service.Contract
         AppResponse<LinkTemplateDto> Get(Guid Id);
         AppResponse<List<LinkTemplateDto>> GetAll();
         AppResponse<SearchResponse<LinkTemplateDto>> Search(SearchRequest request);
+        AppResponse<string> StatusChange(Guid Id);
     }
 }
