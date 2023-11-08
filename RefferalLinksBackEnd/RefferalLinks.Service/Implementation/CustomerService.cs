@@ -8,6 +8,8 @@ using RefferalLinks.Models.Dto;
 using RefferalLinks.Service.Contract;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
+using System.Data.Entity.ModelConfiguration.Configuration;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -32,7 +34,7 @@ namespace RefferalLinks.Service.Implementation
             {
                 var customer = _mapper.Map<Customer>(request);
                 customer.Id = Guid.NewGuid();
-
+           
                 _customerRespository.Add(customer);
                 request.Id = Guid.NewGuid();
                 result.BuildResult(request);
@@ -68,6 +70,11 @@ namespace RefferalLinks.Service.Implementation
             {
                 var customer = _customerRespository.Get((Guid)request.Id);
                 customer.Name = request.Name;
+                customer.Email = request.Email;
+                customer.Passport = request.Passport;
+                customer.ApplicationUserId = request.ApplicationUserId;
+                customer.PhoneNumber = request.PhoneNumber;
+                customer.ProvinceId = request.ProvinceId;
                 _customerRespository.Edit(customer);
                 result.BuildResult(request);
             }
@@ -83,8 +90,18 @@ namespace RefferalLinks.Service.Implementation
             var result = new AppResponse<CustomerDto>();
             try
             {
-                var customer = _customerRespository.Get(Id);
-                var data = _mapper.Map<CustomerDto>(customer);
+                var query = _customerRespository.FindBy(x => x.Id == Id).Include(x => x.Province);
+                var data = query.Select(x => new CustomerDto
+                {
+                   Id = x.Id,
+                   Email = x.Email,
+                   Passport = x.Passport,
+                   ApplicationUserId = x.ApplicationUserId,
+                   ProvinceId = x.ProvinceId,
+                   PhoneNumber = x.PhoneNumber,
+                   Name = x.Name,
+                   NameProvice = x.Province.Name,
+                }).First();
                 result.BuildResult(data);
             }
             catch (Exception ex)
@@ -99,10 +116,16 @@ namespace RefferalLinks.Service.Implementation
             var result = new AppResponse<List<CustomerDto>>();
             try
             {
-                var list = _customerRespository.GetAll().Select(x => new CustomerDto
+                var list = _customerRespository.GetAll() .Include(x => x.Province) .Select(x => new CustomerDto
                 {
                     Id = x.Id,
                     Name = x.Name,
+                    Passport = x.Passport,
+                    PhoneNumber = x.PhoneNumber,
+                    Email = x.Email,
+                    ProvinceId = x.ProvinceId,
+                    NameProvice = x.Province.Name,
+                    ApplicationUserId = x.ApplicationUserId,
                 }).ToList();
                 result.BuildResult(list);
             }
