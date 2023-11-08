@@ -25,7 +25,12 @@ namespace RefferalLinks.API.StartUp
 			builder.Services.AddScoped<IBankRepository, BankRepository>();
 			builder.Services.AddScoped<ICampaignRepository, CampaignRepository>();
 			builder.Services.AddScoped<IProvinceRepository, ProvinceRepository>();
+
 			builder.Services.AddScoped<ICustomerRespository, CustomerRespository>();
+
+
+			builder.Services.AddScoped<ILinkTemplateService, LinkTemplateService>();
+			builder.Services.AddScoped<ILinkTemplateRepository, LinkTemplateRepository>();
 
 		}
 	}

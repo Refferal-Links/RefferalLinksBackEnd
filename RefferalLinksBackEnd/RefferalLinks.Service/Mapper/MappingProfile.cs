@@ -26,6 +26,7 @@ namespace RefferalLinks.Service.Mapper
 			CreateMap<Campaign,CampaignDto>().ReverseMap();
 			CreateMap<Province, ProvinceDto>().ReverseMap();
 			CreateMap<Customer, CustomerDto>().ReverseMap();
+			CreateMap<LinkTemplate, LinkTemplateDto>().ReverseMap();
 		}
 	}
 }
