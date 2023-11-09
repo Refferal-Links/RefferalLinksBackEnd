@@ -10,5 +10,7 @@ namespace RefferalLinks.Models.Dto
 	public class CampaignDto:BaseDto
 	{
 		public string Name { get; set; }
-	}
+
+        public bool IsActive { get; set; }
+    }
 }

@@ -56,5 +56,12 @@ namespace RefferalLinks.API.Controllers
 			var result = _campaignService.Search(request);
 			return Ok(result);
 		}
-	}
+        [HttpPut]
+        [Route("{Id}")]
+        public IActionResult StatusChange(Guid Id)
+        {
+            var result = _campaignService.StatusChange(Id);
+            return Ok(result);
+        }
+    }
 }

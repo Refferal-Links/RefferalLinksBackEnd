@@ -27,7 +27,7 @@ namespace RefferalLinks.Service.Implementation
 			{
 				var campaign = _mapper.Map<Campaign>(request);
 				campaign.Id = Guid.NewGuid();
-
+				campaign.IsActive = true;
 				_campaignRepository.Add(campaign);
 				request.Id = Guid.NewGuid();
 				result.BuildResult(request);
@@ -63,6 +63,7 @@ namespace RefferalLinks.Service.Implementation
 			{
 				var campaign = _campaignRepository.Get((Guid)request.Id);
 				campaign.Name = request.Name;
+				campaign.IsActive = request.IsActive;
 				_campaignRepository.Edit(campaign);
 				result.BuildResult(request);
 			}
@@ -98,6 +99,7 @@ namespace RefferalLinks.Service.Implementation
 				{
 					Id = x.Id,
 					Name = x.Name,
+					IsActive = x.IsActive,
 				}).ToList();
 				result.BuildResult(list);
 			}
@@ -123,7 +125,8 @@ namespace RefferalLinks.Service.Implementation
 					.Select(x => new CampaignDto
 					{
 						Id = x.Id,
-						Name = x.Name
+						Name = x.Name,
+						IsActive = x.IsActive,
 					})
 					.ToList();
 
@@ -179,5 +182,25 @@ namespace RefferalLinks.Service.Implementation
 				throw;
 			}
 		}
-	}
+        public AppResponse<string> StatusChange(Guid Id)
+        {
+            var result = new AppResponse<string>();
+            try
+            {
+                var budget = _campaignRepository.Get(Id);
+                budget.IsActive = !budget.IsActive;
+
+                _campaignRepository.Edit(budget);
+                if (budget.IsActive)
+                    result.BuildResult("active");
+                else
+                    result.BuildResult("inactive");
+            }
+            catch (Exception ex)
+            {
+                result.BuildError(ex.Message);
+            }
+            return result;
+        }
+    }
 }
