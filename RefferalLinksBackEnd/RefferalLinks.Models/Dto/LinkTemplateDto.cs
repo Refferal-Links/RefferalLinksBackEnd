@@ -13,6 +13,8 @@ namespace RefferalLinks.Models.Dto
         public string Url { get; set; }
         public bool IsActive { get; set; }
         public Guid BankId { get; set; }
+        public string? BankName { get; set; }
         public Guid CampaignId { get; set; }
+        public string? CampaignName { get; set;}
     }
 }

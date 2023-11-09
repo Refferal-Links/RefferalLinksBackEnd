@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using System.Data.Entity;
+using AutoMapper;
 using LinqKit;
 using MayNghien.Common.Helpers;
 using MayNghien.Models.Request.Base;
@@ -159,7 +160,7 @@ namespace RefferalLinks.Service.Implementation
             var result = new AppResponse<List<LinkTemplateDto>>();
             try
             {
-                var list = _linkTemplateRepository.GetAll().Where(x=>x.IsDeleted != true);
+                var list = _linkTemplateRepository.GetAll().Where(x=>x.IsDeleted != true).Include(x=>x.Bank).Include(x=>x.Campaign);
                 var data = list.Select(x => new LinkTemplateDto
                 {
                     Id = x.Id,
@@ -167,6 +168,8 @@ namespace RefferalLinks.Service.Implementation
                     CampaignId = x.CampaignId,
                     Url = x.Url,
                     IsActive = x.IsActive,
+                    BankName = x.Bank.Name,
+                    CampaignName = x.Campaign.Name,
                 }).ToList();
 
                 result.BuildResult(data);
