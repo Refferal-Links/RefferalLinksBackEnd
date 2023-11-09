@@ -17,5 +17,7 @@ namespace RefferalLinks.Service.Contract
 		AppResponse<string> Delete(Guid Id);
 		AppResponse<CampaignDto> Create(CampaignDto request);
 		AppResponse<SearchResponse<CampaignDto>> Search(SearchRequest request);
-	}
+		public AppResponse<string> StatusChange(Guid Id);
+
+    }
 }
