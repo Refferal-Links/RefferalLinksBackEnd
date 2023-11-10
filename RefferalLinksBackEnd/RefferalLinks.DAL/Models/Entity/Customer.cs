@@ -15,6 +15,7 @@ namespace RefferalLinks.DAL.Models.Entity
         public bool Passport { get; set; }    
         public string PhoneNumber { get; set; }
         public string Email { get; set; }
+        public string Cccd { get; set; }
         [ForeignKey("Province")]
         public Guid ProvinceId { get; set; }
         [ForeignKey("ProvinceId")]

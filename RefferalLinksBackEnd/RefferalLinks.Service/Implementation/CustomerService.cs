@@ -3,6 +3,7 @@ using LinqKit;
 using MayNghien.Models.Request.Base;
 using MayNghien.Models.Response.Base;
 using RefferalLinks.DAL.Contract;
+using RefferalLinks.DAL.Implementation;
 using RefferalLinks.DAL.Models.Entity;
 using RefferalLinks.Models.Dto;
 using RefferalLinks.Service.Contract;
@@ -21,10 +22,17 @@ namespace RefferalLinks.Service.Implementation
     {
         private readonly ICustomerRespository _customerRespository;
         private IMapper _mapper;
-        public CustomerService(ICustomerRespository customerRespository, IMapper mapper)
+        private ILinkTemplateRepository _linkTemplateRepository;
+        private IUserespository _userespository;
+        private ICustomerLinkRepository _customerLinkRepository;
+        public CustomerService(ICustomerRespository customerRespository, IMapper mapper,
+            ILinkTemplateRepository linkTemplateRepository, IUserespository userespository, ICustomerLinkRepository customerLinkRepository)
         {
             _customerRespository = customerRespository;
             _mapper = mapper;
+            _linkTemplateRepository = linkTemplateRepository;
+            _userespository = userespository;
+            _customerLinkRepository = customerLinkRepository;
         }
 
         public AppResponse<CustomerDto> Create(CustomerDto request)
@@ -32,10 +40,39 @@ namespace RefferalLinks.Service.Implementation
             var result = new AppResponse<CustomerDto>();
             try
             {
+                if(request.RefferalCode == null)
+                {
+                    return result.BuildError("Không để trống mã giớ thiệu");
+                }
+                var user = _userespository.FindByPredicate(x=>x.RefferalCode ==  request.RefferalCode).FirstOrDefault(x => x.RefferalCode == request.RefferalCode);
+                if(user == null)
+                {
+                    return result.BuildError("không tìm thấy mã giới thiệu");
+                }
                 var customer = _mapper.Map<Customer>(request);
                 customer.Id = Guid.NewGuid();
-           
+                customer.ApplicationUserId = user.Id;
                 _customerRespository.Add(customer);
+                request.CustomerLinks = new List<CustomerLinkDto>();
+                var linktemplatelist = _linkTemplateRepository.GetAll().Where(x => x.IsActive == true && x.IsDeleted == false).ToList(); ;
+                foreach (var linktemplate in linktemplatelist)
+                {
+                    var customerlink = new Customerlink();
+                    customerlink.Id = Guid.NewGuid();
+                    customerlink.LinkTemplateId = linktemplate.Id;
+                    customerlink.CustomerId = customer.Id;
+                    customerlink.Url = linktemplate.Url;
+                    customerlink.Url = customerlink.Url.Replace("{{sale}}", request.RefferalCode);
+                    customerlink.Url = customerlink.Url.Replace("{{ten}}", customer.Name);
+                    customerlink.Url = customerlink.Url.Replace("{{phone}}", customer.PhoneNumber);
+                    customerlink.Url = customerlink.Url.Replace("{{cccd}}", customer.Cccd);
+                    customerlink.Url = customerlink.Url.Replace("{{email}}", customer.Email);
+                    _customerLinkRepository.Add(customerlink);
+
+                    var data = _mapper.Map<CustomerLinkDto>(customerlink);
+                    request.CustomerLinks.Add(data);
+                }
+
                 request.Id = Guid.NewGuid();
                 result.BuildResult(request);
             }
@@ -68,14 +105,35 @@ namespace RefferalLinks.Service.Implementation
             var result = new AppResponse<CustomerDto>();
             try
             {
+                var user = _userespository.FindByPredicate(x => x.RefferalCode == request.RefferalCode).FirstOrDefault(x => x.RefferalCode == request.RefferalCode);
                 var customer = _customerRespository.Get((Guid)request.Id);
                 customer.Name = request.Name;
                 customer.Email = request.Email;
                 customer.Passport = request.Passport;
-                customer.ApplicationUserId = request.ApplicationUserId;
+                customer.ApplicationUserId = user.Id;
                 customer.PhoneNumber = request.PhoneNumber;
                 customer.ProvinceId = request.ProvinceId;
                 _customerRespository.Edit(customer);
+                var listCustomerLink = _customerLinkRepository.FindBy(x=>x.CustomerId == customer.Id).ToList();
+                _customerLinkRepository.DeleteRange(listCustomerLink);
+                var linktemplatelist = _linkTemplateRepository.GetAll().Where(x => x.IsActive == true && x.IsDeleted == false).ToList();
+                foreach (var linktemplate in linktemplatelist)
+                {
+                    var customerlink = new Customerlink();
+                    customerlink.Id = Guid.NewGuid();
+                    customerlink.LinkTemplateId = linktemplate.Id;
+                    customerlink.CustomerId = customer.Id;
+                    customerlink.Url = linktemplate.Url;
+                    var code = _userespository.FindUser(customer.ApplicationUserId).RefferalCode;
+                    customerlink.Url = customerlink.Url.Replace("{{sale}}", code);
+                    customerlink.Url = customerlink.Url.Replace("{{ten}}", customer.Name);
+                    customerlink.Url = customerlink.Url.Replace("{{phone}}", customer.PhoneNumber);
+                    customerlink.Url = customerlink.Url.Replace("{{cccd}}", customer.Cccd);
+                    customerlink.Url = customerlink.Url.Replace("{{email}}", customer.Email);
+                    _customerLinkRepository.Add(customerlink);
+                    request.CustomerLinks.Add(_mapper.Map<CustomerLinkDto>(customerlink));
+                }
+
                 result.BuildResult(request);
             }
             catch (Exception ex)
@@ -91,12 +149,12 @@ namespace RefferalLinks.Service.Implementation
             try
             {
                 var query = _customerRespository.FindBy(x => x.Id == Id).Include(x => x.Province);
+
                 var data = query.Select(x => new CustomerDto
                 {
                    Id = x.Id,
                    Email = x.Email,
                    Passport = x.Passport,
-                   ApplicationUserId = x.ApplicationUserId,
                    ProvinceId = x.ProvinceId,
                    PhoneNumber = x.PhoneNumber,
                    Name = x.Name,
@@ -116,16 +174,15 @@ namespace RefferalLinks.Service.Implementation
             var result = new AppResponse<List<CustomerDto>>();
             try
             {
-                var list = _customerRespository.GetAll() .Include(x => x.Province) .Select(x => new CustomerDto
-                {
-                    Id = x.Id,
-                    Name = x.Name,
-                    Passport = x.Passport,
-                    PhoneNumber = x.PhoneNumber,
-                    Email = x.Email,
-                    ProvinceId = x.ProvinceId,
-                    NameProvice = x.Province.Name,
-                    ApplicationUserId = x.ApplicationUserId,
+                var Customeres  = _customerRespository.GetAll().Include(x => x.Province).ToList();
+                var list = Customeres.Select(x => {
+                    var code = _userespository.FindByPredicate(m => m.Id == x.ApplicationUserId).FirstOrDefault().RefferalCode;
+                    var customerDto = new CustomerDto();
+                    customerDto = _mapper.Map<CustomerDto>(x);
+                    customerDto.CustomerLinks = new List<CustomerLinkDto>();
+                    var listCustomerLink = _customerLinkRepository.GetAll().Where(x=>x.CustomerId == (Guid)customerDto.Id).ToList();
+                    customerDto.CustomerLinks.AddRange(_mapper.Map<List<CustomerLinkDto>>(listCustomerLink));
+                    return customerDto;
                 }).ToList();
                 result.BuildResult(list);
             }

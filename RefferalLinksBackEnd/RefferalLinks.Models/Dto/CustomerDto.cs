@@ -12,9 +12,14 @@ namespace RefferalLinks.Models.Dto
         public string Name { get; set; }
         public bool Passport { get; set; }
         public string PhoneNumber { get; set; }
-        public string NameProvice { get; set; }
-        public Guid ProvinceId { get; set; }    
         public string Email { get; set; }
-        public string ApplicationUserId { get; set; }
+        public string Cccd { get; set; }
+
+        public string RefferalCode { get; set; }
+
+        public string NameProvice { get; set; }
+        public Guid ProvinceId { get; set; }
+
+        public List<CustomerLinkDto>? CustomerLinks { get; set; }
     }
 }
