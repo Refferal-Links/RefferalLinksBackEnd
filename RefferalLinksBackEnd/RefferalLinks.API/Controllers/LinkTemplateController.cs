@@ -1,4 +1,5 @@
 ﻿using MayNghien.Models.Request.Base;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using RefferalLinks.Models.Dto;
@@ -9,6 +10,7 @@ namespace RefferalLinks.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(AuthenticationSchemes = "Bearer")]
     public class LinkTemplateController : Controller
     {
         private ILinkTemplateService _templateService;

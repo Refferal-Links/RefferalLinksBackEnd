@@ -90,7 +90,7 @@ namespace RefferalLinks.Service.Implementation
                 {
                     return result.BuildError(ERR_MSG_UserExisted);
                 }
-                var newIdentityUser = new ApplicationUser { Email = user.Email, UserName = user.Email };
+                var newIdentityUser = new ApplicationUser { Email = user.Email, UserName = user.Email , TeamId = user.TeamId };
 
                 var createResult = await _userManager.CreateAsync(newIdentityUser);
                 await _userManager.AddPasswordAsync(newIdentityUser, user.Password);

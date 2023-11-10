@@ -72,7 +72,7 @@ namespace RefferalLinks.Service.Implementation
                 {
                     return result.BuildError("Bank cannot null");
                 }
-                var campaign = _campaignRepository.Get(request.BankId);
+                var campaign = _campaignRepository.Get(request.CampaignId);
                 if (campaign == null)
                 {
                     return result.BuildError("Cannot find Bank");

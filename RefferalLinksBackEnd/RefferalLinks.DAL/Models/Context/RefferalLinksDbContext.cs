@@ -26,7 +26,8 @@ namespace RefferalLinks.DAL.Models.Context
 		public DbSet<Province> Province { get;set; }
 		public DbSet<Campaign> Campaign { get;set; }
 		public DbSet<Customer> Customer { get;set; }
-
+		public DbSet<LinkTemplate> LinkTemplate { get;set; }
+		public DbSet<Customerlink> Customerlink { get;set; }
 		protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 		{
 			if (!optionsBuilder.IsConfigured)

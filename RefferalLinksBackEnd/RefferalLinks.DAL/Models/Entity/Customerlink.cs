@@ -8,18 +8,18 @@ using System.Threading.Tasks;
 
 namespace RefferalLinks.DAL.Models.Entity
 {
-    //public class Customerlink : BaseEntity
-    //{
-    //    [ForeignKey("Customer")]
-    //    public Guid CustomerId { get; set; }
-    //    [ForeignKey("CustomerId")]
-    //    public Customer Customer { get; set; }
+    public class Customerlink : BaseEntity
+    {
+        [ForeignKey("Customer")]
+        public Guid CustomerId { get; set; }
+        [ForeignKey("CustomerId")]
+        public Customer Customer { get; set; }
 
-    //    public string LinkUrl { get; set; }
+        public string Url { get; set; }
 
-    //    //[ForeignKey("LinkTeam")]
-    //    //public Guid CustomerId { get; set; }
-    //    //[ForeignKey("CustomerId")]
-    //    //public Customer Customer { get; set; }
-    //}
+        [ForeignKey("LinkTemplate")]
+        public Guid LinkTemplateId { get; set; }
+        [ForeignKey("LinkTemplateId")]
+        public LinkTemplate LinkTemplate { get; set; }
+    }
 }
