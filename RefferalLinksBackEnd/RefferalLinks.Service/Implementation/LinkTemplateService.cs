@@ -129,6 +129,9 @@ namespace RefferalLinks.Service.Implementation
                     linkTemplate.ModifiedOn = DateTime.UtcNow;
                     var UserName = ClaimHelper.GetClainByName(_httpContextAccessor, "UserName");
                     linkTemplate.Modifiedby = UserName;
+
+                    _linkTemplateRepository.Edit(linkTemplate);
+                    result.BuildResult(request);
                 }
 
             }
@@ -188,7 +191,7 @@ namespace RefferalLinks.Service.Implementation
             {
                 var query = BuildFilterExpression(request.Filters);
                 var numOfRecords = _linkTemplateRepository.CountRecordsByPredicate(query);
-                var model = _linkTemplateRepository.FindByPredicate(query).OrderByDescending(p => p.CreatedOn);
+                var model = _linkTemplateRepository.FindByPredicate(query).OrderByDescending(p => p.CreatedOn).Include(x=>x.Bank).Include(x=>x.Campaign);
                 int pageIndex = request.PageIndex ?? 1;
                 int pageSize = request.PageSize ?? 1;
                 int startIndex = (pageIndex - 1) * (int)pageSize;
@@ -200,6 +203,8 @@ namespace RefferalLinks.Service.Implementation
                         CampaignId= x.CampaignId,
                         Url= x.Url,
                         IsActive = x.IsActive,
+                        BankName = x.Bank.Name,
+                        CampaignName = x.Campaign.Name,
                     })
                     .ToList();
 
