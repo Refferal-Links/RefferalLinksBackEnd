@@ -182,12 +182,12 @@ namespace RefferalLinks.Service.Implementation
 				throw;
 			}
 		}
-        public AppResponse<string> StatusChange(Guid Id)
+        public AppResponse<string> StatusChange(CampaignDto request)
         {
             var result = new AppResponse<string>();
             try
             {
-                var budget = _campaignRepository.Get(Id);
+                var budget = _campaignRepository.Get(request.Id.Value);
                 budget.IsActive = !budget.IsActive;
 
                 _campaignRepository.Edit(budget);
