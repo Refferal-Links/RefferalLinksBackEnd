@@ -56,11 +56,11 @@ namespace RefferalLinks.API.Controllers
 			var result = _campaignService.Search(request);
 			return Ok(result);
 		}
-        [HttpPut]
-        [Route("{Id}")]
-        public IActionResult StatusChange(Guid Id)
+		[HttpPut]
+		[Route("StatusChange")]
+		public IActionResult StatusChange([FromBody] CampaignDto request)
         {
-            var result = _campaignService.StatusChange(Id);
+            var result = _campaignService.StatusChange(request);
             return Ok(result);
         }
     }
