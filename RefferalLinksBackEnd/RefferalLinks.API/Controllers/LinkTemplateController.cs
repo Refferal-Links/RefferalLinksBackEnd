@@ -61,7 +61,7 @@ namespace RefferalLinks.API.Controllers
         }
         [HttpPut]
         [Route("{Id}")]
-        public IActionResult StatusChange(Guid Id)
+        public IActionResult StatusChange(LinkTemplateDto Id)
         {
             var reuslt = _templateService.StatusChange(Id);
             return Ok(reuslt);

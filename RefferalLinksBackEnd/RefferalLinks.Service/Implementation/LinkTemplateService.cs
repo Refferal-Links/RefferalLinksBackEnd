@@ -30,12 +30,12 @@ namespace RefferalLinks.Service.Implementation
             _campaignRepository = campaignRepository;
         }
 
-        public AppResponse<string> StatusChange(Guid Id)
+        public AppResponse<string> StatusChange(LinkTemplateDto request)
         {
             var result = new AppResponse<string>();
             try
             {
-                var linkTemplate = _linkTemplateRepository.Get(Id);
+                var linkTemplate = _linkTemplateRepository.Get(request.Id.Value);
                 linkTemplate.IsActive = !linkTemplate.IsActive;
                 if(linkTemplate.IsActive)
                 {
