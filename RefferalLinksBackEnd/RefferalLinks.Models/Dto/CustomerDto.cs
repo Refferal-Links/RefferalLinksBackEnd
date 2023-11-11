@@ -20,6 +20,8 @@ namespace RefferalLinks.Models.Dto
         public string NameProvice { get; set; }
         public Guid ProvinceId { get; set; }
 
-        public List<CustomerLinkDto>? CustomerLinks { get; set; }
+        //public List<LinkofBankDto> linkofBankDtos { get; set; }
+        //public List<CustomerLinkDto>? CustomerLinks { get; set; }
+        public List<BankDto>? Banks { get; set; }
     }
 }

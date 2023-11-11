@@ -25,14 +25,16 @@ namespace RefferalLinks.Service.Implementation
         private ILinkTemplateRepository _linkTemplateRepository;
         private IUserespository _userespository;
         private ICustomerLinkRepository _customerLinkRepository;
+        private IBankRepository _bankRepository;
         public CustomerService(ICustomerRespository customerRespository, IMapper mapper,
-            ILinkTemplateRepository linkTemplateRepository, IUserespository userespository, ICustomerLinkRepository customerLinkRepository)
+            ILinkTemplateRepository linkTemplateRepository, IUserespository userespository, ICustomerLinkRepository customerLinkRepository, IBankRepository bankRepository)
         {
             _customerRespository = customerRespository;
             _mapper = mapper;
             _linkTemplateRepository = linkTemplateRepository;
             _userespository = userespository;
             _customerLinkRepository = customerLinkRepository;
+            _bankRepository = bankRepository;
         }
 
         public AppResponse<CustomerDto> Create(CustomerDto request)
@@ -40,12 +42,12 @@ namespace RefferalLinks.Service.Implementation
             var result = new AppResponse<CustomerDto>();
             try
             {
-                if(request.RefferalCode == null)
+                if (request.RefferalCode == null)
                 {
                     return result.BuildError("Không để trống mã giớ thiệu");
                 }
-                var user = _userespository.FindByPredicate(x=>x.RefferalCode ==  request.RefferalCode).FirstOrDefault(x => x.RefferalCode == request.RefferalCode);
-                if(user == null)
+                var user = _userespository.FindByPredicate(x => x.RefferalCode == request.RefferalCode).FirstOrDefault(x => x.RefferalCode == request.RefferalCode);
+                if (user == null)
                 {
                     return result.BuildError("không tìm thấy mã giới thiệu");
                 }
@@ -53,8 +55,13 @@ namespace RefferalLinks.Service.Implementation
                 customer.Id = Guid.NewGuid();
                 customer.ApplicationUserId = user.Id;
                 _customerRespository.Add(customer);
-                request.CustomerLinks = new List<CustomerLinkDto>();
-                var linktemplatelist = _linkTemplateRepository.GetAll().Where(x => x.IsActive == true && x.IsDeleted == false).ToList(); ;
+                request.Banks = _bankRepository.GetAll().Select(x => new BankDto
+                {
+                    Name = x.Name,
+                    Id = x.Id,
+                    CustomerLinks = new List<CustomerLinkDto>()
+                }).ToList();
+                var linktemplatelist = _linkTemplateRepository.GetAll().Where(x => x.IsActive == true && x.IsDeleted == false).Include(x => x.Bank).ToList(); ;
                 foreach (var linktemplate in linktemplatelist)
                 {
                     var customerlink = new Customerlink();
@@ -70,7 +77,7 @@ namespace RefferalLinks.Service.Implementation
                     _customerLinkRepository.Add(customerlink);
 
                     var data = _mapper.Map<CustomerLinkDto>(customerlink);
-                    request.CustomerLinks.Add(data);
+                    request.Banks.FirstOrDefault(x => x.Id == linktemplate.BankId).CustomerLinks.Add(data);
                 }
 
                 request.Id = Guid.NewGuid();
@@ -82,6 +89,82 @@ namespace RefferalLinks.Service.Implementation
             }
             return result;
         }
+
+        //public AppResponse<CustomerDto> Create(CustomerDto request)
+        //{
+        //    var result = new AppResponse<CustomerDto>();
+        //    try
+        //    {
+        //        if (request.RefferalCode == null)
+        //        {
+        //            return result.BuildError("Không để trống mã giớ thiệu");
+        //        }
+        //        var user = _userespository.FindByPredicate(x => x.RefferalCode == request.RefferalCode).FirstOrDefault(x => x.RefferalCode == request.RefferalCode);
+        //        if (user == null)
+        //        {
+        //            return result.BuildError("không tìm thấy mã giới thiệu");
+        //        }
+        //        var customer = _mapper.Map<Customer>(request);
+        //        customer.Id = Guid.NewGuid();
+        //        customer.ApplicationUserId = user.Id;
+        //        _customerRespository.Add(customer);
+        //        request.Banks = new List<BankDto>();
+        //        var listcustomedlink = new List<CustomerLinkDto>();
+        //        var addlistbank = new BankDto();
+        //        var listbank = _bankRepository.GetAll().Where(x => x.IsDeleted == false).ToList();
+        //        foreach(var bank in listbank)
+        //        {
+
+        //            var linktemplatelist = _linkTemplateRepository.GetAll().Where(x => x.IsActive == true && x.IsDeleted == false).ToList();
+
+        //            addlistbank.Name = bank.Name;
+        //            foreach (var linktemplate in linktemplatelist)
+        //            {
+        //                if(bank.Id == linktemplate.BankId)
+        //                {
+        //                var customerlink = new Customerlink();
+        //                customerlink.Id = Guid.NewGuid();
+        //                customerlink.LinkTemplateId = linktemplate.Id;
+        //                customerlink.CustomerId = customer.Id;
+        //                customerlink.Url = linktemplate.Url;
+        //                customerlink.Url = customerlink.Url.Replace("{{sale}}", request.RefferalCode);
+        //                customerlink.Url = customerlink.Url.Replace("{{ten}}", customer.Name);
+        //                customerlink.Url = customerlink.Url.Replace("{{phone}}", customer.PhoneNumber);
+        //                customerlink.Url = customerlink.Url.Replace("{{cccd}}", customer.Cccd);
+        //                customerlink.Url = customerlink.Url.Replace("{{email}}", customer.Email);
+        //                  _customerLinkRepository.Add(customerlink);
+        //                  var data = _mapper.Map<CustomerLinkDto>(customerlink);
+        //                    if (addlistbank.CustomerLinks == null)
+        //                    {
+        //                        addlistbank.CustomerLinks = new List<CustomerLinkDto>();
+        //                    }
+        //                    addlistbank.CustomerLinks.Add(data);                   
+
+        //                }
+        //                else
+        //                {
+        //                    continue;
+        //                }
+        //                //var data = _mapper.Map<CustomerLinkDto>(customerlink);
+        //                //_customerLinkRepository.Add(customerlink);
+
+        //            } 
+        //            request.Banks.Add(addlistbank);
+
+        //        }
+
+        //        request.Id = Guid.NewGuid();
+        //        result.BuildResult(request);
+
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        result.BuildError(ex.Message);
+        //    }
+        //    return result;
+        //}
+
+
 
         public AppResponse<string> Delete(Guid Id)
         {
@@ -131,7 +214,7 @@ namespace RefferalLinks.Service.Implementation
                     customerlink.Url = customerlink.Url.Replace("{{cccd}}", customer.Cccd);
                     customerlink.Url = customerlink.Url.Replace("{{email}}", customer.Email);
                     _customerLinkRepository.Add(customerlink);
-                    request.CustomerLinks.Add(_mapper.Map<CustomerLinkDto>(customerlink));
+                    //request.CustomerLinks.Add(_mapper.Map<CustomerLinkDto>(customerlink));
                 }
 
                 result.BuildResult(request);
@@ -148,7 +231,7 @@ namespace RefferalLinks.Service.Implementation
             var result = new AppResponse<CustomerDto>();
             try
             {
-                var query = _customerRespository.FindBy(x => x.Id == Id).Include(x => x.Province);
+                var query = _customerRespository.FindBy(x => x.Id == Id).Include(x => x.Province).Include(x => x.ApplicationUser) ;
 
                 var data = query.Select(x => new CustomerDto
                 {
@@ -158,6 +241,8 @@ namespace RefferalLinks.Service.Implementation
                    ProvinceId = x.ProvinceId,
                    PhoneNumber = x.PhoneNumber,
                    Name = x.Name,
+                   Cccd = x.Cccd,
+                   RefferalCode = x.ApplicationUser.RefferalCode,
                    NameProvice = x.Province.Name,
                 }).First();
                 result.BuildResult(data);
@@ -179,9 +264,9 @@ namespace RefferalLinks.Service.Implementation
                     var code = _userespository.FindByPredicate(m => m.Id == x.ApplicationUserId).FirstOrDefault().RefferalCode;
                     var customerDto = new CustomerDto();
                     customerDto = _mapper.Map<CustomerDto>(x);
-                    customerDto.CustomerLinks = new List<CustomerLinkDto>();
+                    //customerDto.CustomerLinks = new List<CustomerLinkDto>();
                     var listCustomerLink = _customerLinkRepository.GetAll().Where(x=>x.CustomerId == (Guid)customerDto.Id).ToList();
-                    customerDto.CustomerLinks.AddRange(_mapper.Map<List<CustomerLinkDto>>(listCustomerLink));
+                   /* customerDto.CustomerLinks.AddRange(_mapper.Map<List<CustomerLinkDto>>(listCustomerLink))*/;
                     return customerDto;
                 }).ToList();
                 result.BuildResult(list);
