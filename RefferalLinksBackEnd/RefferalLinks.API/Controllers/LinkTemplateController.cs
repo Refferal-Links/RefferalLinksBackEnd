@@ -60,7 +60,7 @@ namespace RefferalLinks.API.Controllers
             return Ok(result);
         }
         [HttpPut]
-        [Route("{Id}")]
+        [Route("StatusChange")]
         public IActionResult StatusChange(LinkTemplateDto Id)
         {
             var reuslt = _templateService.StatusChange(Id);
