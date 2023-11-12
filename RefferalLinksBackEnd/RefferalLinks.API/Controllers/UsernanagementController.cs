@@ -10,7 +10,7 @@ namespace RefferalLinks.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(AuthenticationSchemes = "Bearer")]
+    //[Authorize(AuthenticationSchemes = "Bearer")]
     public class UserManagemetController : Controller
     {
         IUsermanagementService _usermanagementService;
@@ -19,10 +19,10 @@ namespace RefferalLinks.API.Controllers
             _usermanagementService = usermanagementService;
         }
         [HttpGet]
-        [Authorize(Roles = "superadmin")]
-        public IActionResult GetAll()
+        //[Authorize(Roles = "superadmin")]
+        public  async Task< IActionResult> GetAll()
         {
-            var result = _usermanagementService.GetAllUser();
+            var result = await _usermanagementService.GetAllUser();
             return Ok(result);
         }
         [HttpPut]
@@ -65,5 +65,11 @@ namespace RefferalLinks.API.Controllers
 			var result = await _usermanagementService.Search(request);
 			return Ok(result);
 		}
+        [HttpPut]
+        public async Task < IActionResult> Statuschange(string id)
+        {
+            var result = await _usermanagementService.StatusChange(id);
+            return Ok(result);
+        }
 	}
 }

@@ -11,6 +11,8 @@ using RefferalLinks.Service.Contract;
 using static MayNghien.Common.CommonMessage.AuthResponseMessage;
 using static Maynghien.Common.Helpers.SearchHelper;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using RefferalLinks.DAL.Implementation;
+using System.Text.Json;
 
 namespace RefferalLinks.Service.Implementation
 {
@@ -38,16 +40,19 @@ namespace RefferalLinks.Service.Implementation
 				var users = _userRepository.FindByPredicate(query);
 				var UserList = users.ToList();
 				var dtoList = _mapper.Map<List<UserModel>>(UserList);
-				if (dtoList != null && dtoList.Count > 0)
-				{
-					for (int i = 0; i < UserList.Count; i++)
-					{
-						var dtouser = dtoList[i];
-						var identityUser = UserList[i];
-						dtouser.Role = (await _userManager.GetRolesAsync(identityUser)).First();
-					}
-				}
-				return result.BuildResult(dtoList);
+
+           
+                if (dtoList != null && dtoList.Count > 0)
+                {
+                    for (int i = 0; i < UserList.Count; i++)
+                    {
+                        var dtouser = dtoList[i];
+                        var identityUser = UserList[i];
+                        dtouser.Role = (await _userManager.GetRolesAsync(identityUser)).First();
+                  
+                    }
+                }
+                return result.BuildResult(dtoList);
 			}
 			catch (Exception ex)
 			{
@@ -293,5 +298,27 @@ namespace RefferalLinks.Service.Implementation
 				throw;
 			}
 		}
-	}
+
+
+        public async Task< AppResponse<IdentityUser> >StatusChange(string id)
+        {
+            var result = new AppResponse<IdentityUser>();
+            IdentityUser user = _userRepository.FindById(id);
+            try
+            {
+
+                if (user == null)
+                {
+                    return result.BuildError("Người dùng không tìm thấy");
+                }
+                user.EmailConfirmed = false;
+                return result.BuildResult(user);
+            }
+            catch (Exception ex)
+            {
+
+                return result.BuildError(ex.ToString());
+            }
+        }
+    }
 }

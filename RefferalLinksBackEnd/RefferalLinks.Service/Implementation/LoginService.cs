@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
+using RefferalLinks.DAL.Contract;
 using RefferalLinks.DAL.Models.Entity;
 using RefferalLinks.Models.Dto;
 using RefferalLinks.Service.Contract;
@@ -20,13 +21,15 @@ namespace RefferalLinks.Service.Implementation
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
         private IHttpContextAccessor _httpContextAccessor;
+        private ITeamRespository _teamRespository;
         public LoginService(IConfiguration config, UserManager<ApplicationUser> userManager,
-                RoleManager<IdentityRole> roleManager , IHttpContextAccessor httpContextAccessor)
+                RoleManager<IdentityRole> roleManager , IHttpContextAccessor httpContextAccessor , ITeamRespository teamRespository)
         {
             _config = config;
             _userManager = userManager;
             _roleManager = roleManager;
             _httpContextAccessor = httpContextAccessor;
+            _teamRespository = teamRespository;
         }
         public async Task<AppResponse<string>> AuthenticateUser(UserModel login)
         {
@@ -47,7 +50,20 @@ namespace RefferalLinks.Service.Implementation
                     }
                     if (await _userManager.CheckPasswordAsync(identityUser, login.Password))
                     {
-                        user = new UserModel { UserName = identityUser.UserName, Email = identityUser.Email , Role = "superadmin" };
+                        if(login.Role == "sale" || login.Role == "superadmin")
+                        {
+                            var getidteam = _teamRespository.Get(login.TeamId.Value);
+                            if (identityUser.TeamId != null && getidteam != null);
+                            {
+                            user = new UserModel { UserName = identityUser.UserName, Email = identityUser.Email, TeamId = identityUser.TeamId };
+                            }
+                           
+                        }
+                        else
+                        {
+                       user = new UserModel { UserName = identityUser.UserName, Email = identityUser.Email , Role = "superadmin" };
+                        }
+                       
                         
                     }
 
