@@ -235,10 +235,10 @@ namespace RefferalLinks.Service.Implementation
                         switch (filter.FieldName)
                         {
                             case "bankId":
-                                predicate = predicate.And(m => m.Bank.Id.Equals(filter.Value));
+                                predicate = predicate.And(m => m.Bank.Id.Equals(Guid.Parse(filter.Value)));
                                 break;
                             case "campaignId":
-                                predicate = predicate.And(m => m.Campaign.Id.Equals(filter.Value));
+                                predicate = predicate.And(m => m.Campaign.Id.Equals(Guid.Parse(filter.Value)));
                                 break;
                             default:
                                 break;
