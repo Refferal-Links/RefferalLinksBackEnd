@@ -63,7 +63,7 @@ namespace RefferalLinks.Service.Implementation
 			{
 				var campaign = _campaignRepository.Get((Guid)request.Id);
 				campaign.Name = request.Name;
-				campaign.IsActive = request.IsActive;
+				campaign.IsActive = request.IsActive == "đang hoạt động" ? true : false;
 				_campaignRepository.Edit(campaign);
 				result.BuildResult(request);
 			}
@@ -99,7 +99,7 @@ namespace RefferalLinks.Service.Implementation
 				{
 					Id = x.Id,
 					Name = x.Name,
-					IsActive = x.IsActive,
+					IsActive = x.IsActive ? "đang hoạt động" : "đã tắt",
 				}).ToList();
 				result.BuildResult(list);
 			}
@@ -126,7 +126,7 @@ namespace RefferalLinks.Service.Implementation
 					{
 						Id = x.Id,
 						Name = x.Name,
-						IsActive = x.IsActive,
+						IsActive = x.IsActive ? "đang hoạt động" : "đã tắt",
 					})
 					.ToList();
 

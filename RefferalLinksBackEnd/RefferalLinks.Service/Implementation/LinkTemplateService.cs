@@ -37,6 +37,7 @@ namespace RefferalLinks.Service.Implementation
             {
                 var linkTemplate = _linkTemplateRepository.Get(request.Id.Value);
                 linkTemplate.IsActive = !linkTemplate.IsActive;
+                _linkTemplateRepository.Edit(linkTemplate);
                 if(linkTemplate.IsActive)
                 {
                     result.BuildResult("đã kích hoạt");
@@ -124,7 +125,7 @@ namespace RefferalLinks.Service.Implementation
                     var linkTemplate = _linkTemplateRepository.Get(request.Id.Value);
                     linkTemplate.Url = request.Url;
                     linkTemplate.BankId = request.BankId;
-                    linkTemplate.IsActive = request.IsActive;
+                    linkTemplate.IsActive = request.IsActive == "đang hoạt động" ? true:false;
                     linkTemplate.CampaignId = request.CampaignId;
                     linkTemplate.ModifiedOn = DateTime.UtcNow;
                     var UserName = ClaimHelper.GetClainByName(_httpContextAccessor, "UserName");
@@ -170,7 +171,7 @@ namespace RefferalLinks.Service.Implementation
                     BankId = x.BankId,
                     CampaignId = x.CampaignId,
                     Url = x.Url,
-                    IsActive = x.IsActive,
+                    IsActive = x.IsActive ? "đang hoạt động" : "đã tắt",
                     BankName = x.Bank.Name,
                     CampaignName = x.Campaign.Name,
                 }).ToList();
@@ -202,7 +203,7 @@ namespace RefferalLinks.Service.Implementation
                         BankId= x.BankId,
                         CampaignId= x.CampaignId,
                         Url= x.Url,
-                        IsActive = x.IsActive,
+                        IsActive = x.IsActive ? "đang hoạt động" : "đã tắt",
                         BankName = x.Bank.Name,
                         CampaignName = x.Campaign.Name,
                     })

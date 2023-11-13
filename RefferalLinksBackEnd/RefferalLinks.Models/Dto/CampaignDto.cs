@@ -11,6 +11,6 @@ namespace RefferalLinks.Models.Dto
 	{
 		public string Name { get; set; }
 
-        public bool IsActive { get; set; }
+        public string? IsActive { get; set; }
     }
 }
