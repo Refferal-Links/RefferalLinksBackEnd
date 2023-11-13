@@ -22,13 +22,14 @@ namespace RefferalLinks.Service.Implementation
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly IMapper _mapper;
         private readonly IUserespository _userRepository;
-
-        public UsermanagementService(UserManager<ApplicationUser> userManager , RoleManager<IdentityRole> roleManager , RefferalLinksDbContext context , IMapper mapper , IUserespository userespository) {
+        private readonly ITeamRespository _teamRespository;
+        public UsermanagementService(UserManager<ApplicationUser> userManager , RoleManager<IdentityRole> roleManager , RefferalLinksDbContext context , IMapper mapper , IUserespository userespository , ITeamRespository teamRespository) {
 
             _userManager = userManager;
             _roleManager = roleManager;
             _mapper = mapper;
             _userRepository = userespository;
+            _teamRespository = teamRespository;
         }
 		public async Task<AppResponse<List<UserModel>>> GetAllUser()
 		{
@@ -95,7 +96,38 @@ namespace RefferalLinks.Service.Implementation
                 {
                     return result.BuildError(ERR_MSG_UserExisted);
                 }
-                var newIdentityUser = new ApplicationUser { Email = user.Email, UserName = user.Email , TeamId = user.TeamId };
+
+                if(user.Role == "sale" || user.Role == "teamleader")
+                {
+                    var idteam =  _teamRespository.Get((Guid) user.TeamId);
+                    if(user.TeamId == null ||  idteam == null )
+                    {
+                        return result.BuildError("Vui long nhap dung teamId");
+                    }
+                    else
+                    {
+                        var newIdentityUserSale = new ApplicationUser { Email = user.Email, UserName = user.Email, TeamId = user.Id };
+                        if(user.Role == "sale")
+                        {
+                            newIdentityUserSale.RefferalCode = user.Reffercode;
+                            newIdentityUserSale.TpBank = user.TPbank;
+                        }
+
+                        var createResultSale = await _userManager.CreateAsync(newIdentityUserSale);
+                        await _userManager.AddPasswordAsync(newIdentityUserSale, user.Password);
+                        if (!(await _roleManager.RoleExistsAsync(user.Role)))
+                        {
+                            IdentityRole role = new IdentityRole { Name = user.Role };
+                            await _roleManager.CreateAsync(role);
+                        }
+                        await _userManager.AddToRoleAsync(newIdentityUserSale, user.Role);
+                        newIdentityUserSale = await _userManager.FindByEmailAsync(user.Email);
+                        return result.BuildResult(INFO_MSG_UserCreated);
+
+                    }
+
+                }
+                var newIdentityUser = new ApplicationUser { Email = user.Email, UserName = user.Email , TeamId = null };
 
                 var createResult = await _userManager.CreateAsync(newIdentityUser);
                 await _userManager.AddPasswordAsync(newIdentityUser, user.Password);
@@ -300,18 +332,23 @@ namespace RefferalLinks.Service.Implementation
 		}
 
 
-        public async Task< AppResponse<IdentityUser> >StatusChange(string id)
+        public async Task< AppResponse<ApplicationUser> >StatusChange(string id)
         {
-            var result = new AppResponse<IdentityUser>();
-            IdentityUser user = _userRepository.FindById(id);
+            var result = new AppResponse<ApplicationUser>();
+            ApplicationUser userid = _userRepository.FindById(id);
             try
             {
 
-                if (user == null)
+                if (userid == null)
                 {
                     return result.BuildError("Người dùng không tìm thấy");
                 }
-                user.EmailConfirmed = false;
+               
+                DateTimeOffset LockoutEndnable = new DateTimeOffset(2023, 11, 13, 10, 38, 0 , TimeSpan.Zero);
+                var user = new ApplicationUser();
+                await _userManager.SetLockoutEnabledAsync(userid, false);
+                //user.LockoutEnd = LockoutEndnable;
+                await _userManager.SetLockoutEndDateAsync(userid, LockoutEndnable);
                 return result.BuildResult(user);
             }
             catch (Exception ex)
