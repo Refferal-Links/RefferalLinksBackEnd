@@ -121,7 +121,8 @@ namespace RefferalLinks.Service.Implementation
                 new Claim("UserName", user.UserName),
 
                 new Claim("Email", user.Email),
-
+                new Claim("RefferalCode", user.Reffercode != null ? user.Reffercode: ""),
+                new Claim("TPBank", user.TPbank != null ? user.TPbank : ""),
             };
             var roles = await _userManager.GetRolesAsync(identityUser);
             foreach (var role in roles)
