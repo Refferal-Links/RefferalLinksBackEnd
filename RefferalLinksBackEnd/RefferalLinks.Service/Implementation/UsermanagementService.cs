@@ -41,14 +41,22 @@ namespace RefferalLinks.Service.Implementation
 				var users = _userRepository.FindByPredicate(query);
 				var UserList = users.ToList();
 				var dtoList = _mapper.Map<List<UserModel>>(UserList);
-
+               
            
                 if (dtoList != null && dtoList.Count > 0)
                 {
                     for (int i = 0; i < UserList.Count; i++)
                     {
                         var dtouser = dtoList[i];
+                        
                         var identityUser = UserList[i];
+                        if (UserList[i].LockoutEnabled == true ) {
+                            dtouser.LockoutEnabled = "Normal";
+                        }
+                        else
+                        {
+                            dtouser.LockoutEnabled = "Banned";
+                        }
                         dtouser.Role = (await _userManager.GetRolesAsync(identityUser)).First();
                   
                     }
