@@ -281,6 +281,7 @@ namespace RefferalLinks.Service.Implementation
                     Id = Guid.Parse(x.Id),
                     LockoutEnabled = x.LockoutEnabled ? "hoạt động": "cấm đến "+ x.LockoutEnd.Value.ToString("dd/MM/yyyy"),
                     RefferalCode = x.RefferalCode ?? "",
+                    TPbank = x.TpBank
                 }).ToList();
 				if (dtoList != null && dtoList.Count > 0)
 				{
