@@ -352,7 +352,7 @@ namespace RefferalLinks.Service.Implementation
                     return result.BuildError("Người dùng không tìm thấy");
                 }
                
-                DateTimeOffset LockoutEndnable = new DateTimeOffset(2023, 11, 13, 10, 38, 0 , TimeSpan.Zero);
+                DateTime LockoutEndnable = new DateTime(2024, 08, 01);
                 var user = new ApplicationUser();
                 await _userManager.SetLockoutEnabledAsync(userid, false);
                 //user.LockoutEnd = LockoutEndnable;
