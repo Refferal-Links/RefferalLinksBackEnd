@@ -10,6 +10,5 @@ namespace RefferalLinks.Models.Dto
    public class TeamDto : BaseDto
     {
         public string name { get; set; }
-        public string RefferalCode { get; set; }
     }
 }

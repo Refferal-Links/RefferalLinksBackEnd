@@ -89,7 +89,7 @@ namespace RefferalLinks.Service.Implementation
                 team.ModifiedOn = DateTime.UtcNow;
                 team.Modifiedby = UserName;
                 team.name = request.name;
-                team.RefferalCode = request.RefferalCode;
+                //team.RefferalCode = request.RefferalCode;
 
 				_teamRespository.Edit(team);
 
@@ -116,7 +116,7 @@ namespace RefferalLinks.Service.Implementation
                 {
                     Id = m.Id,
                    name = m.name,
-                   RefferalCode = m.RefferalCode,
+                   //RefferalCode = m.RefferalCode,
 
                 }).ToList();
                 result.IsSuccess = true;
@@ -169,7 +169,7 @@ namespace RefferalLinks.Service.Implementation
 					{
 						Id = x.Id,
 						name = x.name,
-                        RefferalCode = x.RefferalCode
+                        //RefferalCode = x.RefferalCode
 					})
 					.ToList();
 

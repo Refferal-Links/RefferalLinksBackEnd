@@ -14,7 +14,7 @@ namespace RefferalLinks.Models.Dto
         public string? Email { get; set; }
         public string? Role { get; set; }
         public Guid? TeamId { get; set; }
-        public string? Reffercode { get; set; }
+        public string? RefferalCode { get; set; }
         public string? TPbank { get; set; }
         public string? LockoutEnabled { get; set; }
     }

@@ -10,7 +10,6 @@ namespace RefferalLinks.DAL.Models.Entity
 {
   public class Team : BaseEntity
     {
-        public string? name { get; set; }
-        public string? RefferalCode { get; set; }
+        public string name { get; set; }
     }
 }

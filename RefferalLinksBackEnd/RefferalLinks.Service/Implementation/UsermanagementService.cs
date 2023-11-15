@@ -105,7 +105,7 @@ namespace RefferalLinks.Service.Implementation
                     return result.BuildError(ERR_MSG_UserExisted);
                 }
 
-                if(user.Role == "sale" || user.Role == "teamleader")
+                if(user.Role == "Sale" || user.Role == "Teamleader")
                 {
                     var idteam =  _teamRespository.Get((Guid) user.TeamId);
                     if(user.TeamId == null ||  idteam == null )
@@ -115,9 +115,9 @@ namespace RefferalLinks.Service.Implementation
                     else
                     {
                         var newIdentityUserSale = new ApplicationUser { Email = user.Email, UserName = user.Email, TeamId = user.Id };
-                        if(user.Role == "sale")
+                        if(user.Role == "Sale")
                         {
-                            newIdentityUserSale.RefferalCode = user.Reffercode;
+                            newIdentityUserSale.RefferalCode = user.RefferalCode;
                             newIdentityUserSale.TpBank = user.TPbank;
                         }
 
@@ -280,7 +280,7 @@ namespace RefferalLinks.Service.Implementation
                     UserName = x.UserName,
                     Id = Guid.Parse(x.Id),
                     LockoutEnabled = x.LockoutEnabled ? "hoạt động": "cấm đến "+ x.LockoutEnd.Value.ToString("dd/MM/yyyy"),
-                    Reffercode = x.RefferalCode ?? "",
+                    RefferalCode = x.RefferalCode ?? "",
                 }).ToList();
 				if (dtoList != null && dtoList.Count > 0)
 				{
