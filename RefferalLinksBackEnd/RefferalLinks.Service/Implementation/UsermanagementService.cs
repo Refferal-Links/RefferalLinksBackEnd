@@ -114,7 +114,7 @@ namespace RefferalLinks.Service.Implementation
                     }
                     else
                     {
-                        var newIdentityUserSale = new ApplicationUser { Email = user.Email, UserName = user.Email, TeamId = user.Id };
+                        var newIdentityUserSale = new ApplicationUser { Email = user.Email, UserName = user.Email, TeamId = user.TeamId };
                         if(user.Role == "Sale")
                         {
                             newIdentityUserSale.RefferalCode = user.RefferalCode;
@@ -274,14 +274,23 @@ namespace RefferalLinks.Service.Implementation
 				int pageSize = request.PageSize ?? 1;
 				int startIndex = (pageIndex - 1) * (int)pageSize;
 				var UserList = users.Skip(startIndex).Take(pageSize).ToList();
-                var dtoList = UserList.Select(x => new UserModel
+                var dtoList = UserList.Select(x =>
                 {
-                    Email = x.Email,
-                    UserName = x.UserName,
-                    Id = Guid.Parse(x.Id),
-                    LockoutEnabled = x.LockoutEnabled ? "hoạt động": "cấm đến "+ x.LockoutEnd.Value.ToString("dd/MM/yyyy"),
-                    RefferalCode = x.RefferalCode ?? "",
-                    TPbank = x.TpBank
+                    var user = new UserModel
+                    {
+                        Email = x.Email,
+                        UserName = x.UserName,
+                        Id = Guid.Parse(x.Id),
+                        LockoutEnabled = x.LockoutEnabled ? "hoạt động" : "cấm đến " + x.LockoutEnd.Value.ToString("dd/MM/yyyy"),
+                        RefferalCode = x.RefferalCode ?? "",
+                        TPbank = x.TpBank,
+                        
+                    };
+                    if(x.TeamId != null)
+                    {
+                        user.TeamName = _teamRespository.Get(x.TeamId.Value).name;
+                    }
+                    return user;
                 }).ToList();
 				if (dtoList != null && dtoList.Count > 0)
 				{
