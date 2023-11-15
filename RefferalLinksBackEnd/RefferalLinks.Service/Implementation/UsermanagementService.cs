@@ -336,8 +336,11 @@ namespace RefferalLinks.Service.Implementation
 							case "userName":
 								predicate = predicate.And(m => m.UserName.Equals(filter.Value));
 								break;
+                            case "teamId":
+                                predicate = predicate.And(m=>m.TeamId.Equals(Guid.Parse(filter.Value)));
+                                break;
 
-							default:
+                            default:
 								break;
 						}
 					}
