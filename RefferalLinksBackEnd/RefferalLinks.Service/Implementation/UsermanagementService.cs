@@ -261,16 +261,16 @@ namespace RefferalLinks.Service.Implementation
 
 				var users = _userRepository.FindByPredicate(query).ToList();
 
-                for(int i=0;i<users.Count; i++)
+                for (int i = 0; i < users.Count; i++)
                 {
-                    if((await _userManager.GetRolesAsync(users[i])).First() == "superadmin")
+                    if ((await _userManager.GetRolesAsync(users[i])).First() == "superadmin")
                     {
                         users.Remove(users[i]);
                         i--;
                     }
                 }
 
-				int pageIndex = request.PageIndex ?? 1;
+                int pageIndex = request.PageIndex ?? 1;
 				int pageSize = request.PageSize ?? 1;
 				int startIndex = (pageIndex - 1) * (int)pageSize;
 				var UserList = users.Skip(startIndex).Take(pageSize).ToList();
@@ -278,7 +278,9 @@ namespace RefferalLinks.Service.Implementation
                 {
                     Email = x.Email,
                     UserName = x.UserName,
-                    Id = Guid.Parse(x.Id)
+                    Id = Guid.Parse(x.Id),
+                    LockoutEnabled = x.LockoutEnabled ? "hoạt động": "cấm đến "+ x.LockoutEnd.Value.ToString("dd/MM/yyyy"),
+                    Reffercode = x.RefferalCode ?? "",
                 }).ToList();
 				if (dtoList != null && dtoList.Count > 0)
 				{
@@ -340,24 +342,26 @@ namespace RefferalLinks.Service.Implementation
 		}
 
 
-        public async Task< AppResponse<ApplicationUser> >StatusChange(string id)
+        public async Task< AppResponse<string> >StatusChange(UserModel request)
         {
-            var result = new AppResponse<ApplicationUser>();
-            ApplicationUser userid = _userRepository.FindById(id);
+            var result = new AppResponse<string>();
+            ApplicationUser user = await _userManager.FindByIdAsync(request.Id.Value.ToString());
             try
             {
 
-                if (userid == null)
+                if (user == null)
                 {
                     return result.BuildError("Người dùng không tìm thấy");
                 }
                
-                DateTime LockoutEndnable = new DateTime(2024, 08, 01);
-                var user = new ApplicationUser();
-                await _userManager.SetLockoutEnabledAsync(userid, false);
+                DateTimeOffset LockoutEndnable = DateTimeOffset.UtcNow.AddDays(30);
+                
+                await _userManager.SetLockoutEnabledAsync(user, false);
                 //user.LockoutEnd = LockoutEndnable;
-                await _userManager.SetLockoutEndDateAsync(userid, LockoutEndnable);
-                return result.BuildResult(user);
+                //await _userManager.SetLockoutEndDateAsync(userid, LockoutEndnable);
+                user.LockoutEnd = DateTimeOffset.UtcNow.AddDays(7);
+                await _userManager.UpdateAsync(user);
+                return result.BuildResult("OK");
             }
             catch (Exception ex)
             {

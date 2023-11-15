@@ -19,6 +19,6 @@ namespace RefferalLinks.Service.Contract
         public Task<AppResponse<string>> DeleteUser(string id);
         public Task<AppResponse<UserModel>> GetUser(string email);
         Task<AppResponse<SearchResponse<UserModel>>> Search(SearchRequest request);
-        public  Task<AppResponse<ApplicationUser>> StatusChange(string id);
+        public  Task<AppResponse<string>> StatusChange(UserModel request);
     }
 }

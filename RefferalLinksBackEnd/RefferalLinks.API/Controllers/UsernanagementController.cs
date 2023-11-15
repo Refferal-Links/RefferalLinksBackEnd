@@ -67,9 +67,9 @@ namespace RefferalLinks.API.Controllers
 		}
         [HttpPut]
         [Route("StatusChange")]
-        public async Task < IActionResult> Statuschange(string id)
+        public async Task < IActionResult> Statuschange(UserModel request)
         {
-            var result = await _usermanagementService.StatusChange(id);
+            var result = await _usermanagementService.StatusChange(request);
             return Ok(result);
         }
 	}
