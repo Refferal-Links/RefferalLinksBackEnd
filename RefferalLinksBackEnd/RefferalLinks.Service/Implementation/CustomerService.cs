@@ -192,7 +192,7 @@ namespace RefferalLinks.Service.Implementation
                 var customer = _customerRespository.Get((Guid)request.Id);
                 customer.Name = request.Name;
                 customer.Email = request.Email;
-                customer.Passport = request.Passport;
+                customer.Passport = (bool)request.Passport;
                 customer.ApplicationUserId = user.Id;
                 customer.PhoneNumber = request.PhoneNumber;
                 customer.ProvinceId = request.ProvinceId;
