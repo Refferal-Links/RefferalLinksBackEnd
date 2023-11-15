@@ -50,21 +50,7 @@ namespace RefferalLinks.Service.Implementation
                     }
                     if (await _userManager.CheckPasswordAsync(identityUser, login.Password))
                     {
-                        if(login.Role == "sale" || login.Role == "superadmin")
-                        {
-                            var getidteam = _teamRespository.Get(login.TeamId.Value);
-                            if (identityUser.TeamId != null && getidteam != null);
-                            {
-                            user = new UserModel { UserName = identityUser.UserName, Email = identityUser.Email, TeamId = identityUser.TeamId };
-                            }
-                           
-                        }
-                        else
-                        {
-                       user = new UserModel { UserName = identityUser.UserName, Email = identityUser.Email , Role = "superadmin" };
-                        }
-                       
-                        
+                        user = new UserModel { UserName = identityUser.UserName, Email = identityUser.Email, TeamId = identityUser.TeamId, Reffercode = identityUser.RefferalCode };
                     }
 
                 }
