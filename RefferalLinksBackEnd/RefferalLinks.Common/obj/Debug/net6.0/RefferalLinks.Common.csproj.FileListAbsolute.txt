@@ -9,3 +9,15 @@ D:\GitHub\RefferalLinksBackEnd\RefferalLinksBackEnd\RefferalLinks.Common\obj\Deb
 D:\GitHub\RefferalLinksBackEnd\RefferalLinksBackEnd\RefferalLinks.Common\obj\Debug\net6.0\refint\RefferalLinks.Common.dll
 D:\GitHub\RefferalLinksBackEnd\RefferalLinksBackEnd\RefferalLinks.Common\obj\Debug\net6.0\RefferalLinks.Common.pdb
 D:\GitHub\RefferalLinksBackEnd\RefferalLinksBackEnd\RefferalLinks.Common\obj\Debug\net6.0\ref\RefferalLinks.Common.dll
+D:\DoAn3\RefferalLinksBackEnd\RefferalLinksBackEnd\RefferalLinks.Common\bin\Debug\net6.0\RefferalLinks.Common.deps.json
+D:\DoAn3\RefferalLinksBackEnd\RefferalLinksBackEnd\RefferalLinks.Common\bin\Debug\net6.0\RefferalLinks.Common.dll
+D:\DoAn3\RefferalLinksBackEnd\RefferalLinksBackEnd\RefferalLinks.Common\bin\Debug\net6.0\RefferalLinks.Common.pdb
+D:\DoAn3\RefferalLinksBackEnd\RefferalLinksBackEnd\RefferalLinks.Common\obj\Debug\net6.0\RefferalLinks.Common.csproj.AssemblyReference.cache
+D:\DoAn3\RefferalLinksBackEnd\RefferalLinksBackEnd\RefferalLinks.Common\obj\Debug\net6.0\RefferalLinks.Common.GeneratedMSBuildEditorConfig.editorconfig
+D:\DoAn3\RefferalLinksBackEnd\RefferalLinksBackEnd\RefferalLinks.Common\obj\Debug\net6.0\RefferalLinks.Common.AssemblyInfoInputs.cache
+D:\DoAn3\RefferalLinksBackEnd\RefferalLinksBackEnd\RefferalLinks.Common\obj\Debug\net6.0\RefferalLinks.Common.AssemblyInfo.cs
+D:\DoAn3\RefferalLinksBackEnd\RefferalLinksBackEnd\RefferalLinks.Common\obj\Debug\net6.0\RefferalLinks.Common.csproj.CoreCompileInputs.cache
+D:\DoAn3\RefferalLinksBackEnd\RefferalLinksBackEnd\RefferalLinks.Common\obj\Debug\net6.0\RefferalLinks.Common.dll
+D:\DoAn3\RefferalLinksBackEnd\RefferalLinksBackEnd\RefferalLinks.Common\obj\Debug\net6.0\refint\RefferalLinks.Common.dll
+D:\DoAn3\RefferalLinksBackEnd\RefferalLinksBackEnd\RefferalLinks.Common\obj\Debug\net6.0\RefferalLinks.Common.pdb
+D:\DoAn3\RefferalLinksBackEnd\RefferalLinksBackEnd\RefferalLinks.Common\obj\Debug\net6.0\ref\RefferalLinks.Common.dll

@@ -10,9 +10,9 @@ using System.Threading.Tasks;
 
 namespace RefferalLinks.DAL.Contract
 {
-	public interface ITeamRespository : IGenericRepository<TeamManagement, RefferalLinksDbContext, ApplicationUser>
+	public interface ITeamRespository : IGenericRepository<Team, RefferalLinksDbContext, ApplicationUser>
     {
-        public int CountRecordsByPredicate(Expression<Func<TeamManagement, bool>> predicate);
-        public IQueryable<TeamManagement> FindByPredicate(Expression<Func<TeamManagement, bool>> predicate);
+        public int CountRecordsByPredicate(Expression<Func<Team, bool>> predicate);
+        public IQueryable<Team> FindByPredicate(Expression<Func<Team, bool>> predicate);
     }
 }

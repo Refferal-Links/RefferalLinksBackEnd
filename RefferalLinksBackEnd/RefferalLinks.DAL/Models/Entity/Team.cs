@@ -8,9 +8,8 @@ using System.Threading.Tasks;
 
 namespace RefferalLinks.DAL.Models.Entity
 {
-  public class TeamManagement : BaseEntity
+  public class Team : BaseEntity
     {
-        public string? name { get; set; }
-        public string? RefferalCode { get; set; }
+        public string name { get; set; }
     }
 }

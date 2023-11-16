@@ -56,5 +56,12 @@ namespace RefferalLinks.API.Controllers
 			var result = _campaignService.Search(request);
 			return Ok(result);
 		}
-	}
+		[HttpPut]
+		[Route("StatusChange")]
+		public IActionResult StatusChange([FromBody] CampaignDto request)
+        {
+            var result = _campaignService.StatusChange(request);
+            return Ok(result);
+        }
+    }
 }

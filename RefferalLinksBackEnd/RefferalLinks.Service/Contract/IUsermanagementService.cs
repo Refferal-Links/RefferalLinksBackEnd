@@ -1,6 +1,7 @@
 ﻿using MayNghien.Models.Request.Base;
 using MayNghien.Models.Response.Base;
 using Microsoft.AspNetCore.Identity;
+using RefferalLinks.DAL.Models.Entity;
 using RefferalLinks.Models.Dto;
 using System;
 using System.Collections.Generic;
@@ -18,6 +19,6 @@ namespace RefferalLinks.Service.Contract
         public Task<AppResponse<string>> DeleteUser(string id);
         public Task<AppResponse<UserModel>> GetUser(string email);
         Task<AppResponse<SearchResponse<UserModel>>> Search(SearchRequest request);
-
-	}
+        public  Task<AppResponse<string>> StatusChange(UserModel request);
+    }
 }

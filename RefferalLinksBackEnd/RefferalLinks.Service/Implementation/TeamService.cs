@@ -33,8 +33,8 @@ namespace RefferalLinks.Service.Implementation
                 {
                     return result.BuildError("Cannot find Account by this user");
                 }
-                var team = new TeamManagement();
-                team = _mapper.Map<TeamManagement>(request);
+                var team = new Team();
+                team = _mapper.Map<Team>(request);
                 team.Id = Guid.NewGuid();
                 team.CreatedBy = UserName;
 
@@ -58,7 +58,7 @@ namespace RefferalLinks.Service.Implementation
             var result = new AppResponse<string>();
             try
             {
-                var team = new TeamManagement();
+                var team = new Team();
                 team = _teamRespository.Get(Id);
                 team.IsDeleted = true;
 
@@ -89,7 +89,7 @@ namespace RefferalLinks.Service.Implementation
                 team.ModifiedOn = DateTime.UtcNow;
                 team.Modifiedby = UserName;
                 team.name = request.name;
-                team.RefferalCode = request.RefferalCode;
+                //team.RefferalCode = request.RefferalCode;
 
 				_teamRespository.Edit(team);
 
@@ -116,7 +116,7 @@ namespace RefferalLinks.Service.Implementation
                 {
                     Id = m.Id,
                    name = m.name,
-                   RefferalCode = m.RefferalCode,
+                   //RefferalCode = m.RefferalCode,
 
                 }).ToList();
                 result.IsSuccess = true;
@@ -169,7 +169,7 @@ namespace RefferalLinks.Service.Implementation
 					{
 						Id = x.Id,
 						name = x.name,
-                        RefferalCode = x.RefferalCode
+                        //RefferalCode = x.RefferalCode
 					})
 					.ToList();
 
@@ -189,11 +189,11 @@ namespace RefferalLinks.Service.Implementation
 			}
 			return result;
 		}
-		private ExpressionStarter<TeamManagement> BuildFilterExpression(IList<Filter> Filters)
+		private ExpressionStarter<Team> BuildFilterExpression(IList<Filter> Filters)
 		{
 			try
 			{
-				var predicate = PredicateBuilder.New<TeamManagement>(true);
+				var predicate = PredicateBuilder.New<Team>(true);
 				if (Filters != null)
 					foreach (var filter in Filters)
 					{

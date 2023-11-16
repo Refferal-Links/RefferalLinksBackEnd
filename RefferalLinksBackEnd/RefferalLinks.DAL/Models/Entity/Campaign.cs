@@ -10,5 +10,7 @@ namespace RefferalLinks.DAL.Models.Entity
 	public class Campaign : BaseEntity
 	{
 		public string Name { get; set; }
+
+		public bool IsActive { get; set; }
 	}
 }

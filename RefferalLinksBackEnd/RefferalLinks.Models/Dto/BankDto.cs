@@ -10,5 +10,6 @@ namespace RefferalLinks.Models.Dto
 	public class BankDto : BaseDto
 	{
 		public string Name { get; set; }
+		public List<CustomerLinkDto>? CustomerLinks { get; set; }
 	}
 }

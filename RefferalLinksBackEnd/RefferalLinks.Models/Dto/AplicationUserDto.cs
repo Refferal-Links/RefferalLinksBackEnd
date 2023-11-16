@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace RefferalLinks.Models.Dto
 {
    public class AplicationUserDto 
-    {
-    public Guid TeamManagementId { get; set; }
-    }
+   {
+        public Guid TeamManagementId { get; set; }
+   }
 }

@@ -14,6 +14,7 @@ namespace RefferalLinks.DAL.Models.Entity
         public Guid? TeamId { get; set; }
         public string? RefferalCode { get; set; }
 
+        public string? TpBank { get; set; }
 
     }
 }

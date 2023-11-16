@@ -11,6 +11,8 @@ using RefferalLinks.Service.Contract;
 using static MayNghien.Common.CommonMessage.AuthResponseMessage;
 using static Maynghien.Common.Helpers.SearchHelper;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using RefferalLinks.DAL.Implementation;
+using System.Text.Json;
 
 namespace RefferalLinks.Service.Implementation
 {
@@ -20,13 +22,14 @@ namespace RefferalLinks.Service.Implementation
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly IMapper _mapper;
         private readonly IUserespository _userRepository;
-
-        public UsermanagementService(UserManager<ApplicationUser> userManager , RoleManager<IdentityRole> roleManager , RefferalLinksDbContext context , IMapper mapper , IUserespository userespository) {
+        private readonly ITeamRespository _teamRespository;
+        public UsermanagementService(UserManager<ApplicationUser> userManager , RoleManager<IdentityRole> roleManager , RefferalLinksDbContext context , IMapper mapper , IUserespository userespository , ITeamRespository teamRespository) {
 
             _userManager = userManager;
             _roleManager = roleManager;
             _mapper = mapper;
             _userRepository = userespository;
+            _teamRespository = teamRespository;
         }
 		public async Task<AppResponse<List<UserModel>>> GetAllUser()
 		{
@@ -38,16 +41,27 @@ namespace RefferalLinks.Service.Implementation
 				var users = _userRepository.FindByPredicate(query);
 				var UserList = users.ToList();
 				var dtoList = _mapper.Map<List<UserModel>>(UserList);
-				if (dtoList != null && dtoList.Count > 0)
-				{
-					for (int i = 0; i < UserList.Count; i++)
-					{
-						var dtouser = dtoList[i];
-						var identityUser = UserList[i];
-						dtouser.Role = (await _userManager.GetRolesAsync(identityUser)).First();
-					}
-				}
-				return result.BuildResult(dtoList);
+               
+           
+                if (dtoList != null && dtoList.Count > 0)
+                {
+                    for (int i = 0; i < UserList.Count; i++)
+                    {
+                        var dtouser = dtoList[i];
+                        
+                        var identityUser = UserList[i];
+                        if (UserList[i].LockoutEnabled == true ) {
+                            dtouser.LockoutEnabled = "Normal";
+                        }
+                        else
+                        {
+                            dtouser.LockoutEnabled = "Banned";
+                        }
+                        dtouser.Role = (await _userManager.GetRolesAsync(identityUser)).First();
+                  
+                    }
+                }
+                return result.BuildResult(dtoList);
 			}
 			catch (Exception ex)
 			{
@@ -90,7 +104,38 @@ namespace RefferalLinks.Service.Implementation
                 {
                     return result.BuildError(ERR_MSG_UserExisted);
                 }
-                var newIdentityUser = new ApplicationUser { Email = user.Email, UserName = user.Email };
+
+                if(user.Role == "Sale" || user.Role == "Teamleader")
+                {
+                    var idteam =  _teamRespository.Get((Guid) user.TeamId);
+                    if(user.TeamId == null ||  idteam == null )
+                    {
+                        return result.BuildError("Vui long nhap dung teamId");
+                    }
+                    else
+                    {
+                        var newIdentityUserSale = new ApplicationUser { Email = user.Email, UserName = user.Email, TeamId = user.TeamId };
+                        if(user.Role == "Sale")
+                        {
+                            newIdentityUserSale.RefferalCode = user.RefferalCode;
+                            newIdentityUserSale.TpBank = user.TPbank;
+                        }
+
+                        var createResultSale = await _userManager.CreateAsync(newIdentityUserSale);
+                        await _userManager.AddPasswordAsync(newIdentityUserSale, user.Password);
+                        if (!(await _roleManager.RoleExistsAsync(user.Role)))
+                        {
+                            IdentityRole role = new IdentityRole { Name = user.Role };
+                            await _roleManager.CreateAsync(role);
+                        }
+                        await _userManager.AddToRoleAsync(newIdentityUserSale, user.Role);
+                        newIdentityUserSale = await _userManager.FindByEmailAsync(user.Email);
+                        return result.BuildResult(INFO_MSG_UserCreated);
+
+                    }
+
+                }
+                var newIdentityUser = new ApplicationUser { Email = user.Email, UserName = user.Email , TeamId = null };
 
                 var createResult = await _userManager.CreateAsync(newIdentityUser);
                 await _userManager.AddPasswordAsync(newIdentityUser, user.Password);
@@ -214,26 +259,38 @@ namespace RefferalLinks.Service.Implementation
 				var query = BuildFilterExpression(request.Filters);
 				var numOfRecords = _userRepository.CountRecordsByPredicate(query);
 
-				var users = _userRepository.FindByPredicate(query).ToList();
+				var users = _userRepository.FindByPredicate(query).OrderByDescending(x=>x.Email).ToList();
 
-                for(int i=0;i<users.Count; i++)
+                for (int i = 0; i < users.Count; i++)
                 {
-                    if((await _userManager.GetRolesAsync(users[i])).First() == "superadmin")
+                    if ((await _userManager.GetRolesAsync(users[i])).First() == "superadmin")
                     {
                         users.Remove(users[i]);
                         i--;
                     }
                 }
 
-				int pageIndex = request.PageIndex ?? 1;
+                int pageIndex = request.PageIndex ?? 1;
 				int pageSize = request.PageSize ?? 1;
 				int startIndex = (pageIndex - 1) * (int)pageSize;
 				var UserList = users.Skip(startIndex).Take(pageSize).ToList();
-                var dtoList = UserList.Select(x => new UserModel
+                var dtoList = UserList.Select(x =>
                 {
-                    Email = x.Email,
-                    UserName = x.UserName,
-                    Id = Guid.Parse(x.Id)
+                    var user = new UserModel
+                    {
+                        Email = x.Email,
+                        UserName = x.UserName,
+                        Id = Guid.Parse(x.Id),
+                        LockoutEnabled = x.LockoutEnabled ? "hoạt động" : "cấm đến " + x.LockoutEnd.Value.ToString("dd/MM/yyyy"),
+                        RefferalCode = x.RefferalCode ?? "",
+                        TPbank = x.TpBank,
+                        
+                    };
+                    if(x.TeamId != null)
+                    {
+                        user.TeamName = _teamRespository.Get(x.TeamId.Value).name;
+                    }
+                    return user;
                 }).ToList();
 				if (dtoList != null && dtoList.Count > 0)
 				{
@@ -277,10 +334,13 @@ namespace RefferalLinks.Service.Implementation
 						switch (filter.FieldName)
 						{
 							case "userName":
-								predicate = predicate.And(m => m.UserName.Equals(filter.Value));
+								predicate = predicate.And(m => m.UserName.Contains(filter.Value));
 								break;
+                            case "teamId":
+                                predicate = predicate.And(m=>m.TeamId.Equals(Guid.Parse(filter.Value)));
+                                break;
 
-							default:
+                            default:
 								break;
 						}
 					}
@@ -293,5 +353,40 @@ namespace RefferalLinks.Service.Implementation
 				throw;
 			}
 		}
-	}
+
+
+        public async Task< AppResponse<string> >StatusChange(UserModel request)
+        {
+            var result = new AppResponse<string>();
+            ApplicationUser user = await _userManager.FindByIdAsync(request.Id.Value.ToString());
+            try
+            {
+
+                if (user == null)
+                {
+                    return result.BuildError("Người dùng không tìm thấy");
+                }
+                if(user.LockoutEnabled == false)
+                {
+                    await _userManager.SetLockoutEnabledAsync(user, true);
+                    user.LockoutEnd = null;
+                    await _userManager.UpdateAsync(user);
+                    return result.BuildResult("OK");
+                }
+                DateTimeOffset LockoutEndnable = DateTimeOffset.UtcNow.AddDays(30);
+                
+                await _userManager.SetLockoutEnabledAsync(user, false);
+                //user.LockoutEnd = LockoutEndnable;
+                //await _userManager.SetLockoutEndDateAsync(userid, LockoutEndnable);
+                user.LockoutEnd = DateTimeOffset.UtcNow.AddDays(7);
+                await _userManager.UpdateAsync(user);
+                return result.BuildResult("OK");
+            }
+            catch (Exception ex)
+            {
+
+                return result.BuildError(ex.ToString());
+            }
+        }
+    }
 }

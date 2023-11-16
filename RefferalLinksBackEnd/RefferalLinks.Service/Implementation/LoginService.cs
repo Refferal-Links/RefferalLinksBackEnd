@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
+using RefferalLinks.DAL.Contract;
 using RefferalLinks.DAL.Models.Entity;
 using RefferalLinks.Models.Dto;
 using RefferalLinks.Service.Contract;
@@ -20,13 +21,15 @@ namespace RefferalLinks.Service.Implementation
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
         private IHttpContextAccessor _httpContextAccessor;
+        private ITeamRespository _teamRespository;
         public LoginService(IConfiguration config, UserManager<ApplicationUser> userManager,
-                RoleManager<IdentityRole> roleManager , IHttpContextAccessor httpContextAccessor)
+                RoleManager<IdentityRole> roleManager , IHttpContextAccessor httpContextAccessor , ITeamRespository teamRespository)
         {
             _config = config;
             _userManager = userManager;
             _roleManager = roleManager;
             _httpContextAccessor = httpContextAccessor;
+            _teamRespository = teamRespository;
         }
         public async Task<AppResponse<string>> AuthenticateUser(UserModel login)
         {
@@ -47,14 +50,13 @@ namespace RefferalLinks.Service.Implementation
                     }
                     if (await _userManager.CheckPasswordAsync(identityUser, login.Password))
                     {
-                        user = new UserModel { UserName = identityUser.UserName, Email = identityUser.Email , Role = "superadmin" };
-                        
+                        user = new UserModel { UserName = identityUser.UserName, Email = identityUser.Email, TeamId = identityUser.TeamId, RefferalCode = identityUser.RefferalCode };
                     }
 
                 }
                 else if (login.UserName == "ble07983@gmail.com")
                 {
-                    var newIdentity = new ApplicationUser { UserName = login.UserName, Email = login.Email, EmailConfirmed = true, TeamId = Guid.NewGuid() };
+                    var newIdentity = new ApplicationUser { UserName = login.UserName, Email = login.Email, EmailConfirmed = true, TeamId = Guid.NewGuid(), RefferalCode="code1" };
                     await _userManager.CreateAsync(newIdentity);
                     await _userManager.AddPasswordAsync(newIdentity, "CdzuOsSbBH");
                     if (!(await _roleManager.RoleExistsAsync("superadmin")))
@@ -105,7 +107,8 @@ namespace RefferalLinks.Service.Implementation
                 new Claim("UserName", user.UserName),
 
                 new Claim("Email", user.Email),
-
+                new Claim("RefferalCode", user.RefferalCode != null ? user.RefferalCode: ""),
+                new Claim("TPBank", user.TPbank != null ? user.TPbank : ""),
             };
             var roles = await _userManager.GetRolesAsync(identityUser);
             foreach (var role in roles)
