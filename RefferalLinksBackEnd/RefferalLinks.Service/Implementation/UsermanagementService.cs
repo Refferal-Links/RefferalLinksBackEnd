@@ -259,7 +259,7 @@ namespace RefferalLinks.Service.Implementation
 				var query = BuildFilterExpression(request.Filters);
 				var numOfRecords = _userRepository.CountRecordsByPredicate(query);
 
-				var users = _userRepository.FindByPredicate(query).ToList();
+				var users = _userRepository.FindByPredicate(query).OrderByDescending(x=>x.Email).ToList();
 
                 for (int i = 0; i < users.Count; i++)
                 {
@@ -366,7 +366,12 @@ namespace RefferalLinks.Service.Implementation
                 {
                     return result.BuildError("Người dùng không tìm thấy");
                 }
-               
+                if(user.LockoutEnabled == false)
+                {
+                    await _userManager.SetLockoutEnabledAsync(user, true);
+                    user.LockoutEnd = null;
+                    await _userManager.UpdateAsync(user);
+                }
                 DateTimeOffset LockoutEndnable = DateTimeOffset.UtcNow.AddDays(30);
                 
                 await _userManager.SetLockoutEnabledAsync(user, false);
