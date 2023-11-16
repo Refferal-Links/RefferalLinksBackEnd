@@ -15,7 +15,7 @@ namespace RefferalLinks.Models.Dto
         public Guid LinkTemplateId { get; set; }
         public string? InforCustomer { get;set; }
         public string? Name { get; set; }
-        public bool? Passport { get; set; }
+        public string? Passport { get; set; }
         public string? PhoneNumber { get; set; }
         public string? Email { get; set; }
         public string? Cccd { get; set; }

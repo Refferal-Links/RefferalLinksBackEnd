@@ -47,14 +47,13 @@ namespace RefferalLinks.Service.Implementation
                     Url = x.Url,
                     CustomerId = x.CustomerId,
                     LinkTemplateId = x.LinkTemplateId,
-                    Email = x.Customer.Email,             
-                    Cccd = x.Customer.Cccd,
+                    Email = x.Customer.Email,       
                     Passport = x.Customer.Passport,
                     PhoneNumber = x.Customer.PhoneNumber,
                     Name = x.Customer.Name,
                     BankName = x.LinkTemplate.Bank.Name,
                     CamPainNamme = x.LinkTemplate.Campaign.Name,
-                    InforCustomer = String.Format("Name:{0} , Email:{1} , Cccd:{2} , PhoneNumber:{3} , PassPort:{4}  ", x.Customer.Name, x.Customer.Email, x.Customer.Cccd, x.Customer.PhoneNumber, x.Customer.Passport)
+                    InforCustomer = String.Format("Name:{0} , Email:{1} , Cccd:{2} , PhoneNumber:{3} , PassPort:{4}  ", x.Customer.Name, x.Customer.Email, x.Customer.Passport, x.Customer.PhoneNumber, x.Customer.Passport)
                 }).ToList();
                 result.BuildResult(list);
             }
@@ -115,7 +114,6 @@ namespace RefferalLinks.Service.Implementation
                     CustomerId = x.CustomerId,
                     Email = x.Customer.Email,
                     LinkTemplateId = x.LinkTemplateId,
-                    Cccd = x.Customer.Cccd,
                     Passport = x.Customer.Passport,
                     PhoneNumber = x.Customer.PhoneNumber,
                     Name = x.Customer.Name,
@@ -148,14 +146,13 @@ namespace RefferalLinks.Service.Implementation
                         CustomerId = x.CustomerId,
                         LinkTemplateId= x.LinkTemplateId,
                         Email = x.Customer.Email,
-                        Cccd = x.Customer.Cccd,
                         PhoneNumber = x.Customer.PhoneNumber,
                         Passport = x.Customer.Passport,
                         Name = x.Customer.Name,
                         BankName = x.LinkTemplate.Bank.Name,
                         CamPainNamme = x.LinkTemplate.Campaign.Name,
                         UserName = x.Customer.ApplicationUser.UserName,
-                        InforCustomer = String.Format("Name:{0} , Email:{1} , Cccd:{2} , PhoneNumber:{3} , PassPort:{4}  " , x.Customer.Name, x.Customer.Email, x.Customer.Cccd , x.Customer.PhoneNumber ,x.Customer.Passport)
+                        InforCustomer = String.Format("Name:{0} , Email:{1} , Cccd:{2} , PhoneNumber:{3} , PassPort:{4}  " , x.Customer.Name, x.Customer.Email, x.Customer.Passport , x.Customer.PhoneNumber ,x.Customer.Passport)
                     })
                     .ToList();
                
@@ -192,7 +189,7 @@ namespace RefferalLinks.Service.Implementation
                                 predicate = predicate.And(m => m.Customer.PhoneNumber.Contains(filter.Value));
                                 break;
                             case "Cccd":
-                                predicate = predicate.And(m => m.Customer.Cccd.Contains(filter.Value));
+                                predicate = predicate.And(m => m.Customer.Passport.Contains(filter.Value));
                                 break;
                             case "Name":
                                 predicate = predicate.And(m => m.Customer.Name.Contains(filter.Value));

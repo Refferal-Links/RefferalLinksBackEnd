@@ -12,10 +12,9 @@ namespace RefferalLinks.DAL.Models.Entity
     {
       
         public string Name { get; set; }
-        public bool Passport { get; set; }    
         public string PhoneNumber { get; set; }
         public string Email { get; set; }
-        public string Cccd { get; set; }
+        public string Passport { get; set; }
         [ForeignKey("Province")]
         public Guid ProvinceId { get; set; }
         [ForeignKey("ProvinceId")]

@@ -51,6 +51,11 @@ namespace RefferalLinks.Service.Implementation
                 {
                     return result.BuildError("không tìm thấy mã giới thiệu");
                 }
+                var cccd = _customerRespository.FindBy(x=>x.Passport == request.Passport);
+                if (cccd.Count() != 0)
+                {
+                    return result.BuildError("Căn cước đã tồn tại");
+                }
                 var customer = _mapper.Map<Customer>(request);
                 customer.Id = Guid.NewGuid();
                 customer.ApplicationUserId = user.Id;
@@ -72,7 +77,7 @@ namespace RefferalLinks.Service.Implementation
                     customerlink.Url = customerlink.Url.Replace("{{sale}}", request.RefferalCode);
                     customerlink.Url = customerlink.Url.Replace("{{ten}}", customer.Name);
                     customerlink.Url = customerlink.Url.Replace("{{phone}}", customer.PhoneNumber);
-                    customerlink.Url = customerlink.Url.Replace("{{cccd}}", customer.Cccd);
+                    customerlink.Url = customerlink.Url.Replace("{{cccd}}", customer.Passport);
                     customerlink.Url = customerlink.Url.Replace("{{email}}", customer.Email);
                     _customerLinkRepository.Add(customerlink);
 
@@ -192,7 +197,7 @@ namespace RefferalLinks.Service.Implementation
                 var customer = _customerRespository.Get((Guid)request.Id);
                 customer.Name = request.Name;
                 customer.Email = request.Email;
-                customer.Passport = (bool)request.Passport;
+                customer.Passport = request.Passport;
                 customer.ApplicationUserId = user.Id;
                 customer.PhoneNumber = request.PhoneNumber;
                 customer.ProvinceId = request.ProvinceId;
@@ -211,7 +216,7 @@ namespace RefferalLinks.Service.Implementation
                     customerlink.Url = customerlink.Url.Replace("{{sale}}", code);
                     customerlink.Url = customerlink.Url.Replace("{{ten}}", customer.Name);
                     customerlink.Url = customerlink.Url.Replace("{{phone}}", customer.PhoneNumber);
-                    customerlink.Url = customerlink.Url.Replace("{{cccd}}", customer.Cccd);
+                    customerlink.Url = customerlink.Url.Replace("{{cccd}}", customer.Passport);
                     customerlink.Url = customerlink.Url.Replace("{{email}}", customer.Email);
                     _customerLinkRepository.Add(customerlink);
                     //request.CustomerLinks.Add(_mapper.Map<CustomerLinkDto>(customerlink));
@@ -241,7 +246,6 @@ namespace RefferalLinks.Service.Implementation
                    ProvinceId = x.ProvinceId,
                    PhoneNumber = x.PhoneNumber,
                    Name = x.Name,
-                   Cccd = x.Cccd,
                    RefferalCode = x.ApplicationUser.RefferalCode,
                    NameProvice = x.Province.Name,
                 }).First();

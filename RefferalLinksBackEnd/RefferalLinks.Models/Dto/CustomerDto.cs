@@ -10,10 +10,9 @@ namespace RefferalLinks.Models.Dto
     public class CustomerDto : BaseDto
     {
         public string Name { get; set; }
-        public bool? Passport { get; set; } = true;
         public string PhoneNumber { get; set; }
         public string Email { get; set; }
-        public string Cccd { get; set; }
+        public string Passport { get; set; }
 
         public string RefferalCode { get; set; }
 
