@@ -334,7 +334,7 @@ namespace RefferalLinks.Service.Implementation
 						switch (filter.FieldName)
 						{
 							case "userName":
-								predicate = predicate.And(m => m.UserName.Equals(filter.Value));
+								predicate = predicate.And(m => m.UserName.Contains(filter.Value));
 								break;
                             case "teamId":
                                 predicate = predicate.And(m=>m.TeamId.Equals(Guid.Parse(filter.Value)));
