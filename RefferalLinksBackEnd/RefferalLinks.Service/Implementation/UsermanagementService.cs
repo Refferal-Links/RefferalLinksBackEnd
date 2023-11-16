@@ -371,6 +371,7 @@ namespace RefferalLinks.Service.Implementation
                     await _userManager.SetLockoutEnabledAsync(user, true);
                     user.LockoutEnd = null;
                     await _userManager.UpdateAsync(user);
+                    return result.BuildResult("OK");
                 }
                 DateTimeOffset LockoutEndnable = DateTimeOffset.UtcNow.AddDays(30);
                 
