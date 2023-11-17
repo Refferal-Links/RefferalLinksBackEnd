@@ -236,19 +236,44 @@ namespace RefferalLinks.Service.Implementation
             var result = new AppResponse<CustomerDto>();
             try
             {
-                var query = _customerRespository.FindBy(x => x.Id == Id).Include(x => x.Province).Include(x => x.ApplicationUser) ;
+                var customer = _customerRespository.FindBy(x => x.Id == Id).Include(x => x.Province).Include(x => x.ApplicationUser) ;
 
-                var data = query.Select(x => new CustomerDto
+                var data = customer.Select(customer => new CustomerDto
                 {
-                   Id = x.Id,
-                   Email = x.Email,
-                   Passport = x.Passport,
-                   ProvinceId = x.ProvinceId,
-                   PhoneNumber = x.PhoneNumber,
-                   Name = x.Name,
-                   RefferalCode = x.ApplicationUser.RefferalCode,
-                   NameProvice = x.Province.Name,
+                    Id = customer.Id,
+                    Email = customer.Email,
+                    Passport = customer.Passport,
+                    ProvinceId = customer.ProvinceId,
+                    PhoneNumber = customer.PhoneNumber,
+                    Name = customer.Name,
+                    RefferalCode = customer.ApplicationUser.RefferalCode,
+                    NameProvice = customer.Province.Name,
+                    Banks = new List<BankDto>()
                 }).First();
+
+                data.Banks = _bankRepository.GetAll().Where(bank => bank.IsDeleted != true)
+                    .Select(bank => new BankDto
+                    {
+                        CustomerLinks = new List<CustomerLinkDto>(),
+                        Id = bank.Id,
+                        Name = bank.Name,
+                    }).ToList();
+                data.Banks.ForEach(x =>
+                {
+                    x.CustomerLinks = _customerLinkRepository.GetAll()
+                        .Where(customerLink => customerLink.IsDeleted != true && customerLink.CustomerId == Id && customerLink.LinkTemplate.BankId == x.Id)
+                        .Include(x => x.LinkTemplate)
+                        .Include(x => x.Customer)
+                        .Select(customerLink2 => new CustomerLinkDto
+                        {
+                            CustomerId = customerLink2.CustomerId,
+                            Url = customerLink2.Url,
+                            LinkTemplateId = customerLink2.LinkTemplateId,
+                            Id = customerLink2.Id
+                        }).ToList();
+                });
+
+
                 result.BuildResult(data);
             }
             catch (Exception ex)
