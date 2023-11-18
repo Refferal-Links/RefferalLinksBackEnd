@@ -1,4 +1,5 @@
 ﻿using MayNghien.Models.Request.Base;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using RefferalLinks.Models.Dto;
@@ -8,7 +9,8 @@ namespace RefferalLinks.API.Controllers
 {
 	[Route("api/[controller]")]
 	[ApiController]
-	public class CustomerLinkController : Controller
+    [Authorize(AuthenticationSchemes = "Bearer")]
+    public class CustomerLinkController : Controller
 	{
 		private ICustomerLinkService _customerService;
 		public CustomerLinkController(ICustomerLinkService customerService)
@@ -46,9 +48,9 @@ namespace RefferalLinks.API.Controllers
 		}
 		[HttpPost]
 		[Route("search")]
-		public IActionResult Search(SearchRequest request)
+		public async Task< IActionResult> Search(SearchRequest request)
 		{
-			var result =_customerService.Search(request);
+			var result =await _customerService.Search(request);
 			return Ok(result);
 		}
 	}

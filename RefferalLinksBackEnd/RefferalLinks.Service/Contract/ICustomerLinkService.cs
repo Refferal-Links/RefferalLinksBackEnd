@@ -15,7 +15,7 @@ namespace RefferalLinks.Service.Contract
     public    AppResponse<CustomerLinkDto> Get(Guid Id);
       public  AppResponse<CustomerLinkDto> Edit(CustomerLinkDto request);
        public AppResponse<string> Delete(Guid Id);
-       public AppResponse<SearchResponse<CustomerLinkDto>> Search(SearchRequest request);
+       public  Task<AppResponse<SearchResponse<CustomerLinkDto>>> Search(SearchRequest request);
         public AppResponse<List<CustomerLinkDto>> GetAll();
     }
 }

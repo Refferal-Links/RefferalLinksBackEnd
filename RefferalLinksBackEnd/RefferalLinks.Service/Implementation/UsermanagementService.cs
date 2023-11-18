@@ -105,7 +105,7 @@ namespace RefferalLinks.Service.Implementation
                     return result.BuildError(ERR_MSG_UserExisted);
                 }
 
-                if(user.Role == "Sale" || user.Role == "Teamleader")
+                if(user.Role == "sale" || user.Role == "teamleader")
                 {
                     var idteam =  _teamRespository.Get((Guid) user.TeamId);
                     if(user.TeamId == null ||  idteam == null )
@@ -135,7 +135,7 @@ namespace RefferalLinks.Service.Implementation
                     }
 
                 }
-                var newIdentityUser = new ApplicationUser { Email = user.Email, UserName = user.Email , TeamId = null };
+                var newIdentityUser = new ApplicationUser { Email = user.Email, UserName = user.Email , TeamId = user?.TeamId };
 
                 var createResult = await _userManager.CreateAsync(newIdentityUser);
                 await _userManager.AddPasswordAsync(newIdentityUser, user.Password);
