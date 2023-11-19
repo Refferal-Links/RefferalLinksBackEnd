@@ -3,11 +3,13 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using RefferalLinks.Models.Dto;
 using RefferalLinks.Service.Contract;
+using Microsoft.AspNetCore.Authorization;
 
 namespace RefferalLinks.API.Controllers
 {
 	[Route("api/[controller]")]
 	[ApiController]
+	[Authorize(AuthenticationSchemes = "Bearer")]
 	public class CustomerLinkController : Controller
 	{
 		private ICustomerLinkService _customerService;
@@ -45,11 +47,12 @@ namespace RefferalLinks.API.Controllers
 			return Ok(reuslt);
 		}
 		[HttpPost]
-		[Route("search")]
-		public IActionResult Search(SearchRequest request)
-		{
-			var result =_customerService.Search(request);
-			return Ok(result);
-		}
-	}
+        [Route("search")]
+        public async Task<IActionResult> Search(SearchRequest request)
+        {
+            var result = await _customerService.Search(request);
+            return Ok(result);
+        }
+
+    }
 }

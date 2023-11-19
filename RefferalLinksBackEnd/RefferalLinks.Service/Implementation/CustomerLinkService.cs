@@ -1,7 +1,10 @@
 ﻿using AutoMapper;
 using LinqKit;
+using MayNghien.Common.Helpers;
 using MayNghien.Models.Request.Base;
 using MayNghien.Models.Response.Base;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using RefferalLinks.DAL.Contract;
 using RefferalLinks.DAL.Implementation;
 using RefferalLinks.DAL.Models.Entity;
@@ -11,6 +14,7 @@ using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
+using System.Security.Claims;
 using System.Security.Policy;
 using System.Text;
 using System.Threading.Tasks;
@@ -25,8 +29,13 @@ namespace RefferalLinks.Service.Implementation
         private readonly ILinkTemplateRepository _linkTemplateRepository;
         private readonly IUserespository _userespository;
         private readonly ITeamRespository _teamRespository;
+        private IHttpContextAccessor _httpContextAccessor;
+        private readonly UserManager<ApplicationUser> _userManager;
+
         public CustomerLinkService(ICustomerLinkRepository customerLinkRepository, IMapper mapper , ICustomerRespository customerRespository ,
-            ILinkTemplateRepository linkTemplateRepository, IUserespository userespository , ITeamRespository teamRespository)
+            ILinkTemplateRepository linkTemplateRepository, IUserespository userespository , ITeamRespository teamRespository , IHttpContextAccessor httpContextAccessor ,
+            UserManager<ApplicationUser> userManager
+            )
         {
             _customerLinkRepository = customerLinkRepository;
             _mapper = mapper;
@@ -34,6 +43,8 @@ namespace RefferalLinks.Service.Implementation
             _linkTemplateRepository = linkTemplateRepository;
             _userespository = userespository;
             _teamRespository = teamRespository;
+            _httpContextAccessor = httpContextAccessor;
+            _userManager = userManager;
         }
 
         public AppResponse<List<CustomerLinkDto>> GetAll()
@@ -127,24 +138,26 @@ namespace RefferalLinks.Service.Implementation
             return result;
         }
 
-        public AppResponse<SearchResponse<CustomerLinkDto>> Search(SearchRequest request)
+        public async Task<AppResponse<SearchResponse<CustomerLinkDto>>> Search(SearchRequest request)
         {
             var result = new AppResponse<SearchResponse<CustomerLinkDto>>();
+
             try
             {
-                var query = BuildFilterExpression(request.Filters);
+                var userRole = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.Role)?.Value;
+                var query = await BuildFilterExpression(request.Filters);
                 var numOfRecords = _customerLinkRepository.CountRecordsByPredicate(query);
                 var model = _customerLinkRepository.FindByPredicate(query).OrderByDescending(p => p.CreatedOn);
                 int pageIndex = request.PageIndex ?? 1;
                 int pageSize = request.PageSize ?? 1;
                 int startIndex = (pageIndex - 1) * (int)pageSize;
-                var List = model.Skip(startIndex).Take(pageSize) .Include(x => x.Customer) .Include(x => x.LinkTemplate.Bank) . Include(x => x.LinkTemplate.Campaign)
+                var List = model.Skip(startIndex).Take(pageSize).Include(x => x.Customer).Include(x => x.LinkTemplate.Bank).Include(x => x.LinkTemplate.Campaign)
                     .Select(x => new CustomerLinkDto
                     {
                         Id = x.Id,
                         Url = x.Url,
                         CustomerId = x.CustomerId,
-                        LinkTemplateId= x.LinkTemplateId,
+                        LinkTemplateId = x.LinkTemplateId,
                         Email = x.Customer.Email,
                         PhoneNumber = x.Customer.PhoneNumber,
                         Passport = x.Customer.Passport,
@@ -152,10 +165,14 @@ namespace RefferalLinks.Service.Implementation
                         BankName = x.LinkTemplate.Bank.Name,
                         CamPainNamme = x.LinkTemplate.Campaign.Name,
                         UserName = x.Customer.ApplicationUser.UserName,
-                        InforCustomer = String.Format("Name:{0} , Email:{1} , Cccd:{2} , PhoneNumber:{3} , PassPort:{4}  " , x.Customer.Name, x.Customer.Email, x.Customer.Passport , x.Customer.PhoneNumber ,x.Customer.Passport)
+                        InforCustomer = String.Format("Name:{0} , Email:{1} , Cccd:{2} , PhoneNumber:{3} , PassPort:{4}  ", x.Customer.Name, x.Customer.Email, x.Customer.Passport, x.Customer.PhoneNumber, x.Customer.Passport)
                     })
                     .ToList();
-               
+                if (userRole == "teamlearder")
+                {
+
+                }
+
                 var searchUserResult = new SearchResponse<CustomerLinkDto>
                 {
                     TotalRows = numOfRecords,
@@ -163,7 +180,7 @@ namespace RefferalLinks.Service.Implementation
                     CurrentPage = pageIndex,
                     Data = List,
                 };
-  
+
                 result.BuildResult(searchUserResult);
             }
             catch (Exception ex)
@@ -172,17 +189,46 @@ namespace RefferalLinks.Service.Implementation
             }
             return result;
         }
-        private ExpressionStarter<Customerlink> BuildFilterExpression(IList<Filter> Filters)
+        public async Task<ApplicationUser> GetCurrentUserAsync(ClaimsPrincipal user)
+        {
+            var currentUser = await _userManager.GetUserAsync(user);
+            return currentUser;
+        }
+        private async Task<ExpressionStarter<Customerlink>> BuildFilterExpression(IList<Filter> Filters)
         {
             try
             {
+                var userRole = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.Role)?.Value;
+                var UserName = ClaimHelper.GetClainByName(_httpContextAccessor, "UserName");
+                //var userid =  _userManager.GetUserId( _httpContextAccessor.HttpContext.User);
+                var user = await _userManager.FindByNameAsync(UserName);
                 var predicate = PredicateBuilder.New<Customerlink>(true);
+
+                switch (userRole)
+                {
+
+                    case "teamleader":
+
+                        predicate = predicate.And(m => m.Customer.ApplicationUser.TeamId.ToString().Contains(user.TeamId.ToString()));
+
+                        break;
+
+                    case "sale":
+                        predicate = predicate.And(m => m.Customer.ApplicationUserId.Contains(user.Id));
+                        break;
+                    default:
+                        break;
+                }
+
                 if (Filters != null)
+
                     foreach (var filter in Filters)
                     {
                         switch (filter.FieldName)
                         {
+
                             case "Email":
+
                                 predicate = predicate.And(m => m.Customer.Email.Contains(filter.Value));
                                 break;
                             case "PhoneNumber":
@@ -195,24 +241,34 @@ namespace RefferalLinks.Service.Implementation
                                 predicate = predicate.And(m => m.Customer.Name.Contains(filter.Value));
                                 break;
                             case "Bank":
-                                predicate = predicate.And(m => m.LinkTemplate.BankId.Equals(filter.Value));
+
+                                predicate = predicate.And(m => m.LinkTemplate.BankId.ToString().Contains(filter.Value));
                                 break;
                             case "Campain":
-                                predicate = predicate.And(m => m.LinkTemplate.CampaignId.Equals(filter.Value));
+                                predicate = predicate.And(m => m.LinkTemplate.CampaignId.ToString().Contains(filter.Value));
                                 break;
                             case "Team":
-                               predicate = predicate.And( m =>  m.Customer.ApplicationUser.TeamId.Equals(filter.Value));
+                                if (userRole == "teamleader" || userRole == "sale") break;
+                                predicate = predicate.And(m => m.Customer.ApplicationUser.TeamId.ToString().Contains(filter.Value));
                                 break;
                             case "User":
+                                if (userRole == "sale") break;
                                 predicate = predicate.And(m => m.Customer.ApplicationUserId.Contains(filter.Value));
                                 break;
-
                             default:
                                 break;
                         }
                     }
+
+
+
+
+
+
+
                 predicate = predicate.And(m => m.IsDeleted == false);
                 return predicate;
+
             }
             catch (Exception)
             {
