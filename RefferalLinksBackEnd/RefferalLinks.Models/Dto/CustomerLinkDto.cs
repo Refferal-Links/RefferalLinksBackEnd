@@ -20,7 +20,7 @@ namespace RefferalLinks.Models.Dto
         public string? Email { get; set; }
         public string? Cccd { get; set; }
         public string? BankName { get; set; }
-        public string? CamPainNamme { get; set; }
+        public string? CamPaignNamme { get; set; }
         public Guid? TeamId { get; set; }
         public string? UserName { get; set; }
     }

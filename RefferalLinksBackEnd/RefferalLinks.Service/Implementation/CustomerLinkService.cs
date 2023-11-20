@@ -63,7 +63,7 @@ namespace RefferalLinks.Service.Implementation
                     PhoneNumber = x.Customer.PhoneNumber,
                     Name = x.Customer.Name,
                     BankName = x.LinkTemplate.Bank.Name,
-                    CamPainNamme = x.LinkTemplate.Campaign.Name,
+                    CamPaignNamme = x.LinkTemplate.Campaign.Name,
                     InforCustomer = String.Format("Name:{0} , Email:{1} , Cccd:{2} , PhoneNumber:{3} , PassPort:{4}  ", x.Customer.Name, x.Customer.Email, x.Customer.Passport, x.Customer.PhoneNumber, x.Customer.Passport)
                 }).ToList();
                 result.BuildResult(list);
@@ -163,7 +163,7 @@ namespace RefferalLinks.Service.Implementation
                         Passport = x.Customer.Passport,
                         Name = x.Customer.Name,
                         BankName = x.LinkTemplate.Bank.Name,
-                        CamPainNamme = x.LinkTemplate.Campaign.Name,
+                        CamPaignNamme = x.LinkTemplate.Campaign.Name,
                         UserName = x.Customer.ApplicationUser.UserName,
                         InforCustomer = String.Format("Name:{0} , Email:{1} , Cccd:{2} , PhoneNumber:{3} , PassPort:{4}  ", x.Customer.Name, x.Customer.Email, x.Customer.Passport, x.Customer.PhoneNumber, x.Customer.Passport)
                     })
