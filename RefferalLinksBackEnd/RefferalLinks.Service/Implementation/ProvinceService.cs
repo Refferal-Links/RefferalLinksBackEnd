@@ -94,7 +94,7 @@ namespace RefferalLinks.Service.Implementation
 			var result = new AppResponse<List<ProvinceDto>>();
 			try
 			{
-				var list = _provinceRepository.GetAll().Select(x => new ProvinceDto
+				var list = _provinceRepository.GetAll().Where(x=>x.IsDeleted != true).Select(x => new ProvinceDto
 				{
 					Id = x.Id,
 					Name = x.Name,

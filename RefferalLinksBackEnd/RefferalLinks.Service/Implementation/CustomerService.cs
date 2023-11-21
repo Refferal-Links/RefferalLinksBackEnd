@@ -85,7 +85,7 @@ namespace RefferalLinks.Service.Implementation
                     request.Banks.FirstOrDefault(x => x.Id == linktemplate.BankId).CustomerLinks.Add(data);
                 }
 
-                request.Id = Guid.NewGuid();
+                request.Id = customer.Id;
                 result.BuildResult(request);
             }
             catch (Exception ex)
@@ -264,12 +264,14 @@ namespace RefferalLinks.Service.Implementation
                         .Where(customerLink => customerLink.IsDeleted != true && customerLink.CustomerId == Id && customerLink.LinkTemplate.BankId == x.Id)
                         .Include(x => x.LinkTemplate)
                         .Include(x => x.Customer)
+                        .Include(x=> x.LinkTemplate.Campaign)
                         .Select(customerLink2 => new CustomerLinkDto
                         {
                             CustomerId = customerLink2.CustomerId,
                             Url = customerLink2.Url,
                             LinkTemplateId = customerLink2.LinkTemplateId,
-                            Id = customerLink2.Id
+                            Id = customerLink2.Id,
+                            CamPaignNamme = customerLink2.LinkTemplate.Campaign.Name 
                         }).ToList();
                 });
 
