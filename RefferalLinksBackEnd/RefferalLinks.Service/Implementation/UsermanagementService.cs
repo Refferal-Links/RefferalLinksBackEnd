@@ -114,7 +114,7 @@ namespace RefferalLinks.Service.Implementation
                     }
                     else
                     {
-                        var newIdentityUserSale = new ApplicationUser { Email = user.Email, UserName = user.Email, TeamId = user.TeamId };
+                        var newIdentityUserSale = new ApplicationUser { Email = user.Email, UserName = user.UserName, TeamId = user.TeamId };
                         if(user.Role == "Sale")
                         {
                             newIdentityUserSale.RefferalCode = user.RefferalCode;
