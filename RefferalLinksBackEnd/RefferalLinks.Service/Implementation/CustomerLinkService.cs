@@ -161,17 +161,15 @@ namespace RefferalLinks.Service.Implementation
                         Email = x.Customer.Email,
                         PhoneNumber = x.Customer.PhoneNumber,
                         Passport = x.Customer.Passport,
-                        Name = x.Customer.Name,
+                        Name = x.Customer.Name,    
+         
                         BankName = x.LinkTemplate.Bank.Name,
                         CamPainNamme = x.LinkTemplate.Campaign.Name,
                         UserName = x.Customer.ApplicationUser.UserName,
                         InforCustomer = String.Format("Name:{0} , Email:{1} , Cccd:{2} , PhoneNumber:{3} , PassPort:{4}  ", x.Customer.Name, x.Customer.Email, x.Customer.Passport, x.Customer.PhoneNumber, x.Customer.Passport)
                     })
                     .ToList();
-                if (userRole == "teamlearder")
-                {
-
-                }
+               
 
                 var searchUserResult = new SearchResponse<CustomerLinkDto>
                 {
@@ -209,6 +207,7 @@ namespace RefferalLinks.Service.Implementation
 
                     case "teamleader":
 
+
                         predicate = predicate.And(m => m.Customer.ApplicationUser.TeamId.ToString().Contains(user.TeamId.ToString()));
 
                         break;
@@ -227,31 +226,32 @@ namespace RefferalLinks.Service.Implementation
                         switch (filter.FieldName)
                         {
 
-                            case "Email":
+                            case "email":
 
                                 predicate = predicate.And(m => m.Customer.Email.Contains(filter.Value));
+                                
                                 break;
-                            case "PhoneNumber":
+                            case "phoneNumber":
                                 predicate = predicate.And(m => m.Customer.PhoneNumber.Contains(filter.Value));
                                 break;
-                            case "Cccd":
+                            case "passport":
                                 predicate = predicate.And(m => m.Customer.Passport.Contains(filter.Value));
                                 break;
-                            case "Name":
+                            case "name":
                                 predicate = predicate.And(m => m.Customer.Name.Contains(filter.Value));
                                 break;
-                            case "Bank":
+                            case "bank":
 
                                 predicate = predicate.And(m => m.LinkTemplate.BankId.ToString().Contains(filter.Value));
                                 break;
-                            case "Campain":
+                            case "campain":
                                 predicate = predicate.And(m => m.LinkTemplate.CampaignId.ToString().Contains(filter.Value));
                                 break;
-                            case "Team":
+                            case "team":
                                 if (userRole == "teamleader" || userRole == "sale") break;
                                 predicate = predicate.And(m => m.Customer.ApplicationUser.TeamId.ToString().Contains(filter.Value));
                                 break;
-                            case "User":
+                            case "user":
                                 if (userRole == "sale") break;
                                 predicate = predicate.And(m => m.Customer.ApplicationUserId.Contains(filter.Value));
                                 break;

@@ -10,7 +10,7 @@ namespace RefferalLinks.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    //[Authorize(AuthenticationSchemes = "Bearer")]
+    [Authorize(AuthenticationSchemes = "Bearer")]
     public class UserManagemetController : Controller
     {
         IUsermanagementService _usermanagementService;
@@ -23,6 +23,13 @@ namespace RefferalLinks.API.Controllers
         public  async Task< IActionResult> GetAll()
         {
             var result = await _usermanagementService.GetAllUser();
+            return Ok(result);
+        }
+        [HttpGet]
+        [Route("sale")]
+        public async Task<IActionResult> GetAllsale()
+        {
+            var result = await _usermanagementService.GetAllSale();
             return Ok(result);
         }
         [HttpPut]

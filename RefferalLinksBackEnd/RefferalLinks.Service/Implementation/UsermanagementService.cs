@@ -13,6 +13,10 @@ using static Maynghien.Common.Helpers.SearchHelper;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using RefferalLinks.DAL.Implementation;
 using System.Text.Json;
+using Microsoft.AspNetCore.Http;
+using MayNghien.Common.Helpers;
+using System.Security.Claims;
+using System.Linq.Expressions;
 
 namespace RefferalLinks.Service.Implementation
 {
@@ -23,15 +27,74 @@ namespace RefferalLinks.Service.Implementation
         private readonly IMapper _mapper;
         private readonly IUserespository _userRepository;
         private readonly ITeamRespository _teamRespository;
-        public UsermanagementService(UserManager<ApplicationUser> userManager , RoleManager<IdentityRole> roleManager , RefferalLinksDbContext context , IMapper mapper , IUserespository userespository , ITeamRespository teamRespository) {
+        private IHttpContextAccessor _httpContextAccessor;
+      
+        public UsermanagementService(UserManager<ApplicationUser> userManager , RoleManager<IdentityRole> roleManager , RefferalLinksDbContext context , IMapper mapper , IUserespository userespository , ITeamRespository teamRespository ,
+           IHttpContextAccessor httpContextAccessor
+            ) {
 
             _userManager = userManager;
             _roleManager = roleManager;
             _mapper = mapper;
             _userRepository = userespository;
             _teamRespository = teamRespository;
+            _httpContextAccessor = httpContextAccessor;
         }
-		public async Task<AppResponse<List<UserModel>>> GetAllUser()
+
+        public async Task<AppResponse<List<UserModel>>> GetAllSale()
+        {
+            var result = new AppResponse<List<UserModel>>();
+            try
+            {
+             
+
+                List<Filter> Filters = new List<Filter>();
+                var query = await BuildFilterExpression2(Filters);
+                var users = _userRepository.FindByPredicate(query);
+                //var UserList = users.Select(asych x => new UserModel {
+                //    Id = Guid(x.Id),
+                //    UserName = x.UserName,
+                //    Email = x.Email,
+                //    Role = await _userManager.GetUsersInRoleAsync(x).ToString(),
+                //    TeamId = x.TeamId,
+                //    RefferalCode = x.RefferalCode,
+                //    LockoutEnabled = x.LockoutEnabled ? "Normal" : "Banned",
+                //    TPbank = x.TpBank,
+
+                //}).ToList();
+                var UserList = users.ToList();
+                var dtoList = _mapper.Map<List<UserModel>>(UserList);
+                if (dtoList != null && dtoList.Count > 0)
+                {
+                    for (int i = 0; i < UserList.Count; i++)
+                    {
+                        var dtouser = dtoList[i];
+                        dtouser.RefferalCode = dtouser.RefferalCode;
+                        var identityUser = UserList[i];
+                        if (UserList[i].LockoutEnabled == true)
+                        {
+                            dtouser.LockoutEnabled = "Normal";
+                        }
+                        else
+                        {
+                            dtouser.LockoutEnabled = "Banned";
+                        }
+                        dtouser.Role = (await _userManager.GetRolesAsync(identityUser)).First();
+
+                    }
+                }
+                return result.BuildResult(dtoList);
+            }
+            catch (Exception ex)
+            {
+
+                return result.BuildError(ex.ToString());
+            }
+
+        }
+
+
+        public async Task<AppResponse<List<UserModel>>> GetAllUser()
 		{
 			var result = new AppResponse<List<UserModel>>();
 			try
@@ -105,7 +168,7 @@ namespace RefferalLinks.Service.Implementation
                     return result.BuildError(ERR_MSG_UserExisted);
                 }
 
-                if(user.Role == "Sale" || user.Role == "Teamleader")
+                if(user.Role == "sale" || user.Role == "teamleader")
                 {
                     var idteam =  _teamRespository.Get((Guid) user.TeamId);
                     if(user.TeamId == null ||  idteam == null )
@@ -115,7 +178,7 @@ namespace RefferalLinks.Service.Implementation
                     else
                     {
                         var newIdentityUserSale = new ApplicationUser { Email = user.Email, UserName = user.Email, TeamId = user.TeamId };
-                        if(user.Role == "Sale")
+                        if(user.Role == "sale")
                         {
                             newIdentityUserSale.RefferalCode = user.RefferalCode;
                             newIdentityUserSale.TpBank = user.TPbank;
@@ -354,6 +417,44 @@ namespace RefferalLinks.Service.Implementation
 			}
 		}
 
+        private async Task< ExpressionStarter<ApplicationUser>> BuildFilterExpression2(List<Filter> Filters)
+        {
+            try
+            {
+                var userRole = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.Role)?.Value;         
+                var UserName = ClaimHelper.GetClainByName(_httpContextAccessor, "UserName");
+         
+                var usersWithRoleuser = await _userManager.GetUsersInRoleAsync(userRole);
+                var usersWithRole = await _userManager.GetUsersInRoleAsync("sale");
+                var userIDs = usersWithRole.Select(u => u.Id).ToList();
+                var userIDs2 = usersWithRoleuser.Select(u => u.Id).First();
+                Expression<Func<ApplicationUser, bool>> predicate = u => true; 
+
+                switch (userRole)
+                {
+                    case "admin":
+                    case "superadmin":                                      
+                        predicate = u => userIDs.Contains(u.Id);
+                        break;
+                    case "teamleader":
+                        if (userRole == "sale")
+                        {
+                            predicate = u => userIDs2.Contains(u.Id);
+                            break;
+                        }
+                        else
+                            break;
+                    default:
+                        break;
+                }
+
+                return predicate;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
 
         public async Task< AppResponse<string> >StatusChange(UserModel request)
         {
@@ -373,8 +474,7 @@ namespace RefferalLinks.Service.Implementation
                     await _userManager.UpdateAsync(user);
                     return result.BuildResult("OK");
                 }
-                DateTimeOffset LockoutEndnable = DateTimeOffset.UtcNow.AddDays(30);
-                
+                DateTimeOffset LockoutEndnable = DateTimeOffset.UtcNow.AddDays(30);             
                 await _userManager.SetLockoutEnabledAsync(user, false);
                 //user.LockoutEnd = LockoutEndnable;
                 //await _userManager.SetLockoutEndDateAsync(userid, LockoutEndnable);

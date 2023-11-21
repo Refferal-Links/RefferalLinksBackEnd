@@ -20,5 +20,6 @@ namespace RefferalLinks.Service.Contract
         public Task<AppResponse<UserModel>> GetUser(string email);
         Task<AppResponse<SearchResponse<UserModel>>> Search(SearchRequest request);
         public  Task<AppResponse<string>> StatusChange(UserModel request);
+        public Task<AppResponse<List<UserModel>>> GetAllSale();
     }
 }
