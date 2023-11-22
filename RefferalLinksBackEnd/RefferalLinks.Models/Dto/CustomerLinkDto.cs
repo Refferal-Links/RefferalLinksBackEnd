@@ -18,9 +18,10 @@ namespace RefferalLinks.Models.Dto
         public string? Passport { get; set; }
         public string? PhoneNumber { get; set; }
         public string? Email { get; set; }
-        public string? Cccd { get; set; }
         public string? BankName { get; set; }
-        public string? CamPaignNamme { get; set; }
+        public Guid? CampaignId { get; set; }   
+        public Guid? BankId { get; set; }
+        public string? CamPaignName { get; set; }
         public Guid? TeamId { get; set; }
         public string? UserName { get; set; }
     }

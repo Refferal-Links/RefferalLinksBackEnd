@@ -62,8 +62,12 @@ namespace RefferalLinks.Service.Implementation
                     Passport = x.Customer.Passport,
                     PhoneNumber = x.Customer.PhoneNumber,
                     Name = x.Customer.Name,
+                    BankId = x.LinkTemplate.BankId,
+                    TeamId = x.Customer.ApplicationUser.TeamId,
+                    UserName = x.Customer.ApplicationUser.UserName,
+                    CampaignId = x.LinkTemplate.CampaignId,
                     BankName = x.LinkTemplate.Bank.Name,
-                    CamPaignNamme = x.LinkTemplate.Campaign.Name,
+                    CamPaignName = x.LinkTemplate.Campaign.Name,
                     InforCustomer = String.Format("Name:{0} , Email:{1} , Cccd:{2} , PhoneNumber:{3} , PassPort:{4}  ", x.Customer.Name, x.Customer.Email, x.Customer.Passport, x.Customer.PhoneNumber, x.Customer.Passport)
                 }).ToList();
                 result.BuildResult(list);
@@ -128,6 +132,13 @@ namespace RefferalLinks.Service.Implementation
                     Passport = x.Customer.Passport,
                     PhoneNumber = x.Customer.PhoneNumber,
                     Name = x.Customer.Name,
+                    BankId = x.LinkTemplate.BankId,
+                    CampaignId = x.LinkTemplate.CampaignId,
+                    BankName = x.LinkTemplate.Bank.Name,
+                    TeamId = x.Customer.ApplicationUser.TeamId,
+                    CamPaignName = x.LinkTemplate.Campaign.Name,
+                    UserName = x.Customer.ApplicationUser.UserName,
+                    InforCustomer = String.Format("Name:{0} , Email:{1} , Cccd:{2} , PhoneNumber:{3} , PassPort:{4}  ", x.Customer.Name, x.Customer.Email, x.Customer.Passport, x.Customer.PhoneNumber, x.Customer.Passport)
                 }).First();
                 result.BuildResult(data);
             }
@@ -162,9 +173,11 @@ namespace RefferalLinks.Service.Implementation
                         PhoneNumber = x.Customer.PhoneNumber,
                         Passport = x.Customer.Passport,
                         Name = x.Customer.Name,    
-         
+                        BankId = x.LinkTemplate.BankId,
+                        CampaignId = x.LinkTemplate.CampaignId,
                         BankName = x.LinkTemplate.Bank.Name,
-                        CamPaignNamme = x.LinkTemplate.Campaign.Name,
+                        CamPaignName = x.LinkTemplate.Campaign.Name,
+                        TeamId = x.Customer.ApplicationUser.TeamId,
                         UserName = x.Customer.ApplicationUser.UserName,
                         InforCustomer = String.Format("Name:{0} , Email:{1} , Cccd:{2} , PhoneNumber:{3} , PassPort:{4}  ", x.Customer.Name, x.Customer.Email, x.Customer.Passport, x.Customer.PhoneNumber, x.Customer.Passport)
                     })
@@ -243,7 +256,7 @@ namespace RefferalLinks.Service.Implementation
                             case "bankId":
                                 predicate = predicate.And(m => m.LinkTemplate.BankId.ToString().Contains(filter.Value));
                                 break;
-                            case "campainId":
+                            case "campaignId":
                                 predicate = predicate.And(m => m.LinkTemplate.CampaignId.ToString().Contains(filter.Value));
                                 break;
                             case "teamId":
@@ -258,12 +271,6 @@ namespace RefferalLinks.Service.Implementation
                                 break;
                         }
                     }
-
-
-
-
-
-
 
                 predicate = predicate.And(m => m.IsDeleted == false);
                 return predicate;

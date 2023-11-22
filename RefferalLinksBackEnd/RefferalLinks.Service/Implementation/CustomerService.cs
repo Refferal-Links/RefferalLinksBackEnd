@@ -271,7 +271,7 @@ namespace RefferalLinks.Service.Implementation
                             Url = customerLink2.Url,
                             LinkTemplateId = customerLink2.LinkTemplateId,
                             Id = customerLink2.Id,
-                            CamPaignNamme = customerLink2.LinkTemplate.Campaign.Name 
+                            CamPaignName = customerLink2.LinkTemplate.Campaign.Name 
                         }).ToList();
                 });
 
