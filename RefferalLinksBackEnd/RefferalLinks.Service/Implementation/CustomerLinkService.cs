@@ -240,18 +240,17 @@ namespace RefferalLinks.Service.Implementation
                             case "name":
                                 predicate = predicate.And(m => m.Customer.Name.Contains(filter.Value));
                                 break;
-                            case "bank":
-
+                            case "bankId":
                                 predicate = predicate.And(m => m.LinkTemplate.BankId.ToString().Contains(filter.Value));
                                 break;
-                            case "campain":
+                            case "campainId":
                                 predicate = predicate.And(m => m.LinkTemplate.CampaignId.ToString().Contains(filter.Value));
                                 break;
-                            case "team":
+                            case "teamId":
                                 if (userRole == "teamleader" || userRole == "sale") break;
                                 predicate = predicate.And(m => m.Customer.ApplicationUser.TeamId.ToString().Contains(filter.Value));
                                 break;
-                            case "user":
+                            case "userId":
                                 if (userRole == "sale") break;
                                 predicate = predicate.And(m => m.Customer.ApplicationUserId.Contains(filter.Value));
                                 break;
