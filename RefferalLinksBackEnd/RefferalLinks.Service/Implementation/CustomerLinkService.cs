@@ -52,6 +52,7 @@ namespace RefferalLinks.Service.Implementation
             var result = new AppResponse<List<CustomerLinkDto>>();
             try
             {
+                var teamNames = _teamRespository.GetAllTeamNames();
                 var list = _customerLinkRepository.GetAll() .Include(x => x.Customer) .Select(x => new CustomerLinkDto
                 {
                     Id = x.Id,
@@ -67,6 +68,9 @@ namespace RefferalLinks.Service.Implementation
                     UserName = x.Customer.ApplicationUser.UserName,
                     CampaignId = x.LinkTemplate.CampaignId,
                     BankName = x.LinkTemplate.Bank.Name,
+                    TeamName = x.Customer.ApplicationUser.TeamId.HasValue && teamNames.ContainsKey(x.Customer.ApplicationUser.TeamId.Value)
+        ? teamNames[x.Customer.ApplicationUser.TeamId.Value]
+        : string.Empty,
                     CamPaignName = x.LinkTemplate.Campaign.Name,
                     InforCustomer = String.Format("Name:{0} , Email:{1} , Cccd:{2} , PhoneNumber:{3} , PassPort:{4}  ", x.Customer.Name, x.Customer.Email, x.Customer.Passport, x.Customer.PhoneNumber, x.Customer.Passport)
                 }).ToList();
@@ -162,6 +166,7 @@ namespace RefferalLinks.Service.Implementation
                 int pageIndex = request.PageIndex ?? 1;
                 int pageSize = request.PageSize ?? 1;
                 int startIndex = (pageIndex - 1) * (int)pageSize;
+                var teamNames = _teamRespository.GetAllTeamNames();
                 var List = model.Skip(startIndex).Take(pageSize).Include(x => x.Customer).Include(x => x.LinkTemplate.Bank).Include(x => x.LinkTemplate.Campaign)
                     .Select(x => new CustomerLinkDto
                     {
@@ -179,6 +184,9 @@ namespace RefferalLinks.Service.Implementation
                         CamPaignName = x.LinkTemplate.Campaign.Name,
                         TeamId = x.Customer.ApplicationUser.TeamId,
                         UserName = x.Customer.ApplicationUser.UserName,
+                        TeamName = x.Customer.ApplicationUser.TeamId.HasValue && teamNames.ContainsKey(x.Customer.ApplicationUser.TeamId.Value)
+        ? teamNames[x.Customer.ApplicationUser.TeamId.Value]
+        : string.Empty,
                         InforCustomer = String.Format("Name:{0} , Email:{1} , Cccd:{2} , PhoneNumber:{3} , PassPort:{4}  ", x.Customer.Name, x.Customer.Email, x.Customer.Passport, x.Customer.PhoneNumber, x.Customer.Passport)
                     })
                     .ToList();

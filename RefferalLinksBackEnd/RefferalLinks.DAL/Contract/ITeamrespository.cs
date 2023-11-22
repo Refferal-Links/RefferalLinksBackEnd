@@ -14,5 +14,7 @@ namespace RefferalLinks.DAL.Contract
     {
         public int CountRecordsByPredicate(Expression<Func<Team, bool>> predicate);
         public IQueryable<Team> FindByPredicate(Expression<Func<Team, bool>> predicate);
+        public string GetTeamById(Guid teamId);
+        public Dictionary<Guid, string> GetAllTeamNames();
     }
 }

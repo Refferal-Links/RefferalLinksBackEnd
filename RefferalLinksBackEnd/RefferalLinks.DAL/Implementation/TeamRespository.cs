@@ -26,5 +26,20 @@ namespace RefferalLinks.DAL.Implementation
         {
             return _context.Team.Where(predicate).AsQueryable();
         }
+        public string GetTeamById(Guid teamId)
+        {
+            var team = _context.Team.FirstOrDefault(t => t.Id == teamId);
+            // Replace Teams and TeamId with your actual entity and property names
+
+            return team?.name ?? string.Empty;
+            // Replace Teams and TeamId with your actual entity and property names
+        }
+        public Dictionary<Guid, string> GetAllTeamNames()
+        {
+            var teamNames = _context.Team.ToDictionary(team => team.Id, team => team.name);
+            // Replace Teams, TeamId, and TeamName with your actual entity and property names
+
+            return teamNames;
+        }
     }
 }
