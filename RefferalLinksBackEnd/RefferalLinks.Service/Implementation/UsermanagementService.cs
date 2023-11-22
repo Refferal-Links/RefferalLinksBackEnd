@@ -51,25 +51,31 @@ namespace RefferalLinks.Service.Implementation
                 List<Filter> Filters = new List<Filter>();
                 var query = await BuildFilterExpression2(Filters);
                 var users = _userRepository.FindByPredicate(query);
-                //var UserList = users.Select(asych x => new UserModel {
-                //    Id = Guid(x.Id),
-                //    UserName = x.UserName,
-                //    Email = x.Email,
-                //    Role = await _userManager.GetUsersInRoleAsync(x).ToString(),
-                //    TeamId = x.TeamId,
-                //    RefferalCode = x.RefferalCode,
-                //    LockoutEnabled = x.LockoutEnabled ? "Normal" : "Banned",
-                //    TPbank = x.TpBank,
-
-                //}).ToList();
                 var UserList = users.ToList();
-                var dtoList = _mapper.Map<List<UserModel>>(UserList);
+                var dtoList = UserList.Select(x =>
+                {
+                    var user = new UserModel
+                    {
+                        Email = x.Email,
+                        UserName = x.UserName,
+                        Id = Guid.Parse(x.Id),
+                        LockoutEnabled = x.LockoutEnabled ? "hoạt động" : "cấm đến " + x.LockoutEnd.Value.ToString("dd/MM/yyyy"),
+                        RefferalCode = x.RefferalCode ?? "",
+                        TpBank = x.TpBank,
+
+                    };
+                    if (x.TeamId != null)
+                    {
+                        user.TeamName = _teamRespository.Get(x.TeamId.Value).name;
+                    }
+                    return user;
+                }).ToList();
                 if (dtoList != null && dtoList.Count > 0)
                 {
                     for (int i = 0; i < UserList.Count; i++)
                     {
                         var dtouser = dtoList[i];
-                        dtouser.RefferalCode = dtouser.RefferalCode;
+                
                         var identityUser = UserList[i];
                         if (UserList[i].LockoutEnabled == true)
                         {
@@ -103,9 +109,30 @@ namespace RefferalLinks.Service.Implementation
 				var query =  BuildFilterExpression(Filters);
 				var users = _userRepository.FindByPredicate(query);
 				var UserList = users.ToList();
-				var dtoList = _mapper.Map<List<UserModel>>(UserList);
-               
-           
+				
+
+
+                var dtoList = UserList.Select(x =>
+                {
+                    var user = new UserModel
+                    {
+                        Email = x.Email,
+                        UserName = x.UserName,
+                        Id = Guid.Parse(x.Id),
+                        LockoutEnabled = x.LockoutEnabled ? "hoạt động" : "cấm đến " + x.LockoutEnd.Value.ToString("dd/MM/yyyy"),
+                        RefferalCode = x.RefferalCode ?? "",
+                        TpBank = x.TpBank,
+                        TeamId = x.TeamId,
+
+                    };
+                    if (x.TeamId != null)
+                    {
+                        user.TeamName = _teamRespository.Get(x.TeamId.Value).name;
+                    }
+                    return user;
+                }).ToList();
+
+
                 if (dtoList != null && dtoList.Count > 0)
                 {
                     for (int i = 0; i < UserList.Count; i++)
@@ -181,7 +208,7 @@ namespace RefferalLinks.Service.Implementation
                         if(user.Role == "sale")
                         {
                             newIdentityUserSale.RefferalCode = user.RefferalCode;
-                            newIdentityUserSale.TpBank = user.TPbank;
+                            newIdentityUserSale.TpBank = user.TpBank;
                         }
 
                         var createResultSale = await _userManager.CreateAsync(newIdentityUserSale);
@@ -346,7 +373,7 @@ namespace RefferalLinks.Service.Implementation
                         Id = Guid.Parse(x.Id),
                         LockoutEnabled = x.LockoutEnabled ? "hoạt động" : "cấm đến " + x.LockoutEnd.Value.ToString("dd/MM/yyyy"),
                         RefferalCode = x.RefferalCode ?? "",
-                        TPbank = x.TpBank,
+                        TpBank = x.TpBank,
                         
                     };
                     if(x.TeamId != null)
@@ -422,8 +449,7 @@ namespace RefferalLinks.Service.Implementation
             try
             {
                 var userRole = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.Role)?.Value;         
-                var UserName = ClaimHelper.GetClainByName(_httpContextAccessor, "UserName");
-         
+                var UserName = ClaimHelper.GetClainByName(_httpContextAccessor, "UserName");        
                 var usersWithRoleuser = await _userManager.GetUsersInRoleAsync(userRole);
                 var usersWithRole = await _userManager.GetUsersInRoleAsync("sale");
                 var userIDs = usersWithRole.Select(u => u.Id).ToList();
