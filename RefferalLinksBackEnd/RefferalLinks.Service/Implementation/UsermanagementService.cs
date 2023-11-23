@@ -467,7 +467,9 @@ namespace RefferalLinks.Service.Implementation
                     case "teamleader":
                         predicate = u => userIDs2.Contains(u.TeamId);
                             break;
-                       
+                    case "sale":
+                        predicate = u => false;
+                        break;
                     default:
                         break;
                 }
