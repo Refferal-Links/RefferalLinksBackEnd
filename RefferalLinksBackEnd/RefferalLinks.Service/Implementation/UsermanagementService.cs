@@ -449,11 +449,13 @@ namespace RefferalLinks.Service.Implementation
             try
             {
                 var userRole = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.Role)?.Value;         
-                var UserName = ClaimHelper.GetClainByName(_httpContextAccessor, "UserName");        
-                var usersWithRoleuser = await _userManager.GetUsersInRoleAsync(userRole);
+                var UserName = ClaimHelper.GetClainByName(_httpContextAccessor, "UserName");
+                var iduser = await _userManager.FindByNameAsync(UserName);
                 var usersWithRole = await _userManager.GetUsersInRoleAsync("sale");
                 var userIDs = usersWithRole.Select(u => u.Id).ToList();
-                var userIDs2 = usersWithRoleuser.Select(u => u.Id).First();
+                var userIDs2 = usersWithRole.Select(u => u.TeamId ).ToList();
+                userIDs2.RemoveAll(user => user != iduser.TeamId);
+
                 Expression<Func<ApplicationUser, bool>> predicate = u => true; 
 
                 switch (userRole)
@@ -463,13 +465,9 @@ namespace RefferalLinks.Service.Implementation
                         predicate = u => userIDs.Contains(u.Id);
                         break;
                     case "teamleader":
-                        if (userRole == "sale")
-                        {
-                            predicate = u => userIDs2.Contains(u.Id);
+                        predicate = u => userIDs2.Contains(u.TeamId);
                             break;
-                        }
-                        else
-                            break;
+                       
                     default:
                         break;
                 }
