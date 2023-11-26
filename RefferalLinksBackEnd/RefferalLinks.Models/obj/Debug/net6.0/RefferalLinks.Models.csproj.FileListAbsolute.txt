@@ -28,3 +28,5 @@ D:\DoAn3\RefferalLinksBackEnd\RefferalLinksBackEnd\RefferalLinks.Models\obj\Debu
 D:\DoAn3\RefferalLinksBackEnd\RefferalLinksBackEnd\RefferalLinks.Models\obj\Debug\net6.0\refint\RefferalLinks.Models.dll
 D:\DoAn3\RefferalLinksBackEnd\RefferalLinksBackEnd\RefferalLinks.Models\obj\Debug\net6.0\RefferalLinks.Models.pdb
 D:\DoAn3\RefferalLinksBackEnd\RefferalLinksBackEnd\RefferalLinks.Models\obj\Debug\net6.0\ref\RefferalLinks.Models.dll
+D:\GitHub\RefferalLinksBackEnd\RefferalLinksBackEnd\RefferalLinks.Models\bin\Debug\net6.0\RefferalLinks.Common.dll
+D:\GitHub\RefferalLinksBackEnd\RefferalLinksBackEnd\RefferalLinks.Models\bin\Debug\net6.0\RefferalLinks.Common.pdb

@@ -2685,7 +2685,8 @@
         "type": "project",
         "framework": ".NETCoreApp,Version=v6.0",
         "dependencies": {
-          "Maynghien.Common": "1.0.0"
+          "Maynghien.Common": "1.0.0",
+          "RefferalLinks.Common": "1.0.0"
         },
         "compile": {
           "bin/placeholder/RefferalLinks.Models.dll": {}

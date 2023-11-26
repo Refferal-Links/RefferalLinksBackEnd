@@ -391,6 +391,9 @@
             "projectReferences": {
               "D:\\GitHub\\RefferalLinksBackEnd\\RefferalLinksBackEnd\\Maynghien.Common\\Maynghien.Common.csproj": {
                 "projectPath": "D:\\GitHub\\RefferalLinksBackEnd\\RefferalLinksBackEnd\\Maynghien.Common\\Maynghien.Common.csproj"
+              },
+              "D:\\GitHub\\RefferalLinksBackEnd\\RefferalLinksBackEnd\\RefferalLinks.Common\\RefferalLinks.Common.csproj": {
+                "projectPath": "D:\\GitHub\\RefferalLinksBackEnd\\RefferalLinksBackEnd\\RefferalLinks.Common\\RefferalLinks.Common.csproj"
               }
             }
           }

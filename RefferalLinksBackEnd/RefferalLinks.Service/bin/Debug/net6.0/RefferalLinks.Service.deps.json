@@ -1491,7 +1491,8 @@
       },
       "RefferalLinks.Models/1.0.0": {
         "dependencies": {
-          "Maynghien.Common": "1.0.0"
+          "Maynghien.Common": "1.0.0",
+          "RefferalLinks.Common": "1.0.0"
         },
         "runtime": {
           "RefferalLinks.Models.dll": {}

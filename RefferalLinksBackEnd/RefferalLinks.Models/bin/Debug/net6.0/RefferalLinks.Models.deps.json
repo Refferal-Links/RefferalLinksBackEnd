@@ -8,7 +8,8 @@
     ".NETCoreApp,Version=v6.0": {
       "RefferalLinks.Models/1.0.0": {
         "dependencies": {
-          "Maynghien.Common": "1.0.0"
+          "Maynghien.Common": "1.0.0",
+          "RefferalLinks.Common": "1.0.0"
         },
         "runtime": {
           "RefferalLinks.Models.dll": {}
@@ -1407,6 +1408,11 @@
         "runtime": {
           "Maynghien.Common.dll": {}
         }
+      },
+      "RefferalLinks.Common/1.0.0": {
+        "runtime": {
+          "RefferalLinks.Common.dll": {}
+        }
       }
     }
   },
@@ -2243,6 +2249,11 @@
       "hashPath": "system.windows.extensions.4.7.0.nupkg.sha512"
     },
     "Maynghien.Common/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "RefferalLinks.Common/1.0.0": {
       "type": "project",
       "serviceable": false,
       "sha512": ""

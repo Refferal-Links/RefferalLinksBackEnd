@@ -2105,6 +2105,16 @@
         "runtime": {
           "bin/placeholder/Maynghien.Common.dll": {}
         }
+      },
+      "RefferalLinks.Common/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v6.0",
+        "compile": {
+          "bin/placeholder/RefferalLinks.Common.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/RefferalLinks.Common.dll": {}
+        }
       }
     }
   },
@@ -4639,11 +4649,17 @@
       "type": "project",
       "path": "../Maynghien.Common/Maynghien.Common.csproj",
       "msbuildProject": "../Maynghien.Common/Maynghien.Common.csproj"
+    },
+    "RefferalLinks.Common/1.0.0": {
+      "type": "project",
+      "path": "../RefferalLinks.Common/RefferalLinks.Common.csproj",
+      "msbuildProject": "../RefferalLinks.Common/RefferalLinks.Common.csproj"
     }
   },
   "projectFileDependencyGroups": {
     "net6.0": [
-      "Maynghien.Common >= 1.0.0"
+      "Maynghien.Common >= 1.0.0",
+      "RefferalLinks.Common >= 1.0.0"
     ]
   },
   "packageFolders": {
@@ -4680,6 +4696,9 @@
           "projectReferences": {
             "D:\\GitHub\\RefferalLinksBackEnd\\RefferalLinksBackEnd\\Maynghien.Common\\Maynghien.Common.csproj": {
               "projectPath": "D:\\GitHub\\RefferalLinksBackEnd\\RefferalLinksBackEnd\\Maynghien.Common\\Maynghien.Common.csproj"
+            },
+            "D:\\GitHub\\RefferalLinksBackEnd\\RefferalLinksBackEnd\\RefferalLinks.Common\\RefferalLinks.Common.csproj": {
+              "projectPath": "D:\\GitHub\\RefferalLinksBackEnd\\RefferalLinksBackEnd\\RefferalLinks.Common\\RefferalLinks.Common.csproj"
             }
           }
         }
