@@ -28,6 +28,8 @@ namespace RefferalLinks.DAL.Models.Context
 		public DbSet<Customer> Customer { get;set; }
 		public DbSet<LinkTemplate> LinkTemplate { get;set; }
 		public DbSet<Customerlink> Customerlink { get;set; }
+		public DbSet<CustomerLinkImage> CustomerlinkImage { get;set; }
+
 		protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 		{
 			if (!optionsBuilder.IsConfigured)

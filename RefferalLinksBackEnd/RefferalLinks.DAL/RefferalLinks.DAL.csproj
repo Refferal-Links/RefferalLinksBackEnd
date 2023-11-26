@@ -38,4 +38,8 @@
     <ProjectReference Include="..\RefferalLinks.Common\RefferalLinks.Common.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Migrations\" />
+  </ItemGroup>
+
 </Project>

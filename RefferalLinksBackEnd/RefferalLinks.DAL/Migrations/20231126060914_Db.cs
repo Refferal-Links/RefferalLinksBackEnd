@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace RefferalLinks.DAL.Migrations
 {
-    public partial class updii : Migration
+    public partial class Db : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -30,6 +30,7 @@ namespace RefferalLinks.DAL.Migrations
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     TeamId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     RefferalCode = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    TpBank = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
@@ -73,6 +74,7 @@ namespace RefferalLinks.DAL.Migrations
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    IsActive = table.Column<bool>(type: "bit", nullable: false),
                     CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: true),
                     CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ModifiedOn = table.Column<DateTime>(type: "datetime2", nullable: true),
@@ -102,12 +104,11 @@ namespace RefferalLinks.DAL.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "TeamManagement",
+                name: "Team",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    name = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    RefferalCode = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: true),
                     CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ModifiedOn = table.Column<DateTime>(type: "datetime2", nullable: true),
@@ -116,7 +117,7 @@ namespace RefferalLinks.DAL.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_TeamManagement", x => x.Id);
+                    table.PrimaryKey("PK_Team", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -226,15 +227,47 @@ namespace RefferalLinks.DAL.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "LinkTemplate",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Url = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    IsActive = table.Column<bool>(type: "bit", nullable: false),
+                    BankId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    CampaignId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ModifiedOn = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    Modifiedby = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_LinkTemplate", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_LinkTemplate_Bank_BankId",
+                        column: x => x.BankId,
+                        principalTable: "Bank",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_LinkTemplate_Campaign_CampaignId",
+                        column: x => x.CampaignId,
+                        principalTable: "Campaign",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Customer",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Passport = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Province = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Passport = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ProvinceId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     ApplicationUserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: true),
                     CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -249,6 +282,68 @@ namespace RefferalLinks.DAL.Migrations
                         name: "FK_Customer_AspNetUsers_ApplicationUserId",
                         column: x => x.ApplicationUserId,
                         principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Customer_Province_ProvinceId",
+                        column: x => x.ProvinceId,
+                        principalTable: "Province",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Customerlink",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    CustomerId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Url = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Status = table.Column<int>(type: "int", nullable: false),
+                    LinkTemplateId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ModifiedOn = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    Modifiedby = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Customerlink", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Customerlink_Customer_CustomerId",
+                        column: x => x.CustomerId,
+                        principalTable: "Customer",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Customerlink_LinkTemplate_LinkTemplateId",
+                        column: x => x.LinkTemplateId,
+                        principalTable: "LinkTemplate",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "CustomerlinkImage",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    LinkImage = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CustomerLinkId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ModifiedOn = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    Modifiedby = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CustomerlinkImage", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_CustomerlinkImage_Customerlink_CustomerLinkId",
+                        column: x => x.CustomerLinkId,
+                        principalTable: "Customerlink",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
@@ -296,6 +391,36 @@ namespace RefferalLinks.DAL.Migrations
                 name: "IX_Customer_ApplicationUserId",
                 table: "Customer",
                 column: "ApplicationUserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Customer_ProvinceId",
+                table: "Customer",
+                column: "ProvinceId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Customerlink_CustomerId",
+                table: "Customerlink",
+                column: "CustomerId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Customerlink_LinkTemplateId",
+                table: "Customerlink",
+                column: "LinkTemplateId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_CustomerlinkImage_CustomerLinkId",
+                table: "CustomerlinkImage",
+                column: "CustomerLinkId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_LinkTemplate_BankId",
+                table: "LinkTemplate",
+                column: "BankId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_LinkTemplate_CampaignId",
+                table: "LinkTemplate",
+                column: "CampaignId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -316,25 +441,34 @@ namespace RefferalLinks.DAL.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "Bank");
+                name: "CustomerlinkImage");
 
             migrationBuilder.DropTable(
-                name: "Campaign");
-
-            migrationBuilder.DropTable(
-                name: "Customer");
-
-            migrationBuilder.DropTable(
-                name: "Province");
-
-            migrationBuilder.DropTable(
-                name: "TeamManagement");
+                name: "Team");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
+                name: "Customerlink");
+
+            migrationBuilder.DropTable(
+                name: "Customer");
+
+            migrationBuilder.DropTable(
+                name: "LinkTemplate");
+
+            migrationBuilder.DropTable(
                 name: "AspNetUsers");
+
+            migrationBuilder.DropTable(
+                name: "Province");
+
+            migrationBuilder.DropTable(
+                name: "Bank");
+
+            migrationBuilder.DropTable(
+                name: "Campaign");
         }
     }
 }

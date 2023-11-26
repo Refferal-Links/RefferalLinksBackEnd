@@ -9,13 +9,14 @@ using System.Threading.Tasks;
 
 namespace RefferalLinks.Service.Contract
 {
-  public interface ICustomerLinkService
+    public interface ICustomerLinkService
     {
         //AppResponse<CustomerLinkDto> Create(CustomerLinkDto request);
-    public    AppResponse<CustomerLinkDto> Get(Guid Id);
-      public  AppResponse<CustomerLinkDto> Edit(CustomerLinkDto request);
-       public AppResponse<string> Delete(Guid Id);
+        public AppResponse<CustomerLinkDto> Get(Guid Id);
+        public AppResponse<CustomerLinkDto> Edit(CustomerLinkDto request);
+        public AppResponse<string> Delete(Guid Id);
         public Task<AppResponse<SearchResponse<CustomerLinkDto>>> Search(SearchRequest request);
         public AppResponse<List<CustomerLinkDto>> GetAll();
+        public AppResponse<string> StatusChange(CustomerLinkDto request);
     }
 }

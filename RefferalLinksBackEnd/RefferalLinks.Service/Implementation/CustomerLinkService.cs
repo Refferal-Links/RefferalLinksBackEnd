@@ -31,10 +31,11 @@ namespace RefferalLinks.Service.Implementation
         private readonly ITeamRespository _teamRespository;
         private IHttpContextAccessor _httpContextAccessor;
         private readonly UserManager<ApplicationUser> _userManager;
+        private readonly ICustomerlinkImageRepository _customerlinkImageRepository;
 
         public CustomerLinkService(ICustomerLinkRepository customerLinkRepository, IMapper mapper , ICustomerRespository customerRespository ,
             ILinkTemplateRepository linkTemplateRepository, IUserespository userespository , ITeamRespository teamRespository , IHttpContextAccessor httpContextAccessor ,
-            UserManager<ApplicationUser> userManager
+            UserManager<ApplicationUser> userManager, ICustomerlinkImageRepository customerlinkImageRepository
             )
         {
             _customerLinkRepository = customerLinkRepository;
@@ -45,6 +46,7 @@ namespace RefferalLinks.Service.Implementation
             _teamRespository = teamRespository;
             _httpContextAccessor = httpContextAccessor;
             _userManager = userManager;
+            _customerlinkImageRepository = customerlinkImageRepository;
         }
 
         public AppResponse<List<CustomerLinkDto>> GetAll()
@@ -291,6 +293,41 @@ namespace RefferalLinks.Service.Implementation
             }
         }
 
+        public AppResponse<string> StatusChange(CustomerLinkDto request)
+        {
+            var result = new AppResponse<string>();
+            try
+            {
+                var UserName = ClaimHelper.GetClainByName(_httpContextAccessor, "UserName");
+                if (UserName == null)
+                {
+                    return result.BuildError("Cannot find Account by this user");
+                }
+                if (request.ListCustomerlinkImage == null)
+                {
+                    return result.BuildError("Không để trống danh sách hình ảnh");
+                }
+                request.ListCustomerlinkImage.ForEach(item =>
+                {
+                    var customerLinkImage = _mapper.Map<CustomerLinkImage>(item);
+                    customerLinkImage.Id = Guid.NewGuid();
+                    customerLinkImage.CreatedOn = DateTime.UtcNow;
+                    customerLinkImage.CreatedBy = UserName;
+                    customerLinkImage.CustomerLinkId = request.Id.Value;
+                    _customerlinkImageRepository.Add(customerLinkImage);
+                });
+                var customerLink = _customerLinkRepository.Get(request.Id.Value);
+                customerLink.Status = request.Status.Value;
+                _customerLinkRepository.Edit(customerLink);
+                result.BuildResult("OK");
 
+            }
+            catch(Exception ex)
+            {
+                result.BuildError(ex.Message);
+            }
+
+            return result;
+        }
     }
 }

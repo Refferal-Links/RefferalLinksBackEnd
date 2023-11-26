@@ -2,6 +2,7 @@
 using LinqKit;
 using MayNghien.Models.Request.Base;
 using MayNghien.Models.Response.Base;
+using RefferalLinks.Common.Enum;
 using RefferalLinks.DAL.Contract;
 using RefferalLinks.DAL.Implementation;
 using RefferalLinks.DAL.Models.Entity;
@@ -79,6 +80,7 @@ namespace RefferalLinks.Service.Implementation
                     customerlink.Url = customerlink.Url.Replace("{{phone}}", customer.PhoneNumber);
                     customerlink.Url = customerlink.Url.Replace("{{cccd}}", customer.Passport);
                     customerlink.Url = customerlink.Url.Replace("{{email}}", customer.Email);
+                    customerlink.Status = StatusCustomerLink.Pending;
                     _customerLinkRepository.Add(customerlink);
 
                     var data = _mapper.Map<CustomerLinkDto>(customerlink);

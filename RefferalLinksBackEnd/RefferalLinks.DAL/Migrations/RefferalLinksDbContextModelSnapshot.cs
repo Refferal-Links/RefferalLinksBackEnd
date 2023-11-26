@@ -372,6 +372,9 @@ namespace RefferalLinks.DAL.Migrations
                     b.Property<string>("Modifiedby")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
                     b.Property<string>("Url")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -383,6 +386,41 @@ namespace RefferalLinks.DAL.Migrations
                     b.HasIndex("LinkTemplateId");
 
                     b.ToTable("Customerlink");
+                });
+
+            modelBuilder.Entity("RefferalLinks.DAL.Models.Entity.CustomerLinkImage", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("CustomerLinkId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("LinkImage")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("ModifiedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Modifiedby")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CustomerLinkId");
+
+                    b.ToTable("CustomerlinkImage");
                 });
 
             modelBuilder.Entity("RefferalLinks.DAL.Models.Entity.LinkTemplate", b =>
@@ -575,6 +613,17 @@ namespace RefferalLinks.DAL.Migrations
                     b.Navigation("Customer");
 
                     b.Navigation("LinkTemplate");
+                });
+
+            modelBuilder.Entity("RefferalLinks.DAL.Models.Entity.CustomerLinkImage", b =>
+                {
+                    b.HasOne("RefferalLinks.DAL.Models.Entity.Customerlink", "Customerlink")
+                        .WithMany()
+                        .HasForeignKey("CustomerLinkId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Customerlink");
                 });
 
             modelBuilder.Entity("RefferalLinks.DAL.Models.Entity.LinkTemplate", b =>

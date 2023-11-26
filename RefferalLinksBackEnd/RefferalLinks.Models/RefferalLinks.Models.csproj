@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Maynghien.Common\Maynghien.Common.csproj" />
+    <ProjectReference Include="..\RefferalLinks.Common\RefferalLinks.Common.csproj" />
   </ItemGroup>
 
 </Project>

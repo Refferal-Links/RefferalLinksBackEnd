@@ -1,4 +1,5 @@
 ﻿using MayNghien.Common.Models.Entity;
+using RefferalLinks.Common.Enum;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -16,6 +17,7 @@ namespace RefferalLinks.DAL.Models.Entity
         public Customer Customer { get; set; }
 
         public string Url { get; set; }
+        public StatusCustomerLink Status { get; set; }
 
         [ForeignKey("LinkTemplate")]
         public Guid LinkTemplateId { get; set; }

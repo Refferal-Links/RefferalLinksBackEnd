@@ -53,6 +53,12 @@ namespace RefferalLinks.API.Controllers
             var result = await _customerService.Search(request);
             return Ok(result);
         }
-
+		[HttpPut]
+		[Route("StatusChange")]
+		public IActionResult StatusChange(CustomerLinkDto request)
+		{
+			var result = _customerService.StatusChange(request);
+			return Ok(result);
+		}
     }
 }

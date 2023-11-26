@@ -1,4 +1,5 @@
 ﻿using MayNghien.Common.Models;
+using RefferalLinks.Common.Enum;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,5 +26,8 @@ namespace RefferalLinks.Models.Dto
         public Guid? TeamId { get; set; }
         public string? UserName { get; set; }
         public string? TeamName { get; set; }
+
+        public List<CustomerlinkImageDto>? ListCustomerlinkImage { get; set; }
+        public StatusCustomerLink? Status { get; set; }
     }
 }
