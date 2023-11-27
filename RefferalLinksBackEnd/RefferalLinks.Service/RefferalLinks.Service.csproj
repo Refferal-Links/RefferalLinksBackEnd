@@ -8,7 +8,9 @@
 
   <ItemGroup>
     <PackageReference Include="AutoMapper" Version="12.0.1" />
+    <PackageReference Include="EPPlus" Version="6.2.13" />
     <PackageReference Include="LinqKit" Version="1.2.4" />
+    <PackageReference Include="RTX.EPPlus.Helpers" Version="1.0.0" />
   </ItemGroup>
 
   <ItemGroup>
