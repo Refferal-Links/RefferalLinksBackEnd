@@ -60,5 +60,12 @@ namespace RefferalLinks.API.Controllers
 			var result = _customerService.StatusChange(request);
 			return Ok(result);
 		}
+        [HttpPost("Download")]
+        public async Task<IActionResult> Dowloadexcel(SearchRequest request)
+        {
+            var ex = await _customerService.ExportToExcel(request);
+            MemoryStream stream = new MemoryStream(ex);
+            return File(stream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "SelectedRows.xlsx");
+        }
     }
 }

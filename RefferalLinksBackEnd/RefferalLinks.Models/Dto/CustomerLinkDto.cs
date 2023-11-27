@@ -1,4 +1,5 @@
 ﻿using MayNghien.Common.Models;
+using Microsoft.EntityFrameworkCore.Query.Internal;
 using RefferalLinks.Common.Enum;
 using System;
 using System.Collections.Generic;
@@ -26,7 +27,9 @@ namespace RefferalLinks.Models.Dto
         public Guid? TeamId { get; set; }
         public string? UserName { get; set; }
         public string? TeamName { get; set; }
-
+        public DateTime? CreatedOn { get; set; }
+        public string? RefferalCode { get; set; }
+        public string? TpBank { get;set; }
         public List<CustomerlinkImageDto>? ListCustomerlinkImage { get; set; }
         public StatusCustomerLink? Status { get; set; }
     }

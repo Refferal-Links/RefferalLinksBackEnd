@@ -5,6 +5,7 @@ using MayNghien.Models.Request.Base;
 using MayNghien.Models.Response.Base;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
+using OfficeOpenXml;
 using RefferalLinks.DAL.Contract;
 using RefferalLinks.DAL.Implementation;
 using RefferalLinks.DAL.Models.Entity;
@@ -74,6 +75,7 @@ namespace RefferalLinks.Service.Implementation
         ? teamNames[x.Customer.ApplicationUser.TeamId.Value]
         : string.Empty,
                     CamPaignName = x.LinkTemplate.Campaign.Name,
+                    CreatedOn = x.CreatedOn,
                     InforCustomer = String.Format("Name:{0} , Email:{1} , Cccd:{2} , PhoneNumber:{3} , PassPort:{4}  ", x.Customer.Name, x.Customer.Email, x.Customer.Passport, x.Customer.PhoneNumber, x.Customer.Passport)
                 }).ToList();
                 result.BuildResult(list);
@@ -140,6 +142,7 @@ namespace RefferalLinks.Service.Implementation
                     Name = x.Customer.Name,
                     BankId = x.LinkTemplate.BankId,
                     CampaignId = x.LinkTemplate.CampaignId,
+                    CreatedOn = x.CreatedOn,
                     BankName = x.LinkTemplate.Bank.Name,
                     TeamId = x.Customer.ApplicationUser.TeamId,
                     CamPaignName = x.LinkTemplate.Campaign.Name,
@@ -185,6 +188,9 @@ namespace RefferalLinks.Service.Implementation
                         BankName = x.LinkTemplate.Bank.Name,
                         CamPaignName = x.LinkTemplate.Campaign.Name,
                         TeamId = x.Customer.ApplicationUser.TeamId,
+                        CreatedOn = x.CreatedOn,
+                        TpBank = x.Customer.ApplicationUser.TpBank,
+                        RefferalCode = x.Customer.ApplicationUser.RefferalCode,
                         UserName = x.Customer.ApplicationUser.UserName,
                         TeamName = x.Customer.ApplicationUser.TeamId.HasValue && teamNames.ContainsKey(x.Customer.ApplicationUser.TeamId.Value)
         ? teamNames[x.Customer.ApplicationUser.TeamId.Value]
@@ -329,5 +335,49 @@ namespace RefferalLinks.Service.Implementation
 
             return result;
         }
+
+
+
+        public async Task<byte[]> ExportToExcel(SearchRequest request)
+        {
+            var data = await this.Search(request);
+            using (var package = new ExcelPackage())
+            {
+                var worksheet = package.Workbook.Worksheets.Add("SelectedRows");
+           
+
+                worksheet.Cells[1, 1].Value = "PhoneNumber";
+                worksheet.Cells[1, 2].Value = "Passport";
+                worksheet.Cells[1, 3].Value = "Email";
+                worksheet.Cells[1, 4].Value = "Ngày đăng kí thành công";
+                worksheet.Cells[1, 5].Value = "Dự án";
+                worksheet.Cells[1, 6].Value = "Sản phẩm";
+                worksheet.Cells[1, 7].Value = "Link Image";
+
+                for (int i = 0; i < data.Data.Data.Count; i++)
+                {
+                    var dto = data.Data.Data[i];
+                    var GetallImg =  _customerlinkImageRepository.GetAll().Where(x => x.CustomerLinkId == dto.Id).ToList();
+                    var convertedItems = _mapper.Map<List<CustomerlinkImageDto>>(GetallImg);
+                    dto.ListCustomerlinkImage = new List<CustomerlinkImageDto>();
+                    dto.ListCustomerlinkImage?.AddRange( convertedItems);
+                    worksheet.Cells[i + 2, 1].Value = dto.PhoneNumber;
+                    worksheet.Cells[i + 2, 2].Value = dto.Passport;
+                    worksheet.Cells[i + 2, 3].Value = dto.Email;
+                    worksheet.Cells[i + 2, 4].Value = dto.CreatedOn;
+                    worksheet.Cells[i + 2, 5].Value = dto.BankName;
+                    worksheet.Cells[i + 2, 6].Value =  String.Format("Team : {0} , Reffercode : {1} , TPbank : {2} , ImageLink {3}", dto.TeamName , dto.RefferalCode , dto.TpBank,dto.ListCustomerlinkImage)  ;
+                    foreach(var j in dto.ListCustomerlinkImage)
+                    {
+                        worksheet.Cells[i + 2, 7].Value += j + " , ";
+                    }
+                    
+                }
+
+
+                return package.GetAsByteArray();
+            }
+        }
+
     }
 }
