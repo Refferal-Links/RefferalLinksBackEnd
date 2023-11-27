@@ -138,10 +138,6 @@
               "target": "Package",
               "version": "[12.0.1, )"
             },
-            "EPPlus": {
-              "target": "Package",
-              "version": "[6.2.10, )"
-            },
             "Microsoft.AspNetCore.Authentication.JwtBearer": {
               "target": "Package",
               "version": "[6.0.24, )"
@@ -481,9 +477,17 @@
               "target": "Package",
               "version": "[12.0.1, )"
             },
+            "EPPlus": {
+              "target": "Package",
+              "version": "[6.2.13, )"
+            },
             "LinqKit": {
               "target": "Package",
               "version": "[1.2.4, )"
+            },
+            "RTX.EPPlus.Helpers": {
+              "target": "Package",
+              "version": "[1.0.0, )"
             }
           },
           "imports": [

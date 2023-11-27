@@ -111,7 +111,7 @@ namespace RefferalLinks.Service.Implementation
             {
                 var customer = _customerLinkRepository.Get((Guid)request.Id);
                 customer.Url = request.Url;
-                customer.CustomerId = request.CustomerId;
+                customer.CustomerId = (Guid)request.CustomerId;
                 customer.LinkTemplateId = request.LinkTemplateId;
                 _customerLinkRepository.Edit(customer);
                 result.BuildResult(request);

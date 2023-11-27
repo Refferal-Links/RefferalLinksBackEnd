@@ -9,7 +9,6 @@
       "RefferalLinks.API/1.0.0": {
         "dependencies": {
           "AutoMapper.Extensions.Microsoft.DependencyInjection": "12.0.1",
-          "EPPlus": "6.2.10",
           "Maynghien.Common": "1.0.0",
           "Microsoft.AspNetCore.Authentication.JwtBearer": "6.0.24",
           "Microsoft.AspNetCore.Authentication.OpenIdConnect": "6.0.24",
@@ -187,19 +186,19 @@
           }
         }
       },
-      "EPPlus/6.2.10": {
+      "EPPlus/6.2.13": {
         "dependencies": {
           "EPPlus.Interfaces": "6.1.1",
           "EPPlus.System.Drawing": "6.1.1",
           "Microsoft.Extensions.Configuration.Json": "6.0.0",
           "Microsoft.IO.RecyclableMemoryStream": "2.2.1",
-          "System.Security.Cryptography.Pkcs": "6.0.3",
+          "System.Security.Cryptography.Pkcs": "6.0.4",
           "System.Text.Encoding.CodePages": "6.0.0"
         },
         "runtime": {
           "lib/net6.0/EPPlus.dll": {
-            "assemblyVersion": "6.2.10.0",
-            "fileVersion": "6.2.10.0"
+            "assemblyVersion": "6.2.13.0",
+            "fileVersion": "6.2.13.0"
           }
         }
       },
@@ -1133,6 +1132,17 @@
           }
         }
       },
+      "RTX.EPPlus.Helpers/1.0.0": {
+        "dependencies": {
+          "EPPlus": "6.2.13"
+        },
+        "runtime": {
+          "lib/net45/RTX.EPPlus.Helpers.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "1.0.0.0"
+          }
+        }
+      },
       "runtime.native.System.Data.SqlClient.sni/4.7.0": {
         "dependencies": {
           "runtime.win-arm64.runtime.native.System.Data.SqlClient.sni": "4.4.0",
@@ -1350,14 +1360,14 @@
         }
       },
       "System.Security.Cryptography.Cng/4.5.0": {},
-      "System.Security.Cryptography.Pkcs/6.0.3": {
+      "System.Security.Cryptography.Pkcs/6.0.4": {
         "dependencies": {
           "System.Formats.Asn1": "6.0.0"
         },
         "runtime": {
           "lib/net6.0/System.Security.Cryptography.Pkcs.dll": {
             "assemblyVersion": "6.0.0.0",
-            "fileVersion": "6.0.1823.26907"
+            "fileVersion": "6.0.1923.31806"
           }
         },
         "runtimeTargets": {
@@ -1365,7 +1375,7 @@
             "rid": "win",
             "assetType": "runtime",
             "assemblyVersion": "6.0.0.0",
-            "fileVersion": "6.0.1823.26907"
+            "fileVersion": "6.0.1923.31806"
           }
         }
       },
@@ -1475,8 +1485,10 @@
       "RefferalLinks.Service/1.0.0": {
         "dependencies": {
           "AutoMapper": "12.0.1",
+          "EPPlus": "6.2.13",
           "LinqKit": "1.2.4",
           "Maynghien.Common": "1.0.0",
+          "RTX.EPPlus.Helpers": "1.0.0",
           "RefferalLinks.DAL": "1.0.0",
           "RefferalLinks.Models": "1.0.0"
         },
@@ -1569,12 +1581,12 @@
       "path": "entityframeworkcore.sqlserver.hierarchyid.abstractions/3.0.1",
       "hashPath": "entityframeworkcore.sqlserver.hierarchyid.abstractions.3.0.1.nupkg.sha512"
     },
-    "EPPlus/6.2.10": {
+    "EPPlus/6.2.13": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-U/kj9mKoUMOMUvNIMwbD7xy4R/UTyc9baMVxDWQhYaeIueCviC12feQ3qbcUJZc8yyodC8gAj0BhzBg/wFIjTg==",
-      "path": "epplus/6.2.10",
-      "hashPath": "epplus.6.2.10.nupkg.sha512"
+      "sha512": "sha512-zeUnVmrtK8uLVSaUMO21fQKSqUAxBn7syLxsRCmzSFDa9xBJ8fzhBRVCVPILXpSl8xKlRoIhnaPNPxC7dETPhg==",
+      "path": "epplus/6.2.13",
+      "hashPath": "epplus.6.2.13.nupkg.sha512"
     },
     "EPPlus.Interfaces/6.1.1": {
       "type": "package",
@@ -2290,6 +2302,13 @@
       "path": "pomelo.entityframeworkcore.mysql/6.0.2",
       "hashPath": "pomelo.entityframeworkcore.mysql.6.0.2.nupkg.sha512"
     },
+    "RTX.EPPlus.Helpers/1.0.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-r6+zQe/45fwTXy8Y9O2/J+8Mesqx10imW5MOGkseCGPcMIoq6chG7/rZbVIvsTvchteQAyOqH3ZQWlWqy9IaPg==",
+      "path": "rtx.epplus.helpers/1.0.0",
+      "hashPath": "rtx.epplus.helpers.1.0.0.nupkg.sha512"
+    },
     "runtime.native.System.Data.SqlClient.sni/4.7.0": {
       "type": "package",
       "serviceable": true,
@@ -2479,12 +2498,12 @@
       "path": "system.security.cryptography.cng/4.5.0",
       "hashPath": "system.security.cryptography.cng.4.5.0.nupkg.sha512"
     },
-    "System.Security.Cryptography.Pkcs/6.0.3": {
+    "System.Security.Cryptography.Pkcs/6.0.4": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-18UT1BdZ4TYFBHk/wuq7JzCdE3X75z81X+C2rXqIlmEnC21Pm60spGV/dKQSzbyomstqYE33EuN5hfnC86VFxA==",
-      "path": "system.security.cryptography.pkcs/6.0.3",
-      "hashPath": "system.security.cryptography.pkcs.6.0.3.nupkg.sha512"
+      "sha512": "sha512-LGbXi1oUJ9QgCNGXRO9ndzBL/GZgANcsURpMhNR8uO+rca47SZmciS3RSQUvlQRwK3QHZSHNOXzoMUASKA+Anw==",
+      "path": "system.security.cryptography.pkcs/6.0.4",
+      "hashPath": "system.security.cryptography.pkcs.6.0.4.nupkg.sha512"
     },
     "System.Security.Cryptography.ProtectedData/4.7.0": {
       "type": "package",
