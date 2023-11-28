@@ -147,7 +147,16 @@ namespace RefferalLinks.Service.Implementation
                     TeamId = x.Customer.ApplicationUser.TeamId,
                     CamPaignName = x.LinkTemplate.Campaign.Name,
                     UserName = x.Customer.ApplicationUser.UserName,
-                    InforCustomer = String.Format("Name:{0} , Email:{1} , Cccd:{2} , PhoneNumber:{3} , PassPort:{4}  ", x.Customer.Name, x.Customer.Email, x.Customer.Passport, x.Customer.PhoneNumber, x.Customer.Passport)
+                    InforCustomer = String.Format("Name:{0} , Email:{1} , Cccd:{2} , PhoneNumber:{3} , PassPort:{4}  ", x.Customer.Name, x.Customer.Email, x.Customer.Passport, x.Customer.PhoneNumber, x.Customer.Passport),
+                    ListCustomerlinkImage = _customerlinkImageRepository.GetAll().Where(m => m.CustomerLinkId == x.Id).Select(
+                        cti => new CustomerlinkImageDto
+                        {
+                            CustomerLinkId = cti.CustomerLinkId,
+                            Id = cti.Id,
+                            LinkImage = cti.LinkImage,
+                        }
+                        ).ToList(),
+                    Status = x.Status,
                 }).First();
                 result.BuildResult(data);
             }
