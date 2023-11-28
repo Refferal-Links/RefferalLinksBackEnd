@@ -365,9 +365,18 @@ namespace RefferalLinks.Service.Implementation
                 worksheet.Cells[1, 3].Value = "Email";
                 worksheet.Cells[1, 4].Value = "Ngày đăng kí thành công";
                 worksheet.Cells[1, 5].Value = "Dự án";
-                worksheet.Cells[1, 6].Value = "Sản phẩm";
-      
-            
+                worksheet.Cells[1, 6].Value = "Sản phẩm";           
+                var getalllinkimg = _customerlinkImageRepository.GetAll();
+                var mostFrequentIDCount = getalllinkimg
+              .GroupBy(e => e.CustomerLinkId)
+              .OrderByDescending(g => g.Count())
+              .Select(g => g.Count()) 
+              .FirstOrDefault();
+                for (int i = 1; i <= mostFrequentIDCount; i++)
+                {
+                    worksheet.Cells[1, 6+ i].Value = $"Ảnh {i}"; 
+                }
+
                 for (int i = 0; i < data.Data.Data.Count; i++)
                 {
                     var dto = data.Data.Data[i];
@@ -381,13 +390,11 @@ namespace RefferalLinks.Service.Implementation
                     worksheet.Cells[i + 2, 4].Value = dto.CreatedOn.Value.ToString("dd/MM/yyyy");
                     worksheet.Cells[i + 2, 5].Value = dto.BankName;
                     worksheet.Cells[i + 2, 6].Value =  String.Format("Team : {0} , Reffercode : {1} , TPbank : {2} ", dto.TeamName , dto.RefferalCode , dto.TpBank)  ;
-
-                      for(int z = 0; z < dto.ListCustomerlinkImage.Count ; z++)
-                        {
-                        worksheet.Cells[1, 7 + z].Value = String.Format("Anh thứ {0} ", (z + 1));
-                        worksheet.Cells[i + 2, 7 + z].Value = dto.ListCustomerlinkImage[i].LinkImage ;
-
-                        }                     
+                    for(int j = 1; j <= mostFrequentIDCount ; j++)
+                    {
+                        worksheet.Cells[i + 2, 6 + j].Value = dto.ListCustomerlinkImage[j-1].LinkImage;
+                    }
+                                    
                    
                     
                 }
