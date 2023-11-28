@@ -313,6 +313,11 @@ namespace RefferalLinks.Service.Implementation
                 {
                     return result.BuildError("Không để trống danh sách hình ảnh");
                 }
+                var listCustomerLinkImage = _customerlinkImageRepository.GetAll().Where(x=>x.CustomerLinkId == request.Id).ToList();
+                if (listCustomerLinkImage != null)
+                {
+                    _customerlinkImageRepository.DeleteRange(listCustomerLinkImage);
+                }
                 request.ListCustomerlinkImage.ForEach(item =>
                 {
                     var customerLinkImage = _mapper.Map<CustomerLinkImage>(item);
