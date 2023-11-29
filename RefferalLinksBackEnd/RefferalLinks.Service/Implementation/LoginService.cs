@@ -137,14 +137,48 @@ namespace RefferalLinks.Service.Implementation
                 {
                     return result.BuildError(ERR_MSG_UserExisted);
                 }
-                var newIdentityUser = new ApplicationUser { Email = user.Email, UserName = user.Email };
+
+                if (user.Role == "sale" || user.Role == "teamleader")
+                {
+                    var idteam = _teamRespository.Get((Guid)user.TeamId);
+                    if (user.TeamId == null || idteam == null)
+                    {
+                        return result.BuildError("Vui long nhap dung teamId");
+                    }
+                    else
+                    {
+                        var newIdentityUserSale = new ApplicationUser { Email = user.Email, UserName = user.Email, TeamId = user.TeamId };
+                        if (user.Role == "sale")
+                        {
+                            newIdentityUserSale.RefferalCode = user.RefferalCode;
+                            newIdentityUserSale.TpBank = user.TpBank;
+                        }
+
+                        var createResultSale = await _userManager.CreateAsync(newIdentityUserSale);
+                        await _userManager.AddPasswordAsync(newIdentityUserSale, user.Password);
+                        if (!(await _roleManager.RoleExistsAsync(user.Role)))
+                        {
+                            IdentityRole role = new IdentityRole { Name = user.Role };
+                            await _roleManager.CreateAsync(role);
+                        }
+                        await _userManager.AddToRoleAsync(newIdentityUserSale, user.Role);
+                        newIdentityUserSale = await _userManager.FindByEmailAsync(user.Email);
+                        return result.BuildResult(INFO_MSG_UserCreated);
+
+                    }
+
+                }
+                var newIdentityUser = new ApplicationUser { Email = user.Email, UserName = user.Email, TeamId = null };
+
                 var createResult = await _userManager.CreateAsync(newIdentityUser);
                 await _userManager.AddPasswordAsync(newIdentityUser, user.Password);
-                newIdentityUser = await _userManager.FindByEmailAsync(user.Email);
-
-                IdentityRole role = new IdentityRole { Name = user.Role };
-                await _roleManager.CreateAsync(role);
+                if (!(await _roleManager.RoleExistsAsync(user.Role)))
+                {
+                    IdentityRole role = new IdentityRole { Name = user.Role };
+                    await _roleManager.CreateAsync(role);
+                }
                 await _userManager.AddToRoleAsync(newIdentityUser, user.Role);
+                newIdentityUser = await _userManager.FindByEmailAsync(user.Email);
                 return result.BuildResult(INFO_MSG_UserCreated);
             }
             catch (Exception ex)

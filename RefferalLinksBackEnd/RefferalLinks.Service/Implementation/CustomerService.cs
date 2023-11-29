@@ -70,12 +70,16 @@ namespace RefferalLinks.Service.Implementation
                 var linktemplatelist = _linkTemplateRepository.GetAll().Where(x => x.IsActive == true && x.IsDeleted == false).Include(x => x.Bank).ToList(); ;
                 foreach (var linktemplate in linktemplatelist)
                 {
+                   
+                    var gettpbank = _userespository.FindById(customer.ApplicationUserId);
                     var customerlink = new Customerlink();
                     customerlink.Id = Guid.NewGuid();
                     customerlink.LinkTemplateId = linktemplate.Id;
                     customerlink.CustomerId = customer.Id;
                     customerlink.Url = linktemplate.Url;
-                    customerlink.Url = customerlink.Url.Replace("{{sale}}", request.RefferalCode);
+                    string replaceValue = linktemplate.Bank.Name == "TpBank" ? gettpbank.TpBank : request.RefferalCode;
+                    customerlink.Url = customerlink.Url.Replace("{{sale}}", replaceValue);
+                   customerlink.Url = customerlink.Url.Replace("{{sale}}", request.RefferalCode);
                     customerlink.Url = customerlink.Url.Replace("{{ten}}", customer.Name);
                     customerlink.Url = customerlink.Url.Replace("{{phone}}", customer.PhoneNumber);
                     customerlink.Url = customerlink.Url.Replace("{{cccd}}", customer.Passport);
