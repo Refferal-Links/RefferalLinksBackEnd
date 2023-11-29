@@ -198,6 +198,7 @@ namespace RefferalLinks.Service.Implementation
                         CamPaignName = x.LinkTemplate.Campaign.Name,
                         TeamId = x.Customer.ApplicationUser.TeamId,
                         CreatedOn = x.CreatedOn,
+                        Iduser = x.Customer.ApplicationUserId,
                         TpBank = x.Customer.ApplicationUser.TpBank,
                         RefferalCode = x.Customer.ApplicationUser.RefferalCode,
                         UserName = x.Customer.ApplicationUser.UserName,
@@ -358,7 +359,7 @@ namespace RefferalLinks.Service.Implementation
             using (var package = new ExcelPackage())
             {
                 var worksheet = package.Workbook.Worksheets.Add("SelectedRows");
-           
+                var UserName = ClaimHelper.GetClainByName(_httpContextAccessor, "UserName");
 
                 worksheet.Cells[1, 1].Value = "PhoneNumber";
                 worksheet.Cells[1, 2].Value = "Passport";
@@ -366,21 +367,21 @@ namespace RefferalLinks.Service.Implementation
                 worksheet.Cells[1, 4].Value = "Ngày đăng kí thành công";
                 worksheet.Cells[1, 5].Value = "Dự án";
                 worksheet.Cells[1, 6].Value = "Sản phẩm";           
-                var getalllinkimg = _customerlinkImageRepository.GetAll();
-                var mostFrequentIDCount = getalllinkimg
-              .GroupBy(e => e.CustomerLinkId)
-              .OrderByDescending(g => g.Count())
-              .Select(g => g.Count()) 
-              .FirstOrDefault();
-                for (int i = 1; i <= mostFrequentIDCount; i++)
+                worksheet.Cells[1, 7].Value = "Code Sale";           
+                worksheet.Cells[1, 8].Value = "Tên Team";           
+                worksheet.Cells[1, 9].Value = "Tên Quản Lý";           
+                worksheet.Cells[1, 10].Value = "Tên Sale ";           
+              
+                for (int i = 1; i <= 4; i++)
                 {
-                    worksheet.Cells[1, 6+ i].Value = $"Ảnh {i}"; 
+                    worksheet.Cells[1, 10+ i].Value = $"Ảnh {i}"; 
                 }
 
                 for (int i = 0; i < data.Data.Data.Count; i++)
                 {
                     var dto = data.Data.Data[i];
                     var GetallImg =  _customerlinkImageRepository.GetAll().Where(x => x.CustomerLinkId == dto.Id).ToList();
+                    var getsale = _userespository.FindById(dto.Iduser);               
                     var convertedItems = _mapper.Map<List<CustomerlinkImageDto>>(GetallImg);
                     dto.ListCustomerlinkImage = new List<CustomerlinkImageDto>();
                     dto.ListCustomerlinkImage?.AddRange( convertedItems);
@@ -389,10 +390,14 @@ namespace RefferalLinks.Service.Implementation
                     worksheet.Cells[i + 2, 3].Value = dto.Email;
                     worksheet.Cells[i + 2, 4].Value = dto.CreatedOn.Value.ToString("dd/MM/yyyy");
                     worksheet.Cells[i + 2, 5].Value = dto.BankName;
-                    worksheet.Cells[i + 2, 6].Value =  String.Format("Team : {0} , Reffercode : {1} , TPbank : {2} ", dto.TeamName , dto.RefferalCode , dto.TpBank)  ;
-                    for(int j = 1; j <= mostFrequentIDCount ; j++)
+                    worksheet.Cells[i + 2, 6].Value = dto.CamPaignName ;
+                    worksheet.Cells[i + 2, 7].Value = dto.RefferalCode ;
+                    worksheet.Cells[i + 2, 8].Value = dto.TeamName ;
+                    worksheet.Cells[i + 2, 9].Value = UserName ;
+                    worksheet.Cells[i + 2, 10].Value = (getsale.RefferalCode == "sale") ? getsale.UserName : "";
+                    for (int j = 0; j < GetallImg.Count ; j++)
                     {
-                        worksheet.Cells[i + 2, 6 + j].Value = dto.ListCustomerlinkImage[j-1].LinkImage;
+                        worksheet.Cells[i + 2, 10 + j + 1].Value = dto.ListCustomerlinkImage[j].LinkImage;
                     }
                                     
                    

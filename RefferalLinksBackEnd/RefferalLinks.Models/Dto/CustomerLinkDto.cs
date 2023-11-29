@@ -30,6 +30,7 @@ namespace RefferalLinks.Models.Dto
         public DateTime? CreatedOn { get; set; }
         public string? RefferalCode { get; set; }
         public string? TpBank { get;set; }
+        public string? Iduser {get; set; }
         public List<CustomerlinkImageDto>? ListCustomerlinkImage { get; set; }
         public StatusCustomerLink? Status { get; set; }
     }
