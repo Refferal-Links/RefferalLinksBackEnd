@@ -52,11 +52,11 @@ namespace RefferalLinks.Service.Implementation
                 {
                     return result.BuildError("không tìm thấy mã giới thiệu");
                 }
-                var cccd = _customerRespository.FindBy(x=>x.Passport == request.Passport);
-                if (cccd.Count() != 0)
-                {
-                    return result.BuildError("Căn cước đã tồn tại");
-                }
+                //var cccd = _customerRespository.FindBy(x=>x.Passport == request.Passport);
+                //if (cccd.Count() != 0)
+                //{
+                //    return result.BuildError("Căn cước đã tồn tại");
+                //}
                 var customer = _mapper.Map<Customer>(request);
                 customer.Id = Guid.NewGuid();
                 customer.ApplicationUserId = user.Id;
@@ -67,7 +67,8 @@ namespace RefferalLinks.Service.Implementation
                     Id = x.Id,
                     CustomerLinks = new List<CustomerLinkDto>()
                 }).ToList();
-                var linktemplatelist = _linkTemplateRepository.GetAll().Where(x => x.IsActive == true && x.IsDeleted == false).Include(x => x.Bank).ToList(); ;
+                var linktemplatelist = _linkTemplateRepository.GetAll().Where(x => x.IsActive == true && x.IsDeleted == false).Include(x => x.Bank).ToList();
+                var TpBank = _bankRepository.FindByPredicate(x=>x.Name == "TpBank").FirstOrDefault();
                 foreach (var linktemplate in linktemplatelist)
                 {
                    
@@ -77,7 +78,7 @@ namespace RefferalLinks.Service.Implementation
                     customerlink.LinkTemplateId = linktemplate.Id;
                     customerlink.CustomerId = customer.Id;
                     customerlink.Url = linktemplate.Url;
-                    string replaceValue = linktemplate.Bank.Name == "TpBank" ? gettpbank.TpBank : request.RefferalCode;
+                    string replaceValue = (TpBank != null && linktemplate.BankId == TpBank.Id) ? gettpbank.TpBank : request.RefferalCode;
                     customerlink.Url = customerlink.Url.Replace("{{sale}}", replaceValue);
                    customerlink.Url = customerlink.Url.Replace("{{sale}}", request.RefferalCode);
                     customerlink.Url = customerlink.Url.Replace("{{ten}}", customer.Name);
