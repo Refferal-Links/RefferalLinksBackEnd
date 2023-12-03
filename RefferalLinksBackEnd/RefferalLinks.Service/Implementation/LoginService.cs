@@ -44,10 +44,10 @@ namespace RefferalLinks.Service.Implementation
                 identityUser = await _userManager.FindByNameAsync(login.UserName);
                 if (identityUser != null)
                 {
-                    if (identityUser.EmailConfirmed != true)
-                    {
-                        return result.BuildError(ERR_MSG_UserNotConFirmed);
-                    }
+                    //if (identityUser.EmailConfirmed != true)
+                    //{
+                    //    return result.BuildError(ERR_MSG_UserNotConFirmed);
+                    //}
                     if (await _userManager.CheckPasswordAsync(identityUser, login.Password))
                     {
                         user = new UserModel { UserName = identityUser.UserName, Email = identityUser.Email, TeamId = identityUser.TeamId, RefferalCode = identityUser.RefferalCode };
