@@ -198,7 +198,7 @@ namespace RefferalLinks.Service.Implementation
                         CamPaignName = x.LinkTemplate.Campaign.Name,
                         TeamId = x.Customer.ApplicationUser.TeamId,
                         CreatedOn = x.CreatedOn,
-                        Iduser = x.Customer.ApplicationUserId,
+                        Iduser = x.Customer.ApplicationUser.Id,
                         TpBank = x.Customer.ApplicationUser.TpBank,
                         RefferalCode = x.Customer.ApplicationUser.RefferalCode,
                         UserName = x.Customer.ApplicationUser.UserName,
