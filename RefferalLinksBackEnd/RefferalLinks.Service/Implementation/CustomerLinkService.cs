@@ -394,7 +394,7 @@ namespace RefferalLinks.Service.Implementation
                     worksheet.Cells[i + 2, 7].Value = dto.RefferalCode ;
                     worksheet.Cells[i + 2, 8].Value = dto.TeamName ;
                     worksheet.Cells[i + 2, 9].Value = UserName ;
-                    worksheet.Cells[i + 2, 10].Value = (getsale.RefferalCode == "sale") ? getsale.UserName : "";
+                    worksheet.Cells[i + 2, 10].Value = (getsale.RefferalCode != null ) ? getsale.UserName : "";
                     for (int j = 0; j < GetallImg.Count ; j++)
                     {
                         worksheet.Cells[i + 2, 10 + j + 1].Value = dto.ListCustomerlinkImage[j].LinkImage;
