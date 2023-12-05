@@ -5,6 +5,7 @@ using MayNghien.Models.Request.Base;
 using MayNghien.Models.Response.Base;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
+using NetTopologySuite.Index.IntervalRTree;
 using OfficeOpenXml;
 using RefferalLinks.DAL.Contract;
 using RefferalLinks.DAL.Implementation;
@@ -381,7 +382,8 @@ namespace RefferalLinks.Service.Implementation
                 {
                     var dto = data.Data.Data[i];
                     var GetallImg =  _customerlinkImageRepository.GetAll().Where(x => x.CustomerLinkId == dto.Id).ToList();
-                    var getsale = _userespository.FindById(dto.Iduser);               
+                    var getsale = _userespository.FindById(dto.Iduser); 
+                    var getleader = _userespository.FindByPredicate(x => x.TeamId == dto.TeamId).ToList();
                     var convertedItems = _mapper.Map<List<CustomerlinkImageDto>>(GetallImg);
                     dto.ListCustomerlinkImage = new List<CustomerlinkImageDto>();
                     dto.ListCustomerlinkImage?.AddRange( convertedItems);
@@ -393,7 +395,20 @@ namespace RefferalLinks.Service.Implementation
                     worksheet.Cells[i + 2, 6].Value = dto.CamPaignName ;
                     worksheet.Cells[i + 2, 7].Value = dto.RefferalCode ;
                     worksheet.Cells[i + 2, 8].Value = dto.TeamName ;
-                    worksheet.Cells[i + 2, 9].Value = UserName ;
+                    var leader = "";
+
+                
+                    foreach(var t in getleader)
+                    {
+                        var roles = await _userManager.GetRolesAsync(t);
+                        bool isTeamLeader = roles.Contains("teamleader");
+                        if (isTeamLeader)
+                        {
+                            leader = t.UserName;
+                            break;
+                        }
+                    }
+                    worksheet.Cells[i + 2, 9].Value = (getsale.RefferalCode != null) ? leader : "";
                     worksheet.Cells[i + 2, 10].Value = (getsale.RefferalCode != null ) ? getsale.UserName : "";
                     for (int j = 0; j < GetallImg.Count ; j++)
                     {
