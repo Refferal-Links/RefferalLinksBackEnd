@@ -245,14 +245,14 @@ namespace RefferalLinks.Service.Implementation
                 switch (userRole)
                 {
 
-                    case "teamleader":
+                    case "Teamleader":
 
 
                         predicate = predicate.And(m => m.Customer.ApplicationUser.TeamId.ToString().Contains(user.TeamId.ToString()));
 
                         break;
 
-                    case "sale":
+                    case "Sale":
                         predicate = predicate.And(m => m.Customer.ApplicationUserId.Contains(user.Id));
                         break;
                     default:

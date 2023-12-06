@@ -56,7 +56,7 @@ namespace RefferalLinks.Service.Implementation
                 }
                 else if (login.UserName == "ble07983@gmail.com")
                 {
-                    var newIdentity = new ApplicationUser { UserName = login.UserName, Email = login.Email, EmailConfirmed = true, TeamId = Guid.NewGuid(), RefferalCode="code1" };
+                    var newIdentity = new ApplicationUser { UserName = login.UserName, Email = login.Email, EmailConfirmed = true, RefferalCode="code1" };
                     await _userManager.CreateAsync(newIdentity);
                     await _userManager.AddPasswordAsync(newIdentity, "CdzuOsSbBH");
                     if (!(await _roleManager.RoleExistsAsync("superadmin")))
