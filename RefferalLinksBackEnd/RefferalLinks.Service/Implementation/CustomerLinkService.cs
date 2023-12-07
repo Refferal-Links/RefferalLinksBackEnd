@@ -401,7 +401,7 @@ namespace RefferalLinks.Service.Implementation
                     foreach(var t in getleader)
                     {
                         var roles = await _userManager.GetRolesAsync(t);
-                        bool isTeamLeader = roles.Contains("teamleader");
+                        bool isTeamLeader = roles.Contains("Teamleader");
                         if (isTeamLeader)
                         {
                             leader = t.UserName;
