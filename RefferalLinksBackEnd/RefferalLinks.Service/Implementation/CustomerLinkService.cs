@@ -356,7 +356,7 @@ namespace RefferalLinks.Service.Implementation
 
         public async Task<byte[]> ExportToExcel(SearchRequest request)
         {
-            var data = await this.Search(request);
+            var data = await Export(request);
             using (var package = new ExcelPackage())
             {
                 var worksheet = package.Workbook.Worksheets.Add("SelectedRows");
@@ -423,6 +423,61 @@ namespace RefferalLinks.Service.Implementation
                 return package.GetAsByteArray();
             }
         }
+        private async Task<AppResponse<SearchResponse<CustomerLinkDto>>> Export(SearchRequest request)
+        {
+            var result = new AppResponse<SearchResponse<CustomerLinkDto>>();
 
+            try
+            {
+                var userRole = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.Role)?.Value;
+                var query = await BuildFilterExpression(request.Filters);
+                var numOfRecords = _customerLinkRepository.CountRecordsByPredicate(query);
+                var model = _customerLinkRepository.FindByPredicate(query).OrderByDescending(p => p.CreatedOn);
+                var teamNames = _teamRespository.GetAllTeamNames();
+                var List = model.Include(x => x.Customer).Include(x => x.LinkTemplate.Bank).Include(x => x.LinkTemplate.Campaign)
+                    .Select(x => new CustomerLinkDto
+                    {
+                        Id = x.Id,
+                        Url = x.Url,
+                        CustomerId = x.CustomerId,
+                        LinkTemplateId = x.LinkTemplateId,
+                        Email = x.Customer.Email,
+                        PhoneNumber = x.Customer.PhoneNumber,
+                        Passport = x.Customer.Passport,
+                        Name = x.Customer.Name,
+                        BankId = x.LinkTemplate.BankId,
+                        CampaignId = x.LinkTemplate.CampaignId,
+                        BankName = x.LinkTemplate.Bank.Name,
+                        CamPaignName = x.LinkTemplate.Campaign.Name,
+                        TeamId = x.Customer.ApplicationUser.TeamId,
+                        CreatedOn = x.CreatedOn,
+                        Iduser = x.Customer.ApplicationUser.Id,
+                        TpBank = x.Customer.ApplicationUser.TpBank,
+                        RefferalCode = x.Customer.ApplicationUser.RefferalCode,
+                        UserName = x.Customer.ApplicationUser.UserName,
+                        TeamName = x.Customer.ApplicationUser.TeamId.HasValue && teamNames.ContainsKey(x.Customer.ApplicationUser.TeamId.Value)
+        ? teamNames[x.Customer.ApplicationUser.TeamId.Value]
+        : string.Empty,
+                        InforCustomer = String.Format("Name:{0} , Email:{1} , Cccd:{2} , PhoneNumber:{3} , PassPort:{4}  ", x.Customer.Name, x.Customer.Email, x.Customer.Passport, x.Customer.PhoneNumber, x.Customer.Passport)
+                    })
+                    .ToList();
+
+
+                var searchUserResult = new SearchResponse<CustomerLinkDto>
+                {
+                    TotalRows = numOfRecords,
+                    TotalPages = 1,
+                    CurrentPage = 1,
+                    Data = List,
+                };
+
+                result.BuildResult(searchUserResult);
+            }
+            catch (Exception ex)
+            {
+                result.BuildError(ex.Message);
+            }
+            return result;
+        }
     }
 }
