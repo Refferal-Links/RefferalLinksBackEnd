@@ -59,7 +59,7 @@ namespace RefferalLinks.Service.Implementation
                         Email = x.Email,
                         UserName = x.UserName,
                         Id = Guid.Parse(x.Id),
-                        LockoutEnabled = x.LockoutEnabled ? "hoạt động" : "cấm đến " + x.LockoutEnd.Value.ToString("dd/MM/yyyy"),
+                        LockoutEnabled = x.LockoutEnabled ? "hoạt động" : "cấm",
                         RefferalCode = x.RefferalCode ?? "",
                         TpBank = x.TpBank,
 
@@ -79,11 +79,11 @@ namespace RefferalLinks.Service.Implementation
                         var identityUser = UserList[i];
                         if (UserList[i].LockoutEnabled == true)
                         {
-                            dtouser.LockoutEnabled = "Normal";
+                            dtouser.LockoutEnabled = "Hoạt động";
                         }
                         else
                         {
-                            dtouser.LockoutEnabled = "Banned";
+                            dtouser.LockoutEnabled = "cấm";
                         }
                         dtouser.Role = (await _userManager.GetRolesAsync(identityUser)).First();
 
@@ -119,7 +119,7 @@ namespace RefferalLinks.Service.Implementation
                         Email = x.Email,
                         UserName = x.UserName,
                         Id = Guid.Parse(x.Id),
-                        LockoutEnabled = x.LockoutEnabled ? "hoạt động" : "cấm đến " + x.LockoutEnd.Value.ToString("dd/MM/yyyy"),
+                        LockoutEnabled = x.LockoutEnabled ? "hoạt động" : "cấm",
                         RefferalCode = x.RefferalCode ?? "",
                         TpBank = x.TpBank,
                         TeamId = x.TeamId,
@@ -141,11 +141,11 @@ namespace RefferalLinks.Service.Implementation
                         
                         var identityUser = UserList[i];
                         if (UserList[i].LockoutEnabled == true ) {
-                            dtouser.LockoutEnabled = "Normal";
+                            dtouser.LockoutEnabled = "Hoạt động";
                         }
                         else
                         {
-                            dtouser.LockoutEnabled = "Banned";
+                            dtouser.LockoutEnabled = "Cấm";
                         }
                         dtouser.Role = (await _userManager.GetRolesAsync(identityUser)).First();
                   
@@ -371,7 +371,7 @@ namespace RefferalLinks.Service.Implementation
                         Email = x.Email,
                         UserName = x.UserName,
                         Id = Guid.Parse(x.Id),
-                        LockoutEnabled = x.LockoutEnabled ? "hoạt động" : "cấm đến " + x.LockoutEnd.Value.ToString("dd/MM/yyyy"),
+                        LockoutEnabled = x.LockoutEnabled ? "hoạt động" : "cấm",
                         RefferalCode = x.RefferalCode ?? "",
                         TpBank = x.TpBank,
                         
@@ -502,9 +502,6 @@ namespace RefferalLinks.Service.Implementation
                 }
                 DateTimeOffset LockoutEndnable = DateTimeOffset.UtcNow.AddDays(30);             
                 await _userManager.SetLockoutEnabledAsync(user, false);
-                //user.LockoutEnd = LockoutEndnable;
-                //await _userManager.SetLockoutEndDateAsync(userid, LockoutEndnable);
-                user.LockoutEnd = DateTimeOffset.UtcNow.AddDays(7);
                 await _userManager.UpdateAsync(user);
                 return result.BuildResult("OK");
             }

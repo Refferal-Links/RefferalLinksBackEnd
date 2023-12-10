@@ -9,7 +9,7 @@ namespace RefferalLinks.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(AuthenticationSchemes = "Bearer")]
+    [Authorize(AuthenticationSchemes = "Bearer", Roles = "Admin,superadmin")]
     public class TeamController : Controller
     {
         private readonly ITeamService _TeamService;

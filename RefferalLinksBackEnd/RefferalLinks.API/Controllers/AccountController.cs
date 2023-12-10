@@ -34,5 +34,15 @@ namespace RefferalLinks.API.Controllers
 
             return Ok(result);
         }
+
+        [HttpPut]
+        [Route("changePassword")]
+        [Authorize(AuthenticationSchemes = "Bearer")]
+        public async Task<IActionResult> ChangePassword(ChangePassword request)
+        {
+            var result = await _iloginService.ChangePassword(request);
+
+            return Ok(result);
+        }
     }
 }

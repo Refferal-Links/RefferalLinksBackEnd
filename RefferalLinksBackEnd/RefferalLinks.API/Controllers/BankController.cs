@@ -1,4 +1,5 @@
 ﻿using MayNghien.Models.Request.Base;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using RefferalLinks.Models.Dto;
@@ -8,7 +9,8 @@ namespace RefferalLinks.API.Controllers
 {
 	[Route("api/[controller]")]
 	[ApiController]
-	public class BankController : Controller
+	[Authorize(AuthenticationSchemes = "Bearer", Roles = "Admin,superadmin")]
+    public class BankController : Controller
 	{
 		private IBankService _bankService;
 		public BankController(IBankService bankService)

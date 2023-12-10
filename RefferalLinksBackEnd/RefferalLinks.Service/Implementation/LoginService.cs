@@ -187,5 +187,31 @@ namespace RefferalLinks.Service.Implementation
                 return result.BuildError(ex.ToString());
             }
         }
+
+
+        public async Task<AppResponse<string>> ChangePassword(ChangePassword request)
+        {
+            var result = new AppResponse<string>();
+            try
+            {
+                var user = await _userManager.FindByEmailAsync(request.Email);
+                if (user == null)
+                {
+                    return result.BuildError("cannot find account");
+                }
+                var check = await _userManager.CheckPasswordAsync(user,request.InitialPassword);
+                if(check == false)
+                {
+                    return result.BuildError("Mật khẩu cũ không chính xác");
+                }
+                await _userManager.ChangePasswordAsync(user, request.InitialPassword, request.NewPassword);
+                result.BuildResult("OK");
+            }
+            catch(Exception ex)
+            {
+                result.BuildError(ex.Message);
+            }
+            return result;
+        }
     }
 }
