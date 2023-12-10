@@ -257,7 +257,7 @@ namespace RefferalLinks.Service.Implementation
                 identityUser = await _userManager.FindByIdAsync(id);
                 if (identityUser != null)
                 {
-                    if (await _userManager.IsInRoleAsync(identityUser, "tenant"))
+                    if (await _userManager.IsInRoleAsync(identityUser, "Sale"))
                     {
 						//var userRoles = await _userManager.GetRolesAsync(identityUser);
       //                  foreach(var role in userRoles)
