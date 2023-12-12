@@ -31,13 +31,14 @@ namespace RefferalLinks.Service.Implementation
             _httpContextAccessor = httpContextAccessor;
             _teamRespository = teamRespository;
         }
-        public async Task<AppResponse<string>> AuthenticateUser(UserModel login)
+        public async Task<AppResponse<LoginResult>> AuthenticateUser(UserModel login)
         {
-            var result = new AppResponse<string>();
+            var result = new AppResponse<LoginResult>();
             try
             {
                 UserModel user = null;
 				ApplicationUser identityUser = new ApplicationUser();
+                var loginResult = new LoginResult();
                 //Validate the User Credentials    
                 //Demo Purpose, I have Passed HardCoded User Information    
 
@@ -69,7 +70,13 @@ namespace RefferalLinks.Service.Implementation
                 if (user != null)
                 {
                     var tokenString = await GenerateJSONWebToken(user, identityUser);
-                    return result.BuildResult(tokenString);
+                    loginResult.Token = tokenString;
+                    loginResult.UserName = user.UserName;
+                    loginResult.TeamId = user.TeamId;
+                    loginResult.RefferalCode = user.RefferalCode;
+                    var roles = await _userManager.GetRolesAsync(identityUser);
+                    loginResult.Roles = roles.ToList();
+                    return result.BuildResult(loginResult);
                 }
                 else
                 {
