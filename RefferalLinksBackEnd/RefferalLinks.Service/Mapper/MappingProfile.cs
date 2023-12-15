@@ -29,6 +29,7 @@ namespace RefferalLinks.Service.Mapper
 			CreateMap<Customerlink,CustomerLinkDto>().ReverseMap();
 			CreateMap<LinkTemplate , LinkTemplateDto>().ReverseMap();
 			CreateMap<CustomerLinkImage, CustomerlinkImageDto>().ReverseMap();
+			CreateMap<Branch, BranchDto>().ReverseMap();
 		}
 	}
 }

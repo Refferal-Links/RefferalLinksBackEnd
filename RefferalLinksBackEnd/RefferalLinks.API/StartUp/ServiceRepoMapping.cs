@@ -32,6 +32,9 @@ namespace RefferalLinks.API.StartUp
 	        builder.Services.AddScoped<ITeamRespository, TeamRespository>();
 			builder.Services.AddScoped<ILinkTemplateRepository,LinkTempalteRepository>();
 			builder.Services.AddScoped<ICustomerlinkImageRepository, CustomerlinkImageRepository>();
+
+			builder.Services.AddScoped<IBranchRepository, BranchRepository>();
+			builder.Services.AddScoped<IBranchService, BranchService>();
 		}
 	}
 }

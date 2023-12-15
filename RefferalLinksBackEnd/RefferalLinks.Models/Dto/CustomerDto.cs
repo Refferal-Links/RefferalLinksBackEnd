@@ -14,6 +14,11 @@ namespace RefferalLinks.Models.Dto
         public string Email { get; set; }
         public string Passport { get; set; }
 
+        public string? OldPassport { get; set; }
+        public string DateOfBirth { get; set; }
+        public string? Job { get; set; }
+        public string Source { get; set; }
+
         public string RefferalCode { get; set; }
 
         public string? NameProvice { get; set; }

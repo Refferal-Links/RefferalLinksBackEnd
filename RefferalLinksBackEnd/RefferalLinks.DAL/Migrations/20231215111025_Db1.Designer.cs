@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using RefferalLinks.DAL.Models.Context;
 
@@ -11,9 +12,10 @@ using RefferalLinks.DAL.Models.Context;
 namespace RefferalLinks.DAL.Migrations
 {
     [DbContext(typeof(RefferalLinksDbContext))]
-    partial class RefferalLinksDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231215111025_Db1")]
+    partial class Db1
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -257,36 +259,6 @@ namespace RefferalLinks.DAL.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Bank");
-                });
-
-            modelBuilder.Entity("RefferalLinks.DAL.Models.Entity.Branch", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("CreatedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("CreatedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime?>("ModifiedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Modifiedby")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Branch");
                 });
 
             modelBuilder.Entity("RefferalLinks.DAL.Models.Entity.Campaign", b =>
@@ -546,9 +518,6 @@ namespace RefferalLinks.DAL.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("BranchId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<string>("CreatedBy")
                         .HasColumnType("nvarchar(max)");
 
@@ -569,8 +538,6 @@ namespace RefferalLinks.DAL.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("BranchId");
 
                     b.ToTable("Team");
                 });
@@ -692,17 +659,6 @@ namespace RefferalLinks.DAL.Migrations
                     b.Navigation("Bank");
 
                     b.Navigation("Campaign");
-                });
-
-            modelBuilder.Entity("RefferalLinks.DAL.Models.Entity.Team", b =>
-                {
-                    b.HasOne("RefferalLinks.DAL.Models.Entity.Branch", "Branch")
-                        .WithMany()
-                        .HasForeignKey("BranchId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("Branch");
                 });
 #pragma warning restore 612, 618
         }

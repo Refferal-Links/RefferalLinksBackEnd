@@ -21,6 +21,8 @@ namespace RefferalLinks.DAL.Models.Context
 		{
 
 		}
+
+        public DbSet<Branch> Branch { get; set; }
         public DbSet<Team> Team{ get;set; }
 		public DbSet<Bank> Bank { get;set; }
 		public DbSet<Province> Province { get;set; }
@@ -29,6 +31,7 @@ namespace RefferalLinks.DAL.Models.Context
 		public DbSet<LinkTemplate> LinkTemplate { get;set; }
 		public DbSet<Customerlink> Customerlink { get;set; }
 		public DbSet<CustomerLinkImage> CustomerlinkImage { get;set; }
+		
 
 		protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 		{

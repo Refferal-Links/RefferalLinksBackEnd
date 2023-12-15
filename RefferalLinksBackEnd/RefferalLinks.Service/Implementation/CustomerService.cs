@@ -1,25 +1,18 @@
-﻿using AutoMapper;
+﻿using System.Data.Entity;
+using AutoMapper;
 using LinqKit;
 using MayNghien.Models.Request.Base;
 using MayNghien.Models.Response.Base;
 using RefferalLinks.Common.Enum;
 using RefferalLinks.DAL.Contract;
-using RefferalLinks.DAL.Implementation;
 using RefferalLinks.DAL.Models.Entity;
 using RefferalLinks.Models.Dto;
 using RefferalLinks.Service.Contract;
-using System;
-using System.Collections.Generic;
-using System.Data.Entity;
-using System.Data.Entity.ModelConfiguration.Configuration;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using static Maynghien.Common.Helpers.SearchHelper;
 
 namespace RefferalLinks.Service.Implementation
 {
-   public class CustomerService : ICustomerService
+    public class CustomerService : ICustomerService
     {
         private readonly ICustomerRespository _customerRespository;
         private IMapper _mapper;
@@ -208,6 +201,10 @@ namespace RefferalLinks.Service.Implementation
                 customer.ApplicationUserId = user.Id;
                 customer.PhoneNumber = request.PhoneNumber;
                 customer.ProvinceId = request.ProvinceId;
+                customer.OldPassport = request.OldPassport;
+                customer.DateOfBirth = request.DateOfBirth;
+                customer.Job = request.Job;
+                customer.Source = request.Source;
                 _customerRespository.Edit(customer);
                 var listCustomerLink = _customerLinkRepository.FindBy(x=>x.CustomerId == customer.Id).ToList();
                 _customerLinkRepository.DeleteRange(listCustomerLink);
@@ -255,6 +252,10 @@ namespace RefferalLinks.Service.Implementation
                     Name = customer.Name,
                     RefferalCode = customer.ApplicationUser.RefferalCode,
                     NameProvice = customer.Province.Name,
+                    DateOfBirth = customer.DateOfBirth,
+                    Job = customer.Job,
+                    OldPassport = customer.Passport,
+                    Source = customer.Source,
                     Banks = new List<BankDto>()
                 }).First();
 
@@ -331,7 +332,14 @@ namespace RefferalLinks.Service.Implementation
                     .Select(x => new CustomerDto
                     {
                         Id = x.Id,
-                        Name = x.Name
+                        Name = x.Name,
+                        DateOfBirth = x.DateOfBirth,
+                        Email = x.Email,
+                        Job = x.Job,
+                        OldPassport = x.OldPassport,
+                        Passport = x.Passport,
+                        PhoneNumber = x.PhoneNumber,
+                        Source = x.Source,
                     })
                     .ToList();
 

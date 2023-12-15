@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using System.Data.Entity;
+using AutoMapper;
 using LinqKit;
 using MayNghien.Common.Helpers;
 using MayNghien.Models.Request.Base;
@@ -17,11 +18,13 @@ namespace RefferalLinks.Service.Implementation
         private readonly  ITeamRespository _teamRespository;
         private readonly IMapper _mapper;
         private IHttpContextAccessor _httpContextAccessor;
+        private IBranchRepository _branchRepository;
 
-        public TeamService(ITeamRespository teamRespository , IMapper mapper , IHttpContextAccessor httpContextAccessor) {
+        public TeamService(ITeamRespository teamRespository , IMapper mapper , IHttpContextAccessor httpContextAccessor, IBranchRepository branchRepository) {
             _teamRespository = teamRespository;
             _mapper = mapper;
             _httpContextAccessor = httpContextAccessor;
+            _branchRepository = branchRepository;
         }
         public AppResponse<TeamDto> CreateTeam(TeamDto request)
         {
@@ -33,11 +36,16 @@ namespace RefferalLinks.Service.Implementation
                 {
                     return result.BuildError("Cannot find Account by this user");
                 }
+                var branch = _branchRepository.FindBy(x=>x.Id == request.BranchId);
+                if(branch.Count() == 0)
+                {
+                    return result.BuildError("Cannot find Branch");
+                }
                 var team = new Team();
                 team = _mapper.Map<Team>(request);
                 team.Id = Guid.NewGuid();
                 team.CreatedBy = UserName;
-
+                team.BranchId = request.BranchId.Value;
                _teamRespository.Add(team);
 
                 request.Id = team.Id;
@@ -89,6 +97,7 @@ namespace RefferalLinks.Service.Implementation
                 team.ModifiedOn = DateTime.UtcNow;
                 team.Modifiedby = UserName;
                 team.name = request.name;
+                team.BranchId = request.BranchId.Value;
                 //team.RefferalCode = request.RefferalCode;
 
 				_teamRespository.Edit(team);
@@ -111,13 +120,13 @@ namespace RefferalLinks.Service.Implementation
             //string userId = "";
             try
             {
-                var query = _teamRespository.GetAll();
+                var query = _teamRespository.GetAll().Include(x => x.Branch);
                 var list = query.Select(m => new TeamDto
                 {
                     Id = m.Id,
-                   name = m.name,
-                   //RefferalCode = m.RefferalCode,
-
+                    name = m.name,
+                    NameBranch = m.Branch.Name,
+                    BranchId = m.Id,
                 }).ToList();
                 result.IsSuccess = true;
                 result.Data = list;
@@ -160,7 +169,7 @@ namespace RefferalLinks.Service.Implementation
 			{
 				var query = BuildFilterExpression(request.Filters);
 				var numOfRecords = _teamRespository.CountRecordsByPredicate(query);
-				var model = _teamRespository.FindByPredicate(query).OrderByDescending(x => x.CreatedOn);
+				var model = _teamRespository.FindByPredicate(query).OrderByDescending(x => x.CreatedOn).Include(x=>x.Branch);
 				int pageIndex = request.PageIndex ?? 1;
 				int pageSize = request.PageSize ?? 1;
 				int startIndex = (pageIndex - 1) * (int)pageSize;
@@ -169,7 +178,8 @@ namespace RefferalLinks.Service.Implementation
 					{
 						Id = x.Id,
 						name = x.name,
-                        //RefferalCode = x.RefferalCode
+                        BranchId = x.BranchId,
+                        NameBranch = x.Branch.Name
 					})
 					.ToList();
 

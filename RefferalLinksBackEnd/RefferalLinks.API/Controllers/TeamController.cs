@@ -9,7 +9,7 @@ namespace RefferalLinks.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(AuthenticationSchemes = "Bearer", Roles = "Admin,superadmin")]
+    [Authorize(AuthenticationSchemes = "Bearer", Roles = "Admin, superadmin")]
     public class TeamController : Controller
     {
         private readonly ITeamService _TeamService;
@@ -18,7 +18,7 @@ namespace RefferalLinks.API.Controllers
             _TeamService = TeamService;
         }
         [HttpGet]
-        [Authorize(Roles = "superadmin")]
+        //[Authorize(Roles = "superadmin")]
         public IActionResult GetAllTeam()
         {
             var result = _TeamService.GetAllTeam();

@@ -9,7 +9,7 @@ namespace RefferalLinks.API.Controllers
 {
 	[Route("api/[controller]")]
 	[ApiController]
-	[Authorize(AuthenticationSchemes = "Bearer", Roles = "Admin,superadmin")]
+	[Authorize(AuthenticationSchemes = "Bearer", Roles = "Admin, superadmin")]
     public class BankController : Controller
 	{
 		private IBankService _bankService;
@@ -19,7 +19,8 @@ namespace RefferalLinks.API.Controllers
 		}
 
 		[HttpGet]
-		public IActionResult GetAll()
+        [AllowAnonymous]
+        public IActionResult GetAll()
 		{
 			var result = _bankService.GetAllBank();
 			return Ok(result);

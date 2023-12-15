@@ -10,5 +10,8 @@ namespace RefferalLinks.Models.Dto
    public class TeamDto : BaseDto
     {
         public string name { get; set; }
+
+        public Guid? BranchId { get; set; }
+        public string? NameBranch { get; set; }
     }
 }

@@ -1,9 +1,15 @@
-﻿using MayNghien.Common.Models.Entity;
+﻿using System.ComponentModel.DataAnnotations.Schema;
+using MayNghien.Common.Models.Entity;
 
 namespace RefferalLinks.DAL.Models.Entity
 {
     public class Team : BaseEntity
     {
         public string name { get; set; }
+
+        [ForeignKey("Branch")]
+        public Guid BranchId { get; set; }
+        [ForeignKey("BranchId")]
+        public Branch? Branch { get; set; }
     }
 }
