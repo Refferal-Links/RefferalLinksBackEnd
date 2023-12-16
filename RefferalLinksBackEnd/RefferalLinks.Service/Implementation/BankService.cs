@@ -77,7 +77,7 @@ namespace RefferalLinks.Service.Implementation
 			var result = new AppResponse<List<BankDto>>();
 			try
 			{
-				var list = _bankRepository.GetAll().Select(x => new BankDto
+				var list = _bankRepository.GetAll().Where(x=>x.IsDeleted == false).Select(x => new BankDto
 				{
 					Id = x.Id,
 					Name = x.Name,

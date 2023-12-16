@@ -120,7 +120,7 @@ namespace RefferalLinks.Service.Implementation
             //string userId = "";
             try
             {
-                var query = _teamRespository.GetAll().Include(x => x.Branch);
+                var query = _teamRespository.GetAll().Where(x => x.IsDeleted == false).Include(x => x.Branch);
                 var list = query.Select(m => new TeamDto
                 {
                     Id = m.Id,

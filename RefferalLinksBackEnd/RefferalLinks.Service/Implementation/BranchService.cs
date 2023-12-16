@@ -110,7 +110,7 @@ namespace RefferalLinks.Service.Implementation
             var result = new AppResponse<List<BranchDto>>();
             try
             {
-                var list = _branchRepository.GetAll().Select(x => new BranchDto
+                var list = _branchRepository.GetAll().Where(x=>x.IsDeleted == false).Select(x => new BranchDto
                 {
                     Id = x.Id,
                     Name = x.Name,
