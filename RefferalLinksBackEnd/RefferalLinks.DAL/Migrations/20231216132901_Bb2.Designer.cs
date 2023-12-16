@@ -12,8 +12,8 @@ using RefferalLinks.DAL.Models.Context;
 namespace RefferalLinks.DAL.Migrations
 {
     [DbContext(typeof(RefferalLinksDbContext))]
-    [Migration("20231215163858_Db2")]
-    partial class Db2
+    [Migration("20231216132901_Bb2")]
+    partial class Bb2
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -548,7 +548,7 @@ namespace RefferalLinks.DAL.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("BranchId")
+                    b.Property<Guid?>("BranchId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("CreatedBy")
@@ -701,8 +701,7 @@ namespace RefferalLinks.DAL.Migrations
                     b.HasOne("RefferalLinks.DAL.Models.Entity.Branch", "Branch")
                         .WithMany()
                         .HasForeignKey("BranchId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.Navigation("Branch");
                 });
