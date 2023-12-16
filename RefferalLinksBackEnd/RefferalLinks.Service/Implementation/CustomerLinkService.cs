@@ -1,25 +1,18 @@
-﻿using AutoMapper;
+﻿using System.Data.Entity;
+using System.Security.Claims;
+using AutoMapper;
 using LinqKit;
 using MayNghien.Common.Helpers;
 using MayNghien.Models.Request.Base;
 using MayNghien.Models.Response.Base;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
-using NetTopologySuite.Index.IntervalRTree;
 using OfficeOpenXml;
+using RefferalLinks.Common.Enum;
 using RefferalLinks.DAL.Contract;
-using RefferalLinks.DAL.Implementation;
 using RefferalLinks.DAL.Models.Entity;
 using RefferalLinks.Models.Dto;
 using RefferalLinks.Service.Contract;
-using System;
-using System.Collections.Generic;
-using System.Data.Entity;
-using System.Linq;
-using System.Security.Claims;
-using System.Security.Policy;
-using System.Text;
-using System.Threading.Tasks;
 using static Maynghien.Common.Helpers.SearchHelper;
 namespace RefferalLinks.Service.Implementation
 {
@@ -206,7 +199,9 @@ namespace RefferalLinks.Service.Implementation
                         TeamName = x.Customer.ApplicationUser.TeamId.HasValue && teamNames.ContainsKey(x.Customer.ApplicationUser.TeamId.Value)
         ? teamNames[x.Customer.ApplicationUser.TeamId.Value]
         : string.Empty,
-                        InforCustomer = String.Format("Name:{0} , Email:{1} , Cccd:{2} , PhoneNumber:{3} , PassPort:{4}  ", x.Customer.Name, x.Customer.Email, x.Customer.Passport, x.Customer.PhoneNumber, x.Customer.Passport)
+                        InforCustomer = String.Format("Name:{0} , Email:{1} , Cccd:{2} , PhoneNumber:{3} , PassPort:{4}  ", x.Customer.Name, x.Customer.Email, x.Customer.Passport, x.Customer.PhoneNumber, x.Customer.Passport),
+                        Status = x.Status,
+                        StatusText = x.Status == StatusCustomerLink.Pending ? "Pending": x.Status == StatusCustomerLink.Approved ? "Approved" : "Rejected"
                     })
                     .ToList();
                
