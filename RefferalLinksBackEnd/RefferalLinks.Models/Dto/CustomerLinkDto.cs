@@ -34,5 +34,9 @@ namespace RefferalLinks.Models.Dto
         public List<CustomerlinkImageDto>? ListCustomerlinkImage { get; set; }
         public StatusCustomerLink? Status { get; set; }
         public string? StatusText { get; set; }
+
+        public string? CreateOn { get; set; }
+        public string? ModifiedOn { get; set; }
+        public string? Note { get; set; }
     }
 }

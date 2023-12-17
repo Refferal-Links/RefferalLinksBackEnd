@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using RefferalLinks.DAL.Models.Context;
 
@@ -11,9 +12,10 @@ using RefferalLinks.DAL.Models.Context;
 namespace RefferalLinks.DAL.Migrations
 {
     [DbContext(typeof(RefferalLinksDbContext))]
-    partial class RefferalLinksDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231217112430_Db3")]
+    partial class Db3
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -343,6 +345,7 @@ namespace RefferalLinks.DAL.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Email")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IsDeleted")

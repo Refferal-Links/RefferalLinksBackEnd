@@ -151,6 +151,10 @@ namespace RefferalLinks.Service.Implementation
                         }
                         ).ToList(),
                     Status = x.Status,
+                    CreateOn = x.CreatedOn.Value.ToString("dd/MM/yyyy"),
+                    ModifiedOn = x.ModifiedOn.Value.ToString("dd/MM/yyyy"),
+                    Note = x.Note,
+                    
                 }).First();
                 result.BuildResult(data);
             }
@@ -197,11 +201,14 @@ namespace RefferalLinks.Service.Implementation
                         RefferalCode = x.Customer.ApplicationUser.RefferalCode,
                         UserName = x.Customer.ApplicationUser.UserName,
                         TeamName = x.Customer.ApplicationUser.TeamId.HasValue && teamNames.ContainsKey(x.Customer.ApplicationUser.TeamId.Value)
-        ? teamNames[x.Customer.ApplicationUser.TeamId.Value]
-        : string.Empty,
+                                    ? teamNames[x.Customer.ApplicationUser.TeamId.Value] : string.Empty,
                         InforCustomer = String.Format("Name:{0} , Email:{1} , Cccd:{2} , PhoneNumber:{3} , PassPort:{4}  ", x.Customer.Name, x.Customer.Email, x.Customer.Passport, x.Customer.PhoneNumber, x.Customer.Passport),
                         Status = x.Status,
-                        StatusText = x.Status == StatusCustomerLink.Pending ? "Pending": x.Status == StatusCustomerLink.Approved ? "Approved" : "Rejected"
+                        StatusText = x.Status == StatusCustomerLink.Pending ? "Pending": x.Status == StatusCustomerLink.Approved ? "Approved" : "Rejected",
+                        CreateOn = x.CreatedOn.Value.ToString("dd/MM/yyyy"),
+                        ModifiedOn = x.ModifiedOn.Value.ToString("dd/MM/yyyy"),
+                        Note = x.Note 
+
                     })
                     .ToList();
                
@@ -335,7 +342,10 @@ namespace RefferalLinks.Service.Implementation
                 });
                 var customerLink = _customerLinkRepository.Get(request.Id.Value);
                 customerLink.Status = request.Status.Value;
+                customerLink.ModifiedOn = DateTime.UtcNow;
+                customerLink.Note = request.Note;
                 _customerLinkRepository.Edit(customerLink);
+
                 result.BuildResult("OK");
 
             }

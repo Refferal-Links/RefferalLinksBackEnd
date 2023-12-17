@@ -73,7 +73,7 @@ namespace RefferalLinks.Service.Implementation
                     customerlink.Url = linktemplate.Url;
                     string replaceValue = (TpBank != null && linktemplate.BankId == TpBank.Id) ? gettpbank.TpBank : request.RefferalCode;
                     customerlink.Url = customerlink.Url.Replace("{{sale}}", replaceValue);
-                   customerlink.Url = customerlink.Url.Replace("{{sale}}", request.RefferalCode);
+                    customerlink.Url = customerlink.Url.Replace("{{sale}}", request.RefferalCode);
                     customerlink.Url = customerlink.Url.Replace("{{ten}}", customer.Name);
                     customerlink.Url = customerlink.Url.Replace("{{phone}}", customer.PhoneNumber);
                     customerlink.Url = customerlink.Url.Replace("{{cccd}}", customer.Passport);
