@@ -202,16 +202,23 @@ namespace RefferalLinks.Service.Implementation
                         UserName = x.Customer.ApplicationUser.UserName,
                         TeamName = x.Customer.ApplicationUser.TeamId.HasValue && teamNames.ContainsKey(x.Customer.ApplicationUser.TeamId.Value)
                                     ? teamNames[x.Customer.ApplicationUser.TeamId.Value] : string.Empty,
-                        InforCustomer = String.Format("Name:{0} , Email:{1} , Cccd:{2} , PhoneNumber:{3} , PassPort:{4}  ", x.Customer.Name, x.Customer.Email, x.Customer.Passport, x.Customer.PhoneNumber, x.Customer.Passport),
+                        InforCustomer = String.Format("Tên: {0}; Email: {1}; CCCD: {2}; phone: {3}  ", x.Customer.Name, x.Customer.Email, x.Customer.Passport, x.Customer.PhoneNumber),
                         Status = x.Status,
                         StatusText = x.Status == StatusCustomerLink.Pending ? "Pending": x.Status == StatusCustomerLink.Approved ? "Approved" : "Rejected",
                         CreateOn = x.CreatedOn.Value.ToString("dd/MM/yyyy"),
                         ModifiedOn = x.ModifiedOn.Value.ToString("dd/MM/yyyy"),
-                        Note = x.Note 
-
+                        Note = x.Note,
                     })
                     .ToList();
-               
+                foreach(var item in List)
+                {
+                    var listImage = _customerlinkImageRepository.FindBy(x=>x.CustomerLinkId ==  item.Id).ToList();
+                    var count = listImage.Count();
+                    item.Image1 = count >= 1 ?  listImage[0].LinkImage: "";
+                    item.Image2 = count >= 2 ? listImage[1].LinkImage : "";
+                    item.Image3 = count >= 3 ? listImage[2].LinkImage : "";
+                    item.Image4 = count >= 4 ? listImage[3].LinkImage : "";
+                }
 
                 var searchUserResult = new SearchResponse<CustomerLinkDto>
                 {
@@ -255,6 +262,9 @@ namespace RefferalLinks.Service.Implementation
                         break;
 
                     case "Sale":
+                        predicate = predicate.And(m => m.Customer.ApplicationUserId.Contains(user.Id));
+                        break;
+                    case "CSKH":
                         predicate = predicate.And(m => m.Customer.ApplicationUserId.Contains(user.Id));
                         break;
                     default:
@@ -463,7 +473,7 @@ namespace RefferalLinks.Service.Implementation
                         TeamName = x.Customer.ApplicationUser.TeamId.HasValue && teamNames.ContainsKey(x.Customer.ApplicationUser.TeamId.Value)
         ? teamNames[x.Customer.ApplicationUser.TeamId.Value]
         : string.Empty,
-                        InforCustomer = String.Format("Name:{0} , Email:{1} , Cccd:{2} , PhoneNumber:{3} , PassPort:{4}  ", x.Customer.Name, x.Customer.Email, x.Customer.Passport, x.Customer.PhoneNumber, x.Customer.Passport)
+                        InforCustomer = String.Format("Tên:{0}; Email:{1}; CCCD:{2}; phone:{3}  ", x.Customer.Name, x.Customer.Email, x.Customer.Passport, x.Customer.PhoneNumber)
                     })
                     .ToList();
 

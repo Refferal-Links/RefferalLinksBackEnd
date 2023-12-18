@@ -9,7 +9,7 @@ namespace RefferalLinks.API.Controllers
 {
 	[Route("api/[controller]")]
 	[ApiController]
-    [Authorize(AuthenticationSchemes = "Bearer", Roles = "Sale")]
+    [Authorize(AuthenticationSchemes = "Bearer")]
     public class CustomerController : Controller
 	{
 		private ICustomerService _customerService;

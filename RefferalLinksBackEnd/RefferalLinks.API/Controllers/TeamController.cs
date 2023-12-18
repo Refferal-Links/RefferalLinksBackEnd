@@ -19,6 +19,7 @@ namespace RefferalLinks.API.Controllers
         }
         [HttpGet]
         //[Authorize(Roles = "superadmin")]
+        [AllowAnonymous]
         public IActionResult GetAllTeam()
         {
             var result = _TeamService.GetAllTeam();

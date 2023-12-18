@@ -38,5 +38,11 @@ namespace RefferalLinks.Models.Dto
         public string? CreateOn { get; set; }
         public string? ModifiedOn { get; set; }
         public string? Note { get; set; }
+
+        public string? Image1 { get; set; }
+        public string? Image2 { get; set; }
+        public string? Image3 { get; set; }
+        public string? Image4 { get; set; }
+
     }
 }
