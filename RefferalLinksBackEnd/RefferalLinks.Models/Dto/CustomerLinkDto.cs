@@ -44,5 +44,8 @@ namespace RefferalLinks.Models.Dto
         public string? Image3 { get; set; }
         public string? Image4 { get; set; }
 
+
+        public string? NvCSKH { get; set; }
+        public string? CodeNVCSKH { get; set; }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System.Data.Entity;
 using System.Security.Claims;
+using System.Threading.Tasks;
 using AutoMapper;
 using LinqKit;
 using MayNghien.Common.Helpers;
@@ -28,8 +29,8 @@ namespace RefferalLinks.Service.Implementation
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly ICustomerlinkImageRepository _customerlinkImageRepository;
 
-        public CustomerLinkService(ICustomerLinkRepository customerLinkRepository, IMapper mapper , ICustomerRespository customerRespository ,
-            ILinkTemplateRepository linkTemplateRepository, IUserespository userespository , ITeamRespository teamRespository , IHttpContextAccessor httpContextAccessor ,
+        public CustomerLinkService(ICustomerLinkRepository customerLinkRepository, IMapper mapper, ICustomerRespository customerRespository,
+            ILinkTemplateRepository linkTemplateRepository, IUserespository userespository, ITeamRespository teamRespository, IHttpContextAccessor httpContextAccessor,
             UserManager<ApplicationUser> userManager, ICustomerlinkImageRepository customerlinkImageRepository
             )
         {
@@ -50,13 +51,13 @@ namespace RefferalLinks.Service.Implementation
             try
             {
                 var teamNames = _teamRespository.GetAllTeamNames();
-                var list = _customerLinkRepository.GetAll() .Include(x => x.Customer) .Select(x => new CustomerLinkDto
+                var list = _customerLinkRepository.GetAll().Include(x => x.Customer).Select(x => new CustomerLinkDto
                 {
                     Id = x.Id,
                     Url = x.Url,
                     CustomerId = x.CustomerId,
                     LinkTemplateId = x.LinkTemplateId,
-                    Email = x.Customer.Email,       
+                    Email = x.Customer.Email,
                     Passport = x.Customer.Passport,
                     PhoneNumber = x.Customer.PhoneNumber,
                     Name = x.Customer.Name,
@@ -122,7 +123,7 @@ namespace RefferalLinks.Service.Implementation
             var result = new AppResponse<CustomerLinkDto>();
             try
             {
-                var query = _customerLinkRepository.FindBy(x => x.Id == Id).Include(x => x.LinkTemplate) .Include(x => x.Customer);
+                var query = _customerLinkRepository.FindBy(x => x.Id == Id).Include(x => x.LinkTemplate).Include(x => x.Customer);
 
                 var data = query.Select(x => new CustomerLinkDto
                 {
@@ -154,7 +155,7 @@ namespace RefferalLinks.Service.Implementation
                     CreateOn = x.CreatedOn.Value.ToString("dd/MM/yyyy"),
                     ModifiedOn = x.ModifiedOn.Value.ToString("dd/MM/yyyy"),
                     Note = x.Note,
-                    
+
                 }).First();
                 result.BuildResult(data);
             }
@@ -189,7 +190,7 @@ namespace RefferalLinks.Service.Implementation
                         Email = x.Customer.Email,
                         PhoneNumber = x.Customer.PhoneNumber,
                         Passport = x.Customer.Passport,
-                        Name = x.Customer.Name,    
+                        Name = x.Customer.Name,
                         BankId = x.LinkTemplate.BankId,
                         CampaignId = x.LinkTemplate.CampaignId,
                         BankName = x.LinkTemplate.Bank.Name,
@@ -198,26 +199,39 @@ namespace RefferalLinks.Service.Implementation
                         CreatedOn = x.CreatedOn,
                         Iduser = x.Customer.ApplicationUser.Id,
                         TpBank = x.Customer.ApplicationUser.TpBank,
-                        RefferalCode = x.Customer.ApplicationUser.RefferalCode,
-                        UserName = x.Customer.ApplicationUser.UserName,
+
                         TeamName = x.Customer.ApplicationUser.TeamId.HasValue && teamNames.ContainsKey(x.Customer.ApplicationUser.TeamId.Value)
-                                    ? teamNames[x.Customer.ApplicationUser.TeamId.Value] : string.Empty,
+                                       ? teamNames[x.Customer.ApplicationUser.TeamId.Value] : string.Empty,
                         InforCustomer = String.Format("Tên: {0}; Email: {1}; CCCD: {2}; phone: {3}  ", x.Customer.Name, x.Customer.Email, x.Customer.Passport, x.Customer.PhoneNumber),
                         Status = x.Status,
-                        StatusText = x.Status == StatusCustomerLink.Pending ? "Pending": x.Status == StatusCustomerLink.Approved ? "Approved" : "Rejected",
+                        StatusText = x.Status == StatusCustomerLink.Pending ? "Pending" : x.Status == StatusCustomerLink.Approved ? "Approved" : "Rejected",
                         CreateOn = x.CreatedOn.Value.ToString("dd/MM/yyyy"),
                         ModifiedOn = x.ModifiedOn.Value.ToString("dd/MM/yyyy"),
                         Note = x.Note,
+                        UserName = x.Customer.ApplicationUser.UserName,
+                        RefferalCode = x.Customer.ApplicationUser.RefferalCode,
+                        CodeNVCSKH = "",
+                        NvCSKH = "",
+
                     })
                     .ToList();
-                foreach(var item in List)
+                foreach (var item in List)
                 {
-                    var listImage = _customerlinkImageRepository.FindBy(x=>x.CustomerLinkId ==  item.Id).ToList();
+                    var listImage = _customerlinkImageRepository.FindBy(x => x.CustomerLinkId == item.Id).ToList();
                     var count = listImage.Count();
-                    item.Image1 = count >= 1 ?  listImage[0].LinkImage: "";
+                    item.Image1 = count >= 1 ? listImage[0].LinkImage : "";
                     item.Image2 = count >= 2 ? listImage[1].LinkImage : "";
                     item.Image3 = count >= 3 ? listImage[2].LinkImage : "";
                     item.Image4 = count >= 4 ? listImage[3].LinkImage : "";
+                    var user = await _userManager.FindByNameAsync(item.UserName);
+                    var role = (await _userManager.GetRolesAsync(user)).First();
+                    if(role == "CSKH")
+                    {
+                        item.NvCSKH = item.UserName;
+                        item.CodeNVCSKH = item.RefferalCode;
+                        item.RefferalCode = "";
+                        item.UserName = "";
+                    }
                 }
 
                 var searchUserResult = new SearchResponse<CustomerLinkDto>
@@ -281,7 +295,7 @@ namespace RefferalLinks.Service.Implementation
                             case "email":
 
                                 predicate = predicate.And(m => m.Customer.Email.Contains(filter.Value));
-                                
+
                                 break;
                             case "phoneNumber":
                                 predicate = predicate.And(m => m.Customer.PhoneNumber.Contains(filter.Value));
@@ -299,12 +313,41 @@ namespace RefferalLinks.Service.Implementation
                                 predicate = predicate.And(m => m.LinkTemplate.CampaignId.ToString().Contains(filter.Value));
                                 break;
                             case "teamId":
-                                if (userRole == "teamleader" || userRole == "sale") break;
+                                if (userRole == "Teamleader" || userRole == "Sale") break;
                                 predicate = predicate.And(m => m.Customer.ApplicationUser.TeamId.ToString().Contains(filter.Value));
                                 break;
-                            case "userId":
-                                if (userRole == "sale") break;
+                            case "userName":
+                                if (userRole == "Sale") break;
                                 predicate = predicate.And(m => m.Customer.ApplicationUserId.Contains(filter.Value));
+                                break;
+                            case "refferalCode":
+                                predicate = predicate.And(m => m.Customer.ApplicationUser.RefferalCode.Contains(filter.Value));
+                                break;
+                            case "createOn":
+                                {
+                                    var day = DateTime.ParseExact(filter.Value, "dd/MM/yyyy", System.Globalization.CultureInfo.InvariantCulture);
+                                    //if (filter.Value != "")
+                                    predicate = predicate.And(m => m.CreatedOn.Value.Day.Equals(day.Day) && m.CreatedOn.Value.Month.Equals(day.Month) && m.CreatedOn.Value.Year.Equals(day.Year));
+                                }
+                                break;
+                            case "modifiedOn":
+                                {
+                                    var day = DateTime.ParseExact(filter.Value, "dd/MM/yyyy", System.Globalization.CultureInfo.InvariantCulture);
+                                    //if (filter.Value != "")
+                                    predicate = predicate.And(m => m.CreatedOn.Value.Day.Equals(day.Day) && m.CreatedOn.Value.Month.Equals(day.Month) && m.CreatedOn.Value.Year.Equals(day.Year));
+                                }
+                                break;
+                            case "statusText":
+                                {
+                                    var value = int.Parse(filter.Value);
+                                    StatusCustomerLink status = (StatusCustomerLink)Enum.ToObject(typeof(StatusCustomerLink), value);
+                                    predicate = predicate.And(m => m.Status == status);
+                                }
+                                break;
+                            case "nvCSKH":
+                                {
+                                    predicate = predicate.And(m => m.Customer.ApplicationUserId.Equals(filter.Value));
+                                }
                                 break;
                             default:
                                 break;
@@ -336,7 +379,7 @@ namespace RefferalLinks.Service.Implementation
                 {
                     return result.BuildError("Không để trống danh sách hình ảnh");
                 }
-                var listCustomerLinkImage = _customerlinkImageRepository.GetAll().Where(x=>x.CustomerLinkId == request.Id).ToList();
+                var listCustomerLinkImage = _customerlinkImageRepository.GetAll().Where(x => x.CustomerLinkId == request.Id).ToList();
                 if (listCustomerLinkImage != null)
                 {
                     _customerlinkImageRepository.DeleteRange(listCustomerLinkImage);
@@ -359,7 +402,7 @@ namespace RefferalLinks.Service.Implementation
                 result.BuildResult("OK");
 
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 result.BuildError(ex.Message);
             }
@@ -371,6 +414,7 @@ namespace RefferalLinks.Service.Implementation
 
         public async Task<byte[]> ExportToExcel(SearchRequest request)
         {
+            request.Filters = request.Filters.Where(x=>x.Value != "" && x.Value != null).ToList();
             var data = await Export(request);
             using (var package = new ExcelPackage())
             {
@@ -382,38 +426,38 @@ namespace RefferalLinks.Service.Implementation
                 worksheet.Cells[1, 3].Value = "Email";
                 worksheet.Cells[1, 4].Value = "Ngày đăng kí thành công";
                 worksheet.Cells[1, 5].Value = "Dự án";
-                worksheet.Cells[1, 6].Value = "Sản phẩm";           
-                worksheet.Cells[1, 7].Value = "Code Sale";           
-                worksheet.Cells[1, 8].Value = "Tên Team";           
-                worksheet.Cells[1, 9].Value = "Tên Quản Lý";           
-                worksheet.Cells[1, 10].Value = "Tên Sale ";           
-              
+                worksheet.Cells[1, 6].Value = "Sản phẩm";
+                worksheet.Cells[1, 7].Value = "Code Sale";
+                worksheet.Cells[1, 8].Value = "Tên Team";
+                worksheet.Cells[1, 9].Value = "Tên Quản Lý";
+                worksheet.Cells[1, 10].Value = "Tên Sale ";
+
                 for (int i = 1; i <= 4; i++)
                 {
-                    worksheet.Cells[1, 10+ i].Value = $"Ảnh {i}"; 
+                    worksheet.Cells[1, 10 + i].Value = $"Ảnh {i}";
                 }
 
                 for (int i = 0; i < data.Data.Data.Count; i++)
                 {
                     var dto = data.Data.Data[i];
-                    var GetallImg =  _customerlinkImageRepository.GetAll().Where(x => x.CustomerLinkId == dto.Id).ToList();
-                    var getsale = _userespository.FindById(dto.Iduser); 
+                    var GetallImg = _customerlinkImageRepository.GetAll().Where(x => x.CustomerLinkId == dto.Id).ToList();
+                    var getsale = _userespository.FindById(dto.Iduser);
                     var getleader = _userespository.FindByPredicate(x => x.TeamId == dto.TeamId).ToList();
                     var convertedItems = _mapper.Map<List<CustomerlinkImageDto>>(GetallImg);
                     dto.ListCustomerlinkImage = new List<CustomerlinkImageDto>();
-                    dto.ListCustomerlinkImage?.AddRange( convertedItems);
+                    dto.ListCustomerlinkImage?.AddRange(convertedItems);
                     worksheet.Cells[i + 2, 1].Value = dto.PhoneNumber;
                     worksheet.Cells[i + 2, 2].Value = dto.Passport;
                     worksheet.Cells[i + 2, 3].Value = dto.Email;
                     worksheet.Cells[i + 2, 4].Value = dto.CreatedOn.Value.ToString("dd/MM/yyyy");
                     worksheet.Cells[i + 2, 5].Value = dto.BankName;
-                    worksheet.Cells[i + 2, 6].Value = dto.CamPaignName ;
-                    worksheet.Cells[i + 2, 7].Value = dto.RefferalCode ;
-                    worksheet.Cells[i + 2, 8].Value = dto.TeamName ;
+                    worksheet.Cells[i + 2, 6].Value = dto.CamPaignName;
+                    worksheet.Cells[i + 2, 7].Value = dto.RefferalCode;
+                    worksheet.Cells[i + 2, 8].Value = dto.TeamName;
                     var leader = "";
 
-                
-                    foreach(var t in getleader)
+
+                    foreach (var t in getleader)
                     {
                         var roles = await _userManager.GetRolesAsync(t);
                         bool isTeamLeader = roles.Contains("Teamleader");
@@ -424,14 +468,14 @@ namespace RefferalLinks.Service.Implementation
                         }
                     }
                     worksheet.Cells[i + 2, 9].Value = (getsale.RefferalCode != null) ? leader : "";
-                    worksheet.Cells[i + 2, 10].Value = (getsale.RefferalCode != null ) ? getsale.UserName : "";
-                    for (int j = 0; j < GetallImg.Count ; j++)
+                    worksheet.Cells[i + 2, 10].Value = (getsale.RefferalCode != null) ? getsale.UserName : "";
+                    for (int j = 0; j < GetallImg.Count; j++)
                     {
                         worksheet.Cells[i + 2, 10 + j + 1].Value = dto.ListCustomerlinkImage[j].LinkImage;
                     }
-                                    
-                   
-                    
+
+
+
                 }
 
 

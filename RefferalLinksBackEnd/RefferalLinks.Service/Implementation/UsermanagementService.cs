@@ -1,26 +1,23 @@
-﻿using AutoMapper;
+﻿using System.Linq.Expressions;
+using System.Security.Claims;
+using AutoMapper;
 using LinqKit;
+using MayNghien.Common.Helpers;
 using MayNghien.Models.Request.Base;
 using MayNghien.Models.Response.Base;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using RefferalLinks.DAL.Contract;
 using RefferalLinks.DAL.Models.Context;
 using RefferalLinks.DAL.Models.Entity;
 using RefferalLinks.Models.Dto;
 using RefferalLinks.Service.Contract;
-using static MayNghien.Common.CommonMessage.AuthResponseMessage;
 using static Maynghien.Common.Helpers.SearchHelper;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-using RefferalLinks.DAL.Implementation;
-using System.Text.Json;
-using Microsoft.AspNetCore.Http;
-using MayNghien.Common.Helpers;
-using System.Security.Claims;
-using System.Linq.Expressions;
+using static MayNghien.Common.CommonMessage.AuthResponseMessage;
 
 namespace RefferalLinks.Service.Implementation
 {
-	public class UsermanagementService : IUsermanagementService
+    public class UsermanagementService : IUsermanagementService
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
@@ -99,6 +96,68 @@ namespace RefferalLinks.Service.Implementation
 
         }
 
+        public async Task<AppResponse<List<UserModel>>> GetAllCSKH()
+        {
+            var result = new AppResponse<List<UserModel>>();
+            try
+            {
+
+
+                List<Filter> Filters = new List<Filter>();
+                Filters.Add(new Filter
+                {
+                    FieldName = "Role",
+                    Value = "CSKH"
+                });
+                var query = await BuildFilterExpression2(Filters);
+                var users = _userRepository.FindByPredicate(query);
+                var UserList = users.ToList();
+                var dtoList = UserList.Select(x =>
+                {
+                    var user = new UserModel
+                    {
+                        Email = x.Email,
+                        UserName = x.UserName,
+                        Id = Guid.Parse(x.Id),
+                        LockoutEnabled = x.LockoutEnabled ? "hoạt động" : "cấm",
+                        RefferalCode = x.RefferalCode ?? "",
+                        TpBank = x.TpBank,
+
+                    };
+                    if (x.TeamId != null)
+                    {
+                        user.TeamName = _teamRespository.Get(x.TeamId.Value).name;
+                    }
+                    return user;
+                }).ToList();
+                if (dtoList != null && dtoList.Count > 0)
+                {
+                    for (int i = 0; i < UserList.Count; i++)
+                    {
+                        var dtouser = dtoList[i];
+
+                        var identityUser = UserList[i];
+                        if (UserList[i].LockoutEnabled == true)
+                        {
+                            dtouser.LockoutEnabled = "Hoạt động";
+                        }
+                        else
+                        {
+                            dtouser.LockoutEnabled = "cấm";
+                        }
+                        dtouser.Role = (await _userManager.GetRolesAsync(identityUser)).First();
+
+                    }
+                }
+                return result.BuildResult(dtoList);
+            }
+            catch (Exception ex)
+            {
+
+                return result.BuildError(ex.ToString());
+            }
+
+        }
 
         public async Task<AppResponse<List<UserModel>>> GetAllUser()
 		{
@@ -451,7 +510,12 @@ namespace RefferalLinks.Service.Implementation
                 var userRole = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.Role)?.Value;         
                 var UserName = ClaimHelper.GetClainByName(_httpContextAccessor, "UserName");
                 var iduser = await _userManager.FindByNameAsync(UserName);
-                var usersWithRole = await _userManager.GetUsersInRoleAsync("sale");
+                var usersWithRole = await _userManager.GetUsersInRoleAsync("Sale");
+                if (Filters.Count > 0)
+                {
+                    var Role = Filters.Where(x => x.FieldName == "Role").First();
+                    usersWithRole = await _userManager.GetUsersInRoleAsync(Role.Value);
+                }
                 var userIDs = usersWithRole.Select(u => u.Id).ToList();
                 var userIDs2 = usersWithRole.Select(u => u.TeamId ).ToList();
                 userIDs2.RemoveAll(user => user != iduser.TeamId);
@@ -460,14 +524,17 @@ namespace RefferalLinks.Service.Implementation
 
                 switch (userRole)
                 {
-                    case "admin":
+                    case "Admin":
                     case "superadmin":                                      
                         predicate = u => userIDs.Contains(u.Id);
                         break;
-                    case "teamleader":
+                    case "Teamleader":
                         predicate = u => userIDs2.Contains(u.TeamId);
                             break;
-                    case "sale":
+                    case "Sale":
+                        predicate = u => false;
+                        break;
+                    case "CSKH":
                         predicate = u => false;
                         break;
                     default:

@@ -32,6 +32,15 @@ namespace RefferalLinks.API.Controllers
             var result = await _usermanagementService.GetAllSale();
             return Ok(result);
         }
+
+        [HttpGet]
+        [Route("cskh")]
+        public async Task<IActionResult> GetAllCSKH()
+        {
+            var result = await _usermanagementService.GetAllCSKH();
+            return Ok(result);
+        }
+
         [HttpPut]
         [Route("{Id}")]
         public async Task<IActionResult> RestPassWordUser(string Id)
