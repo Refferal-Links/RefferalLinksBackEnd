@@ -76,7 +76,7 @@ namespace RefferalLinks.API.Controllers
         }
 		[HttpPost]
 		[Route("search")]
-		public async Task<IActionResult> Search(SearchRequest request)
+		public async Task<IActionResult> Search([FromBody] SearchRequest request)
 		{
 			var result = await _usermanagementService.Search(request);
 			return Ok(result);

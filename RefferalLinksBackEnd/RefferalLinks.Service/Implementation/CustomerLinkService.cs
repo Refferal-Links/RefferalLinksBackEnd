@@ -1,4 +1,5 @@
-﻿using System.Data.Entity;
+﻿using System;
+using System.Data.Entity;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -175,7 +176,12 @@ namespace RefferalLinks.Service.Implementation
                 var userRole = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.Role)?.Value;
                 var query = await BuildFilterExpression(request.Filters);
                 var numOfRecords = _customerLinkRepository.CountRecordsByPredicate(query);
-                var model = _customerLinkRepository.FindByPredicate(query).OrderByDescending(p => p.CreatedOn);
+                var model = _customerLinkRepository.FindByPredicate(query);
+
+                if(request.SortBy != null)
+                {
+                    model = AddSort(model, request.SortBy);
+                }
                 int pageIndex = request.PageIndex ?? 1;
                 int pageSize = request.PageSize ?? 1;
                 int startIndex = (pageIndex - 1) * (int)pageSize;
@@ -250,6 +256,97 @@ namespace RefferalLinks.Service.Implementation
             }
             return result;
         }
+
+        private IQueryable<Customerlink> AddSort(IQueryable<Customerlink> input, SortByInfo sortByInfo)
+        {
+            var result = input.AsQueryable();
+            switch (sortByInfo.FieldName)
+            {
+
+                case "bankName":
+                    {
+                        if (sortByInfo.Ascending != null && sortByInfo.Ascending.Value)
+                        {
+                            result = result.OrderBy(m => m.LinkTemplate.Bank.Name);
+
+                        }
+                        else
+                        {
+                            result = result.OrderByDescending(m => m.LinkTemplate.Bank.Name);
+                        }
+                    }
+                    break;
+                case "camPaignName":
+                    {
+                        if (sortByInfo.Ascending != null && sortByInfo.Ascending.Value)
+                        {
+                            result = result.OrderBy(m => m.LinkTemplate.Campaign.Name);
+
+                        }
+                        else
+                        {
+                            result = result.OrderByDescending(m => m.LinkTemplate.Campaign.Name);
+                        }
+                    }
+                    break;
+                case "statusText":
+                    {
+                        if (sortByInfo.Ascending != null && sortByInfo.Ascending.Value)
+                        {
+                            result = result.OrderBy(m => m.Status);
+
+                        }
+                        else
+                        {
+                            result = result.OrderByDescending(m => m.Status);
+                        }
+                    }
+                    break;
+                case "createOn":
+                    {
+                        if (sortByInfo.Ascending != null && sortByInfo.Ascending.Value)
+                        {
+                            result = result.OrderBy(m => m.CreatedOn.Value);
+
+                        }
+                        else
+                        {
+                            result = result.OrderByDescending(x => x.CreatedOn.Value);
+                        }
+                    }
+                    break;
+                case "modifiedOn":
+                    {
+                        if (sortByInfo.Ascending != null && sortByInfo.Ascending.Value)
+                        {
+                            result = result.OrderBy(m => m.ModifiedOn.Value);
+
+                        }
+                        else
+                        {
+                            result = result.OrderByDescending(m => m.ModifiedOn.Value);
+                        }
+                    }
+                    break;
+                default:
+                    break;
+            }
+
+            //if (sortByInfo.FieldName == "bankName")
+            //{
+            //    if (sortByInfo.Ascending != null && sortByInfo.Ascending.Value)
+            //    {
+            //        result = result.OrderBy(m => m.LinkTemplate.Bank.Name);
+
+            //    }
+            //    else
+            //    {
+            //        result = result.OrderByDescending(m => m.LinkTemplate.Bank.Name);
+            //    }
+            //}
+            return result;
+        }
+
         public async Task<ApplicationUser> GetCurrentUserAsync(ClaimsPrincipal user)
         {
             var currentUser = await _userManager.GetUserAsync(user);

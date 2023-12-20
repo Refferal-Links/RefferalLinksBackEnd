@@ -192,7 +192,11 @@ namespace RefferalLinks.Service.Implementation
             {
                 var query = BuildFilterExpression(request.Filters);
                 var numOfRecords = _linkTemplateRepository.CountRecordsByPredicate(query);
-                var model = _linkTemplateRepository.FindByPredicate(query).OrderByDescending(p => p.CreatedOn).Include(x=>x.Bank).Include(x=>x.Campaign);
+                var model = _linkTemplateRepository.FindByPredicate(query).Include(x=>x.Bank).Include(x=>x.Campaign);
+                if (request.SortBy != null)
+                {
+                    model = AddSort(model, request.SortBy);
+                }
                 int pageIndex = request.PageIndex ?? 1;
                 int pageSize = request.PageSize ?? 1;
                 int startIndex = (pageIndex - 1) * (int)pageSize;
@@ -225,6 +229,58 @@ namespace RefferalLinks.Service.Implementation
             }
             return result;
         }
+
+        private IQueryable<LinkTemplate> AddSort(IQueryable<LinkTemplate> input, SortByInfo sortByInfo)
+        {
+            var result = input.AsQueryable();
+            switch (sortByInfo.FieldName)
+            {
+
+                case "bankName":
+                    {
+                        if (sortByInfo.Ascending != null && sortByInfo.Ascending.Value)
+                        {
+                            result = result.OrderBy(m => m.Bank.Name);
+
+                        }
+                        else
+                        {
+                            result = result.OrderByDescending(m => m.Bank.Name);
+                        }
+                    }
+                    break;
+                case "campaignName":
+                    {
+                        if (sortByInfo.Ascending != null && sortByInfo.Ascending.Value)
+                        {
+                            result = result.OrderBy(m => m.Campaign.Name);
+
+                        }
+                        else
+                        {
+                            result = result.OrderByDescending(m => m.Campaign.Name);
+                        }
+                    }
+                    break;
+                case "isActive":
+                    {
+                        if (sortByInfo.Ascending != null && sortByInfo.Ascending.Value)
+                        {
+                            result = result.OrderBy(m => m.IsActive);
+
+                        }
+                        else
+                        {
+                            result = result.OrderByDescending(m => m.IsActive);
+                        }
+                    }
+                    break;
+                default:
+                    break;
+            }
+            return result;
+        }
+
         private ExpressionStarter<LinkTemplate> BuildFilterExpression(IList<Filter> Filters)
         {
             try

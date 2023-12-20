@@ -115,8 +115,12 @@ namespace RefferalLinks.Service.Implementation
 			{
 				var query = BuildFilterExpression(request.Filters);
 				var numOfRecords = _provinceRepository.CountRecordsByPredicate(query);
-				var model = _provinceRepository.FindByPredicate(query).OrderByDescending(x=>x.CreatedOn);
-				int pageIndex = request.PageIndex ?? 1;
+				var model = _provinceRepository.FindByPredicate(query);
+                if (request.SortBy != null)
+                {
+                    model = AddSort(model, request.SortBy);
+                }
+                int pageIndex = request.PageIndex ?? 1;
 				int pageSize = request.PageSize ?? 1;
 				int startIndex = (pageIndex - 1) * (int)pageSize;
 				var List = model.Skip(startIndex).Take(pageSize)
@@ -143,7 +147,32 @@ namespace RefferalLinks.Service.Implementation
 			}
 			return result;
 		}
-		private ExpressionStarter<Province> BuildFilterExpression(IList<Filter> Filters)
+
+        private IQueryable<Province> AddSort(IQueryable<Province> input, SortByInfo sortByInfo)
+        {
+            var result = input.AsQueryable();
+            switch (sortByInfo.FieldName)
+            {
+                case "name":
+                    {
+                        if (sortByInfo.Ascending != null && sortByInfo.Ascending.Value)
+                        {
+                            result = result.OrderBy(m => m.Name);
+
+                        }
+                        else
+                        {
+                            result = result.OrderByDescending(m => m.Name);
+                        }
+                    }
+                    break;
+                default:
+                    break;
+            }
+            return result;
+        }
+
+        private ExpressionStarter<Province> BuildFilterExpression(IList<Filter> Filters)
 		{
 			try
 			{

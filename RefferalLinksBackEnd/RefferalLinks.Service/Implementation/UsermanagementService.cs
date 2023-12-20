@@ -408,13 +408,18 @@ namespace RefferalLinks.Service.Implementation
 				var query = BuildFilterExpression(request.Filters);
 				var numOfRecords = _userRepository.CountRecordsByPredicate(query);
 
-				var users = _userRepository.FindByPredicate(query).OrderByDescending(x=>x.Email).ToList();
+				var users = _userRepository.FindByPredicate(query);
 
-                for (int i = 0; i < users.Count; i++)
+                if (request.SortBy != null)
                 {
-                    if ((await _userManager.GetRolesAsync(users[i])).First() == "superadmin")
+                    users = addSort(users, request.SortBy);
+                }
+                var usersList = users.ToList();
+                for (int i = 0; i < usersList.Count; i++)
+                {
+                    if ((await _userManager.GetRolesAsync(usersList[i])).First() == "superadmin")
                     {
-                        users.Remove(users[i]);
+                        usersList.Remove(usersList[i]);
                         i--;
                     }
                 }
@@ -422,7 +427,7 @@ namespace RefferalLinks.Service.Implementation
                 int pageIndex = request.PageIndex ?? 1;
 				int pageSize = request.PageSize ?? 1;
 				int startIndex = (pageIndex - 1) * (int)pageSize;
-				var UserList = users.Skip(startIndex).Take(pageSize).ToList();
+				var UserList = usersList.Skip(startIndex).Take(pageSize).ToList();
                 var dtoList = UserList.Select(x =>
                 {
                     var user = new UserModel
@@ -471,8 +476,24 @@ namespace RefferalLinks.Service.Implementation
 			}
 		}
 
+        private IQueryable<ApplicationUser> addSort(IQueryable<ApplicationUser> input, SortByInfo sortByInfo)
+        {
+            var result = input.AsQueryable();
+            if (sortByInfo.FieldName == "userName")
+            {
+                if (sortByInfo.Ascending != null && sortByInfo.Ascending.Value)
+                {
+                    result = result.OrderBy(m => m.UserName);
 
-		private ExpressionStarter<ApplicationUser> BuildFilterExpression(List<Filter> Filters)
+                }
+                else
+                {
+                    result = result.OrderByDescending(m => m.UserName);
+                }
+            }
+            return result;
+        }
+        private ExpressionStarter<ApplicationUser> BuildFilterExpression(List<Filter> Filters)
 		{
 			try
 			{

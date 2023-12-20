@@ -131,7 +131,11 @@ namespace RefferalLinks.Service.Implementation
             {
                 var query = BuildFilterExpression(request.Filters);
                 var numOfRecords = _branchRepository.CountRecordsByPredicate(query);
-                var model = _branchRepository.FindByPredicate(query).OrderByDescending(x => x.CreatedOn);
+                var model = _branchRepository.FindByPredicate(query);
+                if (request.SortBy != null)
+                {
+                    model = AddSort(model, request.SortBy);
+                }
                 int pageIndex = request.PageIndex ?? 1;
                 int pageSize = request.PageSize ?? 1;
                 int startIndex = (pageIndex - 1) * (int)pageSize;
@@ -156,6 +160,30 @@ namespace RefferalLinks.Service.Implementation
             catch (Exception ex)
             {
                 result.BuildError(ex.Message);
+            }
+            return result;
+        }
+
+        private IQueryable<Branch> AddSort(IQueryable<Branch> input, SortByInfo sortByInfo)
+        {
+            var result = input.AsQueryable();
+            switch (sortByInfo.FieldName)
+            {
+                case "name":
+                    {
+                        if (sortByInfo.Ascending != null && sortByInfo.Ascending.Value)
+                        {
+                            result = result.OrderBy(m => m.Name);
+
+                        }
+                        else
+                        {
+                            result = result.OrderByDescending(m => m.Name);
+                        }
+                    }
+                    break;
+                default:
+                    break;
             }
             return result;
         }

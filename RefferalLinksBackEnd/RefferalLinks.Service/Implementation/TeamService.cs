@@ -169,8 +169,12 @@ namespace RefferalLinks.Service.Implementation
 			{
 				var query = BuildFilterExpression(request.Filters);
 				var numOfRecords = _teamRespository.CountRecordsByPredicate(query);
-				var model = _teamRespository.FindByPredicate(query).OrderByDescending(x => x.CreatedOn).Include(x=>x.Branch);
-				int pageIndex = request.PageIndex ?? 1;
+				var model = _teamRespository.FindByPredicate(query).Include(x=>x.Branch);
+                if (request.SortBy != null)
+                {
+                    model = AddSort(model, request.SortBy);
+                }
+                int pageIndex = request.PageIndex ?? 1;
 				int pageSize = request.PageSize ?? 1;
 				int startIndex = (pageIndex - 1) * (int)pageSize;
 				var List = model.Skip(startIndex).Take(pageSize)
@@ -199,7 +203,46 @@ namespace RefferalLinks.Service.Implementation
 			}
 			return result;
 		}
-		private ExpressionStarter<Team> BuildFilterExpression(IList<Filter> Filters)
+
+        private IQueryable<Team> AddSort(IQueryable<Team> input, SortByInfo sortByInfo)
+        {
+            var result = input.AsQueryable();
+            switch (sortByInfo.FieldName)
+            {
+
+                case "nameBranch":
+                    {
+                        if (sortByInfo.Ascending != null && sortByInfo.Ascending.Value)
+                        {
+                            result = result.OrderBy(m => m.Branch.Name);
+
+                        }
+                        else
+                        {
+                            result = result.OrderByDescending(m => m.Branch.Name);
+                        }
+                    }
+                    break;
+                case "name":
+                    {
+                        if (sortByInfo.Ascending != null && sortByInfo.Ascending.Value)
+                        {
+                            result = result.OrderBy(m => m.name);
+
+                        }
+                        else
+                        {
+                            result = result.OrderByDescending(m => m.name);
+                        }
+                    }
+                    break;
+                default:
+                    break;
+            }
+            return result;
+        }
+
+        private ExpressionStarter<Team> BuildFilterExpression(IList<Filter> Filters)
 		{
 			try
 			{

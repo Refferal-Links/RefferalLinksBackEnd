@@ -117,8 +117,12 @@ namespace RefferalLinks.Service.Implementation
 			{
 				var query = BuildFilterExpression(request.Filters);
 				var numOfRecords = _campaignRepository.CountRecordsByPredicate(query);
-				var model = _campaignRepository.FindByPredicate(query).OrderByDescending(p => p.CreatedOn);
-				int pageIndex = request.PageIndex ?? 1;
+				var model = _campaignRepository.FindByPredicate(query);
+                if (request.SortBy != null)
+                {
+                    model = AddSort(model, request.SortBy);
+                }
+                int pageIndex = request.PageIndex ?? 1;
 				int pageSize = request.PageSize ?? 1;
 				int startIndex = (pageIndex - 1) * (int)pageSize;
 				var List = model.Skip(startIndex).Take(pageSize)
@@ -146,7 +150,46 @@ namespace RefferalLinks.Service.Implementation
 			}
 			return result;
 		}
-		private ExpressionStarter<Campaign> BuildFilterExpression(IList<Filter> Filters)
+
+        private IQueryable<Campaign> AddSort(IQueryable<Campaign> input, SortByInfo sortByInfo)
+        {
+            var result = input.AsQueryable();
+            switch (sortByInfo.FieldName)
+            {
+
+                case "isActive":
+                    {
+                        if (sortByInfo.Ascending != null && sortByInfo.Ascending.Value)
+                        {
+                            result = result.OrderBy(m => m.IsActive);
+
+                        }
+                        else
+                        {
+                            result = result.OrderByDescending(m => m.IsActive);
+                        }
+                    }
+                    break;
+                case "name":
+                    {
+                        if (sortByInfo.Ascending != null && sortByInfo.Ascending.Value)
+                        {
+                            result = result.OrderBy(m => m.Name);
+
+                        }
+                        else
+                        {
+                            result = result.OrderByDescending(m => m.Name);
+                        }
+                    }
+                    break;
+                default:
+                    break;
+            }
+            return result;
+        }
+
+        private ExpressionStarter<Campaign> BuildFilterExpression(IList<Filter> Filters)
 		{
 			try
 			{
