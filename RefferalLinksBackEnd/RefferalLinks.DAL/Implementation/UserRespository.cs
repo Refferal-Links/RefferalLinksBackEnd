@@ -43,5 +43,11 @@ namespace RefferalLinks.DAL.Implementation
 
             return user;
         }
+
+        public void Edit(ApplicationUser user)
+        {
+            _context.Users.Update(user);
+            _context.SaveChanges();
+        }
     }
 }

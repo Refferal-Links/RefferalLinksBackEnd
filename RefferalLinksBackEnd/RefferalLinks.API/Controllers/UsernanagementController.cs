@@ -88,5 +88,12 @@ namespace RefferalLinks.API.Controllers
             var result = await _usermanagementService.StatusChange(request);
             return Ok(result);
         }
-	}
+
+        [HttpPut]
+        public IActionResult Edit(UserModel request)
+        {
+            var result = _usermanagementService.Edit(request);
+            return Ok(result);
+        }
+    }
 }

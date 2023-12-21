@@ -599,5 +599,25 @@ namespace RefferalLinks.Service.Implementation
                 return result.BuildError(ex.ToString());
             }
         }
+
+        public AppResponse<UserModel> Edit(UserModel request)
+        {
+            var result = new AppResponse<UserModel>();
+            try
+            {
+                var user = _userRepository.FindUser(request.Id.ToString());
+                user.RefferalCode = request.RefferalCode;
+                user.TpBank = request.TpBank;
+                user.TeamId = request.TeamId;
+                _userRepository.Edit(user);
+
+                result.BuildResult(request);
+            }
+            catch(Exception ex)
+            {
+                result.BuildError(ex.Message);
+            }
+            return result;
+        }
     }
 }
