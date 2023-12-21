@@ -74,7 +74,7 @@ namespace RefferalLinks.Service.Implementation
                     CustomerLinks = new List<CustomerLinkDto>()
                 }).ToList();
                 var linktemplatelist = _linkTemplateRepository.GetAll().Where(x => x.IsActive == true && x.IsDeleted == false).Include(x => x.Bank).ToList();
-                var TpBank = _bankRepository.FindByPredicate(x=>x.Name == "TpBank").FirstOrDefault();
+                var TpBank = _bankRepository.FindByPredicate(x=>x.Name == "TPBANK").FirstOrDefault();
                 foreach (var linktemplate in linktemplatelist)
                 {
                    
@@ -86,7 +86,7 @@ namespace RefferalLinks.Service.Implementation
                     customerlink.Url = linktemplate.Url;
                     string replaceValue = (TpBank != null && linktemplate.BankId == TpBank.Id) ? gettpbank.TpBank : request.RefferalCode;
                     customerlink.Url = customerlink.Url.Replace("{{sale}}", replaceValue);
-                    customerlink.Url = customerlink.Url.Replace("{{sale}}", request.RefferalCode);
+                    //customerlink.Url = customerlink.Url.Replace("{{sale}}", request.RefferalCode);
                     customerlink.Url = customerlink.Url.Replace("{{ten}}", customer.Name);
                     customerlink.Url = customerlink.Url.Replace("{{phone}}", customer.PhoneNumber);
                     customerlink.Url = customerlink.Url.Replace("{{cccd}}", customer.Passport);
