@@ -22,7 +22,7 @@ namespace RefferalLinks.Models.Dto
         public string RefferalCode { get; set; }
 
         public string? NameProvice { get; set; }
-        public Guid ProvinceId { get; set; }
+        public Guid? ProvinceId { get; set; }
 
         public List<BankDto>? Banks { get; set; }
     }

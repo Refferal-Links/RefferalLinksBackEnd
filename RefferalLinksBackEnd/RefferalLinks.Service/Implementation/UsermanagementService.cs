@@ -165,7 +165,7 @@ namespace RefferalLinks.Service.Implementation
 			try
 			{
 				List<Filter> Filters = new List<Filter>();
-				var query =  BuildFilterExpression(Filters);
+				var query =await  BuildFilterExpressionAsync(Filters);
 				var users = _userRepository.FindByPredicate(query);
 				var UserList = users.ToList();
 				
@@ -379,7 +379,7 @@ namespace RefferalLinks.Service.Implementation
             try
             {
                 List<Filter> Filters = new List<Filter>();
-                var query = BuildFilterExpression(Filters);
+                var query = BuildFilterExpressionAsync(Filters);
 
                 //var identityUser = _userRepository.FindById(id);
                 var identityUser = _userRepository.FindById(Id);
@@ -405,7 +405,7 @@ namespace RefferalLinks.Service.Implementation
 			var result = new AppResponse<SearchResponse<UserModel>> ();
 			try
 			{
-				var query = BuildFilterExpression(request.Filters);
+				var query =await BuildFilterExpressionAsync(request.Filters);
 				var numOfRecords = _userRepository.CountRecordsByPredicate(query);
 
 				var users = _userRepository.FindByPredicate(query);
@@ -493,12 +493,29 @@ namespace RefferalLinks.Service.Implementation
             }
             return result;
         }
-        private ExpressionStarter<ApplicationUser> BuildFilterExpression(List<Filter> Filters)
+        private async Task<ExpressionStarter<ApplicationUser>> BuildFilterExpressionAsync(List<Filter> Filters)
 		{
 			try
 			{
 				var predicate = PredicateBuilder.New<ApplicationUser>(true);
-				if (Filters != null)
+
+                var UserName = ClaimHelper.GetClainByName(_httpContextAccessor, "UserName");
+                var user = await _userManager.FindByNameAsync(UserName);
+                var role = (await _userManager.GetRolesAsync(user)).First();
+                if (role != null)
+                {
+                    switch (role)
+                    {
+                        case "Teamleader":
+                            predicate = predicate.And(m => m.TeamId == user.TeamId);
+                            break;
+
+                        default:
+                            break;
+                    }
+                }
+
+                if (Filters != null)
 					foreach (var filter in Filters)
 					{
 						switch (filter.FieldName)
@@ -609,6 +626,7 @@ namespace RefferalLinks.Service.Implementation
                 user.RefferalCode = request.RefferalCode;
                 user.TpBank = request.TpBank;
                 user.TeamId = request.TeamId;
+                user.Email = request.Email;
                 _userRepository.Edit(user);
 
                 result.BuildResult(request);

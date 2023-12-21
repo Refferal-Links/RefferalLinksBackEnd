@@ -20,8 +20,11 @@ namespace RefferalLinks.Service.Implementation
         private IUserespository _userespository;
         private ICustomerLinkRepository _customerLinkRepository;
         private IBankRepository _bankRepository;
+        private IProvinceRepository _provinceRepository;
+
         public CustomerService(ICustomerRespository customerRespository, IMapper mapper,
-            ILinkTemplateRepository linkTemplateRepository, IUserespository userespository, ICustomerLinkRepository customerLinkRepository, IBankRepository bankRepository)
+            ILinkTemplateRepository linkTemplateRepository, IUserespository userespository,
+            ICustomerLinkRepository customerLinkRepository, IBankRepository bankRepository, IProvinceRepository provinceRepository)
         {
             _customerRespository = customerRespository;
             _mapper = mapper;
@@ -29,6 +32,7 @@ namespace RefferalLinks.Service.Implementation
             _userespository = userespository;
             _customerLinkRepository = customerLinkRepository;
             _bankRepository = bankRepository;
+            _provinceRepository = provinceRepository;
         }
 
         public AppResponse<CustomerDto> Create(CustomerDto request)
@@ -44,6 +48,15 @@ namespace RefferalLinks.Service.Implementation
                 if (user == null)
                 {
                     return result.BuildError("không tìm thấy mã giới thiệu");
+                }
+                if (request.ProvinceId == null)
+                {
+                    return result.BuildError("Không để trống tỉnh thành");
+                }
+                var province = _provinceRepository.FindBy(x => x.Id == request.ProvinceId);
+                if (province.Count() == 0)
+                {
+                    return result.BuildError("không tìm thấy thông tin tỉnh thành");
                 }
                 //var cccd = _customerRespository.FindBy(x=>x.Passport == request.Passport);
                 //if (cccd.Count() != 0)
@@ -200,7 +213,7 @@ namespace RefferalLinks.Service.Implementation
                 customer.Passport = request.Passport;
                 customer.ApplicationUserId = user.Id;
                 customer.PhoneNumber = request.PhoneNumber;
-                customer.ProvinceId = request.ProvinceId;
+                customer.ProvinceId = (Guid)request.ProvinceId;
                 customer.OldPassport = request.OldPassport;
                 customer.DateOfBirth = request.DateOfBirth;
                 customer.Job = request.Job;
