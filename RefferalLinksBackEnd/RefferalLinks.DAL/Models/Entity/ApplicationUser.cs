@@ -15,6 +15,6 @@ namespace RefferalLinks.DAL.Models.Entity
         public string? RefferalCode { get; set; }
 
         public string? TpBank { get; set; }
-
+        public string? User { get; set; }
     }
 }

@@ -11,7 +11,7 @@ namespace RefferalLinks.Service.Contract
 {
     public interface ICustomerLinkService
     {
-        //AppResponse<CustomerLinkDto> Create(CustomerLinkDto request);
+        AppResponse<CustomerLinkDto> Create(CustomerLinkDto request);
         public AppResponse<CustomerLinkDto> Get(Guid Id);
         public AppResponse<CustomerLinkDto> Edit(CustomerLinkDto request);
         public AppResponse<string> Delete(Guid Id);

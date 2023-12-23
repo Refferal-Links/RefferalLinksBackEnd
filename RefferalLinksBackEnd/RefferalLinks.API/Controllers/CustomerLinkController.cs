@@ -67,5 +67,12 @@ namespace RefferalLinks.API.Controllers
             MemoryStream stream = new MemoryStream(ex);
             return File(stream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "SelectedRows.xlsx");
         }
+
+		[HttpPost]
+		public IActionResult Create(CustomerLinkDto request)
+		{
+			var result = _customerService.Create(request);
+			return Ok(result);
+		}
     }
 }

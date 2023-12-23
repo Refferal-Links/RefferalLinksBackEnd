@@ -20,6 +20,7 @@ namespace RefferalLinks.Models.Dto
         public string Source { get; set; }
 
         public string RefferalCode { get; set; }
+        public string TpBank { get; set; }
 
         public string? NameProvice { get; set; }
         public Guid? ProvinceId { get; set; }

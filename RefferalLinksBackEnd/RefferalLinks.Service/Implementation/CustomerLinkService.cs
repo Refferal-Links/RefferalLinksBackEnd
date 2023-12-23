@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Identity;
 using OfficeOpenXml;
 using RefferalLinks.Common.Enum;
 using RefferalLinks.DAL.Contract;
+using RefferalLinks.DAL.Implementation;
 using RefferalLinks.DAL.Models.Entity;
 using RefferalLinks.Models.Dto;
 using RefferalLinks.Service.Contract;
@@ -208,11 +209,11 @@ namespace RefferalLinks.Service.Implementation
 
                         TeamName = x.Customer.ApplicationUser.TeamId.HasValue && teamNames.ContainsKey(x.Customer.ApplicationUser.TeamId.Value)
                                        ? teamNames[x.Customer.ApplicationUser.TeamId.Value] : string.Empty,
-                        InforCustomer = String.Format("Tên: {0}; Email: {1}; CCCD: {2}; phone: {3}  ", x.Customer.Name, x.Customer.Email, x.Customer.Passport, x.Customer.PhoneNumber),
+                        //InforCustomer = String.Format("Tên: {0}; Email: {1}; CCCD: {2}; phone: {3}  ", x.Customer.Name, x.Customer.Email, x.Customer.Passport, x.Customer.PhoneNumber),
                         Status = x.Status,
                         StatusText = x.Status == StatusCustomerLink.Pending ? "Pending" : x.Status == StatusCustomerLink.Approved ? "Approved" : "Rejected",
-                        CreateOn = x.CreatedOn.Value.ToString("dd/MM/yyyy"),
-                        ModifiedOn = x.ModifiedOn.Value.ToString("dd/MM/yyyy"),
+                        CreateOn = x.CreatedOn.Value.ToString("dd/MM/yyyy-HH:mm:ss"),
+                        ModifiedOn = x.ModifiedOn.Value.ToString("dd/MM/yyyy-HH:mm:ss"),
                         Note = x.Note,
                         UserName = x.Customer.ApplicationUser.UserName,
                         RefferalCode = x.Customer.ApplicationUser.RefferalCode,
@@ -231,7 +232,10 @@ namespace RefferalLinks.Service.Implementation
                     item.Image4 = count >= 4 ? listImage[3].LinkImage : "";
                     var user = await _userManager.FindByNameAsync(item.UserName);
                     var role = (await _userManager.GetRolesAsync(user)).First();
-                    if(role == "CSKH")
+                    var phoneNumber = item.PhoneNumber;
+                    phoneNumber = phoneNumber.Length < 6 ? phoneNumber: phoneNumber.Substring(0, 3) + "XXX" + phoneNumber.Substring(6);
+                    item.InforCustomer = String.Format("Tên: {0}; Email: {1}; CCCD: {2}; phone: {3}  ", item.Name, item.Email, item.Passport, phoneNumber);
+                    if (role == "CSKH")
                     {
                         item.NvCSKH = item.UserName;
                         item.CodeNVCSKH = item.RefferalCode;
@@ -517,21 +521,21 @@ namespace RefferalLinks.Service.Implementation
             {
                 var worksheet = package.Workbook.Worksheets.Add("SelectedRows");
                 var UserName = ClaimHelper.GetClainByName(_httpContextAccessor, "UserName");
-
-                worksheet.Cells[1, 1].Value = "PhoneNumber";
-                worksheet.Cells[1, 2].Value = "Passport";
-                worksheet.Cells[1, 3].Value = "Email";
-                worksheet.Cells[1, 4].Value = "Ngày đăng kí thành công";
-                worksheet.Cells[1, 5].Value = "Dự án";
-                worksheet.Cells[1, 6].Value = "Sản phẩm";
-                worksheet.Cells[1, 7].Value = "Code Sale";
-                worksheet.Cells[1, 8].Value = "Tên Team";
-                worksheet.Cells[1, 9].Value = "Tên Quản Lý";
-                worksheet.Cells[1, 10].Value = "Tên Sale ";
+                worksheet.Cells[1, 1].Value = "Họ tên khách hàng";
+                worksheet.Cells[1, 2].Value = "PhoneNumber";
+                worksheet.Cells[1, 3].Value = "Căn cước công dân";
+                worksheet.Cells[1, 4].Value = "Email";
+                worksheet.Cells[1, 5].Value = "Ngày đăng kí thành công";
+                worksheet.Cells[1, 6].Value = "Dự án";
+                worksheet.Cells[1, 7].Value = "Sản phẩm";
+                worksheet.Cells[1, 8].Value = "Code Sale";
+                worksheet.Cells[1, 9].Value = "Tên Team";
+                worksheet.Cells[1, 10].Value = "Tên Quản Lý";
+                worksheet.Cells[1, 11].Value = "Tên Sale ";
 
                 for (int i = 1; i <= 4; i++)
                 {
-                    worksheet.Cells[1, 10 + i].Value = $"Ảnh {i}";
+                    worksheet.Cells[1, 11 + i].Value = $"Ảnh {i}";
                 }
 
                 for (int i = 0; i < data.Data.Data.Count; i++)
@@ -543,14 +547,15 @@ namespace RefferalLinks.Service.Implementation
                     var convertedItems = _mapper.Map<List<CustomerlinkImageDto>>(GetallImg);
                     dto.ListCustomerlinkImage = new List<CustomerlinkImageDto>();
                     dto.ListCustomerlinkImage?.AddRange(convertedItems);
-                    worksheet.Cells[i + 2, 1].Value = dto.PhoneNumber;
-                    worksheet.Cells[i + 2, 2].Value = dto.Passport;
-                    worksheet.Cells[i + 2, 3].Value = dto.Email;
-                    worksheet.Cells[i + 2, 4].Value = dto.CreatedOn.Value.ToString("dd/MM/yyyy");
-                    worksheet.Cells[i + 2, 5].Value = dto.BankName;
-                    worksheet.Cells[i + 2, 6].Value = dto.CamPaignName;
-                    worksheet.Cells[i + 2, 7].Value = dto.RefferalCode;
-                    worksheet.Cells[i + 2, 8].Value = dto.TeamName;
+                    worksheet.Cells[i + 2, 1].Value = dto.Name;
+                    worksheet.Cells[i + 2, 2].Value = dto.PhoneNumber;
+                    worksheet.Cells[i + 2, 3].Value = dto.Passport;
+                    worksheet.Cells[i + 2, 4].Value = dto.Email;
+                    worksheet.Cells[i + 2, 5].Value = dto.CreatedOn.Value.ToString("dd/MM/yyyy-HH:mm:ss");
+                    worksheet.Cells[i + 2, 6].Value = dto.BankName;
+                    worksheet.Cells[i + 2, 7].Value = dto.CamPaignName;
+                    worksheet.Cells[i + 2, 8].Value = dto.RefferalCode;
+                    worksheet.Cells[i + 2, 9].Value = dto.TeamName;
                     var leader = "";
 
 
@@ -564,11 +569,11 @@ namespace RefferalLinks.Service.Implementation
                             break;
                         }
                     }
-                    worksheet.Cells[i + 2, 9].Value = (getsale.RefferalCode != null) ? leader : "";
-                    worksheet.Cells[i + 2, 10].Value = (getsale.RefferalCode != null) ? getsale.UserName : "";
+                    worksheet.Cells[i + 2, 10].Value = (getsale.RefferalCode != null) ? leader : "";
+                    worksheet.Cells[i + 2, 11].Value = (getsale.RefferalCode != null) ? getsale.UserName : "";
                     for (int j = 0; j < GetallImg.Count; j++)
                     {
-                        worksheet.Cells[i + 2, 10 + j + 1].Value = dto.ListCustomerlinkImage[j].LinkImage;
+                        worksheet.Cells[i + 2, 11 + j + 1].Value = dto.ListCustomerlinkImage[j].LinkImage;
                     }
 
 
@@ -630,6 +635,49 @@ namespace RefferalLinks.Service.Implementation
                 result.BuildResult(searchUserResult);
             }
             catch (Exception ex)
+            {
+                result.BuildError(ex.Message);
+            }
+            return result;
+        }
+
+        public AppResponse<CustomerLinkDto> Create(CustomerLinkDto request)
+        {
+            var result = new AppResponse<CustomerLinkDto>();
+            try
+            {
+                if(request.CustomerId == null)
+                {
+                    return result.BuildError("Không bỏ trống khách hàng");
+                }
+                var customer = _customerRespository.FindBy(x => x.Id == request.CustomerId);
+                if (customer.Count() == 0)
+                {
+                    return result.BuildError("Không tìm thấy khách hàng");
+                }
+                if (request.LinkTemplateId == null)
+                {
+                    return result.BuildError("Không bỏ trống liên kết");
+                }
+                var linkTemplate = _linkTemplateRepository.FindBy(x => x.Id == request.LinkTemplateId);
+                if (linkTemplate.Count() == 0)
+                {
+                    return result.BuildError("Không tìm thấy liên kết");
+                }
+                var CheckCustomerLink =_customerLinkRepository.FindBy(x=>x.CustomerId == request.CustomerId && x.LinkTemplateId == request.LinkTemplateId);
+                if(CheckCustomerLink.Count() != 0)
+                {
+                    return result.BuildResult(request);
+                }
+                var customerLink = _mapper.Map<Customerlink>(request);
+                customerLink.Id = Guid.NewGuid();
+
+                _customerLinkRepository.Add(customerLink);
+
+                request.Id = customerLink.Id;
+                result.BuildResult(request);
+            }
+            catch(Exception ex)
             {
                 result.BuildError(ex.Message);
             }

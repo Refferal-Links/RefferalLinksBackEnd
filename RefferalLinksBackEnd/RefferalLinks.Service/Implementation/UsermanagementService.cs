@@ -244,11 +244,16 @@ namespace RefferalLinks.Service.Implementation
             var result = new AppResponse<string>();
             try
             {
+                bool endsWithGmail = user.UserName.EndsWith("@gmail.com", StringComparison.OrdinalIgnoreCase);
+                if (!endsWithGmail)
+                {
+                    return result.BuildError("Không đúng định dạng email");
+                }
                 if (string.IsNullOrEmpty(user.Email))
                 {
                     return result.BuildError(ERR_MSG_EmailIsNullOrEmpty);
                 }
-                var identityUser = await _userManager.FindByNameAsync(user.UserName);
+                var identityUser = await _userManager.FindByNameAsync(user.Email);
                 if (identityUser != null)
                 {
                     return result.BuildError(ERR_MSG_UserExisted);
@@ -263,7 +268,7 @@ namespace RefferalLinks.Service.Implementation
                     }
                     else
                     {
-                        var newIdentityUserSale = new ApplicationUser { Email = user.Email, UserName = user.Email, TeamId = user.TeamId };
+                        var newIdentityUserSale = new ApplicationUser { Email = user.Email, UserName = user.Email, TeamId = user.TeamId, User = user.UserName };
                         if(user.Role == "Sale" || user.Role == "CSKH")
                         {
                             newIdentityUserSale.RefferalCode = user.RefferalCode;
@@ -433,7 +438,7 @@ namespace RefferalLinks.Service.Implementation
                     var user = new UserModel
                     {
                         Email = x.Email,
-                        UserName = x.UserName,
+                        UserName = x.User,
                         Id = Guid.Parse(x.Id),
                         LockoutEnabled = x.LockoutEnabled ? "hoạt động" : "cấm",
                         RefferalCode = x.RefferalCode ?? "",

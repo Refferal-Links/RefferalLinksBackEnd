@@ -51,7 +51,7 @@ namespace RefferalLinks.Service.Implementation
                     //}
                     if (await _userManager.CheckPasswordAsync(identityUser, login.Password))
                     {
-                        user = new UserModel { UserName = identityUser.UserName, Email = identityUser.Email, TeamId = identityUser.TeamId, RefferalCode = identityUser.RefferalCode };
+                        user = new UserModel { UserName = identityUser.UserName, Email = identityUser.Email, TeamId = identityUser.TeamId, RefferalCode = identityUser.RefferalCode, TpBank = identityUser.TpBank };
                     }
 
                 }
@@ -74,6 +74,7 @@ namespace RefferalLinks.Service.Implementation
                     loginResult.UserName = user.UserName;
                     loginResult.TeamId = user.TeamId;
                     loginResult.RefferalCode = user.RefferalCode;
+                    loginResult.TpBank = user.TpBank;
                     var roles = await _userManager.GetRolesAsync(identityUser);
                     loginResult.Roles = roles.ToList();
                     return result.BuildResult(loginResult);
