@@ -258,7 +258,7 @@ namespace RefferalLinks.Service.Implementation
             var result = new AppResponse<CustomerDto>();
             try
             {
-                var customer = _customerRespository.FindBy(x => x.Id == Id).Include(x => x.Province).Include(x => x.ApplicationUser) ;
+                var customer = _customerRespository.FindBy(x => x.Id == Id).Include(x => x.Province).Include(x => x.ApplicationUser);
 
                 var data = customer.Select(customer => new CustomerDto
                 {
@@ -274,7 +274,8 @@ namespace RefferalLinks.Service.Implementation
                     Job = customer.Job,
                     OldPassport = customer.Passport,
                     Source = customer.Source,
-                    Banks = new List<BankDto>()
+                    Banks = new List<BankDto>(),
+                    TpBank = customer.ApplicationUser.TpBank
                 }).First();
 
                 data.Banks = _bankRepository.GetAll().Where(bank => bank.IsDeleted != true)
@@ -284,22 +285,31 @@ namespace RefferalLinks.Service.Implementation
                         Id = bank.Id,
                         Name = bank.Name,
                     }).ToList();
-                data.Banks.ForEach(x =>
+                foreach(var bank in data.Banks)
                 {
-                    x.CustomerLinks = _customerLinkRepository.GetAll()
-                        .Where(customerLink => customerLink.IsDeleted != true && customerLink.CustomerId == Id && customerLink.LinkTemplate.BankId == x.Id)
-                        .Include(x => x.LinkTemplate)
-                        .Include(x => x.Customer)
-                        .Include(x=> x.LinkTemplate.Campaign)
-                        .Select(customerLink2 => new CustomerLinkDto
-                        {
-                            CustomerId = customerLink2.CustomerId,
-                            Url = customerLink2.Url,
-                            LinkTemplateId = customerLink2.LinkTemplateId,
-                            Id = customerLink2.Id,
-                            CamPaignName = customerLink2.LinkTemplate.Campaign.Name 
-                        }).ToList();
-                });
+                    var listCustomerLink = new List<CustomerLinkDto>();
+                    var linktemplatelist = _linkTemplateRepository.GetAll().Where(x => x.IsActive == true && x.IsDeleted == false && x.Bank.Id == bank.Id).Include(x => x.Bank).Include(x => x.Campaign).ToList();
+                    var listcampaign = _campaignRepository.GetAll().ToList();
+                    //var TpBank = _bankRepository.FindByPredicate(x=>x.Name == "TPBANK").FirstOrDefault();
+                    foreach (var linktemplate in linktemplatelist)
+                    {
+                        var customerlink = new CustomerLinkDto();
+                        customerlink.Id = Guid.NewGuid();
+                        customerlink.LinkTemplateId = linktemplate.Id;
+                        customerlink.CustomerId = data.Id.Value;
+                        customerlink.Url = linktemplate.Url;
+                        customerlink.Url = customerlink.Url.Replace("{{sale}}", data.RefferalCode);
+                        customerlink.Url = customerlink.Url.Replace("{{tpbank}}", data.TpBank);
+                        customerlink.Url = customerlink.Url.Replace("{{ten}}", data.Name);
+                        customerlink.Url = customerlink.Url.Replace("{{phone}}", data.PhoneNumber);
+                        customerlink.Url = customerlink.Url.Replace("{{cccd}}", data.Passport);
+                        customerlink.Url = customerlink.Url.Replace("{{email}}", data.Email);
+                        //customerlink.Status = StatusCustomerLink.Pending;
+                        customerlink.CamPaignName = listcampaign.Where(x => x.Id == linktemplate.CampaignId).First().Name;
+
+                        bank.CustomerLinks.Add(customerlink);
+                    }
+                };
 
 
                 result.BuildResult(data);
