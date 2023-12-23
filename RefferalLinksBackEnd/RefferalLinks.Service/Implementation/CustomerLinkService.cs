@@ -667,8 +667,15 @@ namespace RefferalLinks.Service.Implementation
                 var CheckCustomerLink =_customerLinkRepository.FindBy(x=>x.CustomerId == request.CustomerId && x.LinkTemplateId == request.LinkTemplateId);
                 if(CheckCustomerLink.Count() != 0)
                 {
+                    var checkIsDelete = CheckCustomerLink.First();
+                    if (CheckCustomerLink.First().IsDeleted == true)
+                    {
+                        checkIsDelete.IsDeleted = false;
+                        _customerLinkRepository.Edit(checkIsDelete);
+                    }
                     return result.BuildResult(request);
                 }
+                
                 var customerLink = _mapper.Map<Customerlink>(request);
                 customerLink.Id = Guid.NewGuid();
 
