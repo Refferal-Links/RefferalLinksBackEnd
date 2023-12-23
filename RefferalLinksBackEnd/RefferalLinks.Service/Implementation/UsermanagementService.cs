@@ -244,11 +244,11 @@ namespace RefferalLinks.Service.Implementation
             var result = new AppResponse<string>();
             try
             {
-                bool endsWithGmail = user.UserName.EndsWith("@gmail.com", StringComparison.OrdinalIgnoreCase);
-                if (!endsWithGmail)
-                {
-                    return result.BuildError("Không đúng định dạng email");
-                }
+                //bool endsWithGmail = user.UserName.EndsWith("@gmail.com", StringComparison.OrdinalIgnoreCase);
+                //if (!endsWithGmail)
+                //{
+                //    return result.BuildError("Không đúng định dạng email");
+                //}
                 if (string.IsNullOrEmpty(user.Email))
                 {
                     return result.BuildError(ERR_MSG_EmailIsNullOrEmpty);
