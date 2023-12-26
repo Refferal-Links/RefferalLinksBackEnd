@@ -11,7 +11,7 @@ namespace RefferalLinks.API.Controllers
     [Route("api/[controller]")]
     [ApiController]
     [Authorize(AuthenticationSchemes = "Bearer")]
-    [Authorize(AuthenticationSchemes = "Bearer", Roles = "Admin, superadmin, Teamleader")]
+    [Authorize(AuthenticationSchemes = "Bearer", Roles = "Admin, superadmin, Teamleader, SUP")]
     public class UserManagemetController : Controller
     {
         IUsermanagementService _usermanagementService;

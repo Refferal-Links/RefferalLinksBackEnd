@@ -18,5 +18,7 @@ namespace RefferalLinks.Models.Dto
         public string? TpBank { get; set; }
         public string? LockoutEnabled { get; set; }
         public string? TeamName { get; set; }
+        public Guid? BranchId { get; set; }
+        public string? BranchName { get; set; }
     }
 }

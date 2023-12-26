@@ -1,4 +1,5 @@
-﻿using System.Linq.Expressions;
+﻿using System.Data.Entity;
+using System.Linq.Expressions;
 using System.Security.Claims;
 using AutoMapper;
 using LinqKit;
@@ -24,10 +25,11 @@ namespace RefferalLinks.Service.Implementation
         private readonly IMapper _mapper;
         private readonly IUserespository _userRepository;
         private readonly ITeamRespository _teamRespository;
+        private readonly IBranchRepository _branchRepository;
         private IHttpContextAccessor _httpContextAccessor;
       
         public UsermanagementService(UserManager<ApplicationUser> userManager , RoleManager<IdentityRole> roleManager , RefferalLinksDbContext context , IMapper mapper , IUserespository userespository , ITeamRespository teamRespository ,
-           IHttpContextAccessor httpContextAccessor
+           IHttpContextAccessor httpContextAccessor, IBranchRepository branchRepository
             ) {
 
             _userManager = userManager;
@@ -36,6 +38,7 @@ namespace RefferalLinks.Service.Implementation
             _userRepository = userespository;
             _teamRespository = teamRespository;
             _httpContextAccessor = httpContextAccessor;
+            _branchRepository = branchRepository;
         }
 
         public async Task<AppResponse<List<UserModel>>> GetAllSale()
@@ -289,6 +292,21 @@ namespace RefferalLinks.Service.Implementation
                     }
 
                 }
+                if(user.Role == "SUP")
+                {
+                    var newIdentityUserSale = new ApplicationUser { Email = user.Email, UserName = user.Email, User = user.UserName, BranchId = user.BranchId };
+
+                    var createResultSale = await _userManager.CreateAsync(newIdentityUserSale);
+                    await _userManager.AddPasswordAsync(newIdentityUserSale, user.Password);
+                    if (!(await _roleManager.RoleExistsAsync(user.Role)))
+                    {
+                        IdentityRole role = new IdentityRole { Name = user.Role };
+                        await _roleManager.CreateAsync(role);
+                    }
+                    await _userManager.AddToRoleAsync(newIdentityUserSale, user.Role);
+                    newIdentityUserSale = await _userManager.FindByEmailAsync(user.Email);
+                    return result.BuildResult(INFO_MSG_UserCreated);
+                }
                 var newIdentityUser = new ApplicationUser { Email = user.Email, UserName = user.Email , TeamId = null };
 
                 var createResult = await _userManager.CreateAsync(newIdentityUser);
@@ -443,6 +461,8 @@ namespace RefferalLinks.Service.Implementation
                         LockoutEnabled = x.LockoutEnabled ? "hoạt động" : "cấm",
                         RefferalCode = x.RefferalCode ?? "",
                         TpBank = x.TpBank,
+                        BranchId = x.BranchId != null ? x.BranchId : null,
+                        BranchName = x.BranchId != null ? _branchRepository.Get(x.BranchId.Value).Name :""
                         
                     };
                     if(x.TeamId != null)
@@ -514,7 +534,15 @@ namespace RefferalLinks.Service.Implementation
                         case "Teamleader":
                             predicate = predicate.And(m => m.TeamId == user.TeamId);
                             break;
-
+                        case "SUP":
+                            {
+                                var listTeam = _teamRespository.FindBy(x => x.Branch.Id == user.BranchId).ToList();
+                                foreach(var team in listTeam)
+                                {
+                                    predicate = predicate.Or(x => x.TeamId == team.Id);
+                                }
+                            }
+                            break;
                         default:
                             break;
                     }
@@ -580,6 +608,12 @@ namespace RefferalLinks.Service.Implementation
                     case "CSKH":
                         predicate = u => false;
                         break;
+                    case "SUP":
+                        {
+                            var listTeam = _teamRespository.FindBy(x=>x.Branch.Id == iduser.BranchId).ToList();
+                            predicate = predicate.And(u => listTeam.Any(t => t.Id == u.TeamId));
+                        }
+                        break;
                     default:
                         break;
                 }
@@ -632,6 +666,7 @@ namespace RefferalLinks.Service.Implementation
                 user.TpBank = request.TpBank;
                 user.TeamId = request.TeamId;
                 user.Email = request.Email;
+                user.BranchId = request.BranchId;
                 _userRepository.Edit(user);
 
                 result.BuildResult(request);

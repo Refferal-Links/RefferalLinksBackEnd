@@ -16,5 +16,7 @@ namespace RefferalLinks.DAL.Models.Entity
 
         public string? TpBank { get; set; }
         public string? User { get; set; }
+
+        public Guid? BranchId { get; set; }
     }
 }

@@ -382,6 +382,15 @@ namespace RefferalLinks.Service.Implementation
                     case "CSKH":
                         predicate = predicate.And(m => m.Customer.ApplicationUserId.Contains(user.Id));
                         break;
+                    case "SUP":
+                        {
+                            var listTeam = _teamRespository.FindBy(x => x.Branch.Id == user.BranchId).ToList();
+                            foreach (var team in listTeam)
+                            {
+                                predicate = predicate.Or(x => x.Customer.ApplicationUser.TeamId == team.Id);
+                            }
+                        }
+                        break;
                     default:
                         break;
                 }
