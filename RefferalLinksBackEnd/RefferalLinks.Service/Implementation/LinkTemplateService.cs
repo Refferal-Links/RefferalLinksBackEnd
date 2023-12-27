@@ -217,10 +217,12 @@ namespace RefferalLinks.Service.Implementation
                     .ToList();
                 var role = ClaimHelper.GetClainByName(_httpContextAccessor, "Roles");
                 var refferalCode = ClaimHelper.GetClainByName(_httpContextAccessor, "RefferalCode");
+                var TpBank = ClaimHelper.GetClainByName(_httpContextAccessor, "TpBank");
                 if(role == "Sale")
                     foreach (var item in List)
                     {
                         item.Url = item.Url.Replace("{{sale}}", refferalCode);
+                        item.Url = item.Url.Replace("{{tpbank}}", TpBank);
                     }
 
                 var searchUserResult = new SearchResponse<LinkTemplateDto>
