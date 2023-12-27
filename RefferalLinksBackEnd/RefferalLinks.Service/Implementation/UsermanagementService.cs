@@ -272,7 +272,7 @@ namespace RefferalLinks.Service.Implementation
                     else
                     {
                         var newIdentityUserSale = new ApplicationUser { Email = user.Email, UserName = user.Email, TeamId = user.TeamId, User = user.UserName, IsReceiveAllocation = true };
-                        if(user.Role == "Sale" || user.Role == "CSKH")
+                        if(user.Role == "Sale" || user.Role == "CSKH" || user.Role == "Teamleader")
                         {
                             newIdentityUserSale.RefferalCode = user.RefferalCode;
                             newIdentityUserSale.TpBank = user.TpBank;
@@ -294,7 +294,7 @@ namespace RefferalLinks.Service.Implementation
                 }
                 if(user.Role == "SUP")
                 {
-                    var newIdentityUserSale = new ApplicationUser { Email = user.Email, UserName = user.Email, User = user.UserName, BranchId = user.BranchId, IsReceiveAllocation = false };
+                    var newIdentityUserSale = new ApplicationUser { Email = user.Email, UserName = user.Email, User = user.UserName, BranchId = user.BranchId, IsReceiveAllocation = false, RefferalCode = user.RefferalCode, TpBank = user.TpBank };
 
                     var createResultSale = await _userManager.CreateAsync(newIdentityUserSale);
                     await _userManager.AddPasswordAsync(newIdentityUserSale, user.Password);
