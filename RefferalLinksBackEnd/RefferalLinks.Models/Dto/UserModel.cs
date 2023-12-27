@@ -20,5 +20,7 @@ namespace RefferalLinks.Models.Dto
         public string? TeamName { get; set; }
         public Guid? BranchId { get; set; }
         public string? BranchName { get; set; }
+
+        public string? ReceiveAllocation { get; set; }
     }
 }

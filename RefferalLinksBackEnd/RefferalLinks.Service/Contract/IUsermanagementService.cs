@@ -24,5 +24,6 @@ namespace RefferalLinks.Service.Contract
         Task<AppResponse<List<UserModel>>> GetAllCSKH();
 
         AppResponse<UserModel> Edit(UserModel request);
+        Task<AppResponse<string>> ReceiveAllocation(UserModel request);
     }
 }

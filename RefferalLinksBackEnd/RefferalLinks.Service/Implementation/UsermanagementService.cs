@@ -462,8 +462,8 @@ namespace RefferalLinks.Service.Implementation
                         RefferalCode = x.RefferalCode ?? "",
                         TpBank = x.TpBank,
                         BranchId = x.BranchId != null ? x.BranchId : null,
-                        BranchName = x.BranchId != null ? _branchRepository.Get(x.BranchId.Value).Name :""
-                        
+                        BranchName = x.BranchId != null ? _branchRepository.Get(x.BranchId.Value).Name :"",
+                        ReceiveAllocation = x.IsReceiveAllocation == true ? "Nhận phân bổ" : "Không nhận phân bổ"
                     };
                     if(x.TeamId != null)
                     {
@@ -676,6 +676,23 @@ namespace RefferalLinks.Service.Implementation
                 result.BuildError(ex.Message);
             }
             return result;
+        }
+
+        public async Task<AppResponse<string>> ReceiveAllocation(UserModel request)
+        {
+            var result = new AppResponse<string>();
+            try
+            {
+                ApplicationUser user = await _userManager.FindByIdAsync(request.Id.Value.ToString());
+                user.IsReceiveAllocation = !user.IsReceiveAllocation;
+                _userRepository.Edit(user);
+                return result.BuildResult("OK");
+            }
+            catch (Exception ex)
+            {
+
+                return result.BuildError(ex.ToString());
+            }
         }
     }
 }

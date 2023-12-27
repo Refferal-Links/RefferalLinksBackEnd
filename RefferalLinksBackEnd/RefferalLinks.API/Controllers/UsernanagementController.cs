@@ -96,5 +96,13 @@ namespace RefferalLinks.API.Controllers
             var result = _usermanagementService.Edit(request);
             return Ok(result);
         }
+
+        [HttpPut]
+        [Route("ReceiveAllocation")]
+        public async Task<IActionResult> ReceiveAllocation(UserModel request)
+        {
+            var result = await _usermanagementService.ReceiveAllocation(request);
+            return Ok(result);
+        }
     }
 }

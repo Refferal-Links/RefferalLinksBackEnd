@@ -212,7 +212,13 @@ namespace RefferalLinks.Service.Implementation
                         CampaignName = x.Campaign.Name,
                     })
                     .ToList();
-
+                var role = ClaimHelper.GetClainByName(_httpContextAccessor, "Roles");
+                var refferalCode = ClaimHelper.GetClainByName(_httpContextAccessor, "RefferalCode");
+                if(role == "Sale")
+                    foreach (var item in List)
+                    {
+                        item.Url = item.Url.Replace("{{sale}}", refferalCode);
+                    }
 
                 var searchUserResult = new SearchResponse<LinkTemplateDto>
                 {
