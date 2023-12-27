@@ -12,6 +12,8 @@ namespace RefferalLinks.DAL.Models.Entity
     {
         public string Url { get; set; }
         public bool IsActive { get; set; }
+        public string? InstructionsLink { get; set; }
+        public string? Note { get; set; }
 
         [ForeignKey("Bank")]
         public Guid BankId { get; set; }

@@ -91,9 +91,9 @@ namespace RefferalLinks.API.Controllers
         }
 
         [HttpPut]
-        public IActionResult Edit(UserModel request)
+        public async Task<IActionResult> Edit(UserModel request)
         {
-            var result = _usermanagementService.Edit(request);
+            var result = await _usermanagementService.Edit(request);
             return Ok(result);
         }
 

@@ -23,7 +23,7 @@ namespace RefferalLinks.Service.Contract
         public Task<AppResponse<List<UserModel>>> GetAllSale();
         Task<AppResponse<List<UserModel>>> GetAllCSKH();
 
-        AppResponse<UserModel> Edit(UserModel request);
+        Task<AppResponse<UserModel>> Edit(UserModel request);
         Task<AppResponse<string>> ReceiveAllocation(UserModel request);
     }
 }

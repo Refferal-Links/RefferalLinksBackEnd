@@ -183,6 +183,10 @@ namespace RefferalLinks.Service.Implementation
                 {
                     model = AddSort(model, request.SortBy);
                 }
+                if(request.SortBy == null)
+                {
+                    model = model.OrderByDescending(x => x.CreatedOn.Value);
+                }
                 int pageIndex = request.PageIndex ?? 1;
                 int pageSize = request.PageSize ?? 1;
                 int startIndex = (pageIndex - 1) * (int)pageSize;
@@ -230,8 +234,8 @@ namespace RefferalLinks.Service.Implementation
                     item.Image2 = count >= 2 ? listImage[1].LinkImage : "";
                     item.Image3 = count >= 3 ? listImage[2].LinkImage : "";
                     item.Image4 = count >= 4 ? listImage[3].LinkImage : "";
-                    var user = await _userManager.FindByNameAsync(item.UserName);
-                    var role = (await _userManager.GetRolesAsync(user)).First();
+                    //var user = await _userManager.FindByNameAsync(item.UserName);
+                    //var role = (await _userManager.GetRolesAsync(user)).First();
                     var phoneNumber = item.PhoneNumber;
                     phoneNumber = phoneNumber.Length < 6 ? phoneNumber: phoneNumber.Substring(0, 3) + "XXX" + phoneNumber.Substring(6);
                     item.InforCustomer = String.Format("Tên: {0}; Email: {1}; CCCD: {2}; phone: {3}  ", item.Name, item.Email, item.Passport, phoneNumber);

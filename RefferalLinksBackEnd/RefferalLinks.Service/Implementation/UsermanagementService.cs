@@ -656,7 +656,7 @@ namespace RefferalLinks.Service.Implementation
             }
         }
 
-        public AppResponse<UserModel> Edit(UserModel request)
+        public async  Task<AppResponse<UserModel>> Edit(UserModel request)
         {
             var result = new AppResponse<UserModel>();
             try
@@ -667,6 +667,18 @@ namespace RefferalLinks.Service.Implementation
                 user.TeamId = request.TeamId;
                 user.Email = request.Email;
                 user.BranchId = request.BranchId;
+                user.User = request.UserName;
+                if(request.Role != null)
+                {
+                    var role = (await _userManager.GetRolesAsync(user)).FirstOrDefault();
+                    if (role != null)
+                    {
+                        await _userManager.RemoveFromRoleAsync(user, role);
+
+                    }
+                    await _userManager.AddToRoleAsync(user, request.Role);
+                }
+                
                 _userRepository.Edit(user);
 
                 result.BuildResult(request);

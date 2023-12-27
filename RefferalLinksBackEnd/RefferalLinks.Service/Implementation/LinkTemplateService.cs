@@ -130,7 +130,8 @@ namespace RefferalLinks.Service.Implementation
                     linkTemplate.ModifiedOn = DateTime.UtcNow;
                     var UserName = ClaimHelper.GetClainByName(_httpContextAccessor, "UserName");
                     linkTemplate.Modifiedby = UserName;
-
+                    linkTemplate.InstructionsLink = request.InstructionsLink;
+                    linkTemplate.Note= request.Note;
                     _linkTemplateRepository.Edit(linkTemplate);
                     result.BuildResult(request);
                 }
@@ -210,6 +211,8 @@ namespace RefferalLinks.Service.Implementation
                         IsActive = x.IsActive ? "đang hoạt động" : "đã tắt",
                         BankName = x.Bank.Name,
                         CampaignName = x.Campaign.Name,
+                        InstructionsLink = x.InstructionsLink,
+                        Note = x.Note,
                     })
                     .ToList();
                 var role = ClaimHelper.GetClainByName(_httpContextAccessor, "Roles");

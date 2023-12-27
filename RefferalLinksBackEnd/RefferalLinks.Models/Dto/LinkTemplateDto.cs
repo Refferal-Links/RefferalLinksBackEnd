@@ -16,5 +16,7 @@ namespace RefferalLinks.Models.Dto
         public string? BankName { get; set; }
         public Guid CampaignId { get; set; }
         public string? CampaignName { get; set;}
+        public string? InstructionsLink { get; set; }
+        public string? Note { get; set; }
     }
 }
