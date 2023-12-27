@@ -276,7 +276,9 @@ namespace RefferalLinks.Service.Implementation
                     OldPassport = customer.Passport,
                     Source = customer.Source,
                     Banks = new List<BankDto>(),
-                    TpBank = customer.ApplicationUser.TpBank
+                    TpBank = customer.ApplicationUser.TpBank,
+                    //CSKHId = customer != null ?Guid.Parse(customer.CSKHId) : null,
+                    //CSKHName = customer != null ? customer.CSKH.UserName : ""
                 }).First();
 
                 data.Banks = _bankRepository.GetAll().Where(bank => bank.IsDeleted != true)
