@@ -47,5 +47,7 @@ namespace RefferalLinks.Models.Dto
 
         public string? NvCSKH { get; set; }
         public string? CodeNVCSKH { get; set; }
+
+        public string? SourceCustomer { get; set; }
     }
 }

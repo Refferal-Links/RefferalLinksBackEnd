@@ -10,6 +10,7 @@ namespace RefferalLinks.Common.Enum
     {
         Pending,
         Approved,
-        Rejected
+        Rejected,
+        Cancel
     }
 }
