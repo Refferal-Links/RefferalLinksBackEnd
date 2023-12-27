@@ -27,10 +27,13 @@ namespace RefferalLinks.DAL.Models.Entity
         public Province Province { get; set; }
 
         [ForeignKey("ApplicationUser")]
-        public string ApplicationUserId { get; set; }
+        public string? ApplicationUserId { get; set; }
         [ForeignKey("ApplicationUserId")]
-        public ApplicationUser ApplicationUser { get; set; }
+        public ApplicationUser? ApplicationUser { get; set; }
 
-
+        [ForeignKey("CSKH")]
+        public string? CSKHId { get; set; }
+        [ForeignKey("CSKHId")]
+        public ApplicationUser? CSKH{ get; set; }
     }
 }

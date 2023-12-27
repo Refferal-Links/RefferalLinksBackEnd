@@ -9,6 +9,7 @@ namespace RefferalLinks.DAL.Implementation
 	{
 		public ProvinceRepository(RefferalLinksDbContext unitOfWork) : base(unitOfWork)
 		{
+			_context = unitOfWork;
 		}
 	}
 }

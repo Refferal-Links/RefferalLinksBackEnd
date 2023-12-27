@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using RefferalLinks.DAL.Models.Context;
 
@@ -11,9 +12,10 @@ using RefferalLinks.DAL.Models.Context;
 namespace RefferalLinks.DAL.Migrations
 {
     [DbContext(typeof(RefferalLinksDbContext))]
-    partial class RefferalLinksDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231227020713_ReceiveAllocation")]
+    partial class ReceiveAllocation
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -338,7 +340,6 @@ namespace RefferalLinks.DAL.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("ApplicationUserId")
-                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("CSKHId")
@@ -647,8 +648,7 @@ namespace RefferalLinks.DAL.Migrations
                     b.HasOne("RefferalLinks.DAL.Models.Entity.ApplicationUser", "ApplicationUser")
                         .WithMany()
                         .HasForeignKey("ApplicationUserId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("RefferalLinks.DAL.Models.Entity.ApplicationUser", "CSKH")
                         .WithMany()

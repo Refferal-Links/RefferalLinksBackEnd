@@ -32,9 +32,9 @@ namespace RefferalLinks.API.Controllers
 			return Ok(reuslt);
 		}
 		[HttpPost]
-		public IActionResult Create(CustomerDto request)
+		public async Task<IActionResult> Create(CustomerDto request)
 		{
-			var result = _customerService.Create(request);
+			var result = await _customerService.Create(request);
 			return Ok(result);
 		}
 		[HttpDelete]

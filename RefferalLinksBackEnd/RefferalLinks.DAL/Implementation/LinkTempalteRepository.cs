@@ -14,6 +14,7 @@ namespace RefferalLinks.DAL.Implementation
     {
         public LinkTempalteRepository(RefferalLinksDbContext unitOfWork) : base(unitOfWork)
         {
+            _context = unitOfWork;
         }
     }
 }

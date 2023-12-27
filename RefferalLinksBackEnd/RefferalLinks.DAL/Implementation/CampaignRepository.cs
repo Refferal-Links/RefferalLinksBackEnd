@@ -14,6 +14,7 @@ namespace RefferalLinks.DAL.Implementation
 	{
 		public CampaignRepository(RefferalLinksDbContext unitOfWork) : base(unitOfWork)
 		{
+			_context = unitOfWork;
 		}
 	}
 }

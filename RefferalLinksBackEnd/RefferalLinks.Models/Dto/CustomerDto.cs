@@ -26,5 +26,8 @@ namespace RefferalLinks.Models.Dto
         public Guid? ProvinceId { get; set; }
 
         public List<BankDto>? Banks { get; set; }
+
+        public Guid? CSKHId { get; set; }
+        public string? CSKHName { get; set; }
     }
 }

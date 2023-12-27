@@ -14,6 +14,7 @@ namespace RefferalLinks.DAL.Implementation
     {
         public CustomerLinkRepository(RefferalLinksDbContext unitOfWork) : base(unitOfWork)
         {
+            _context    = unitOfWork;
         }
     }
 }

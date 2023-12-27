@@ -174,7 +174,7 @@ namespace RefferalLinks.Service.Implementation
 
             try
             {
-                var userRole = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.Role)?.Value;
+                //var userRole = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.Role)?.Value;
                 var query = await BuildFilterExpression(request.Filters);
                 var numOfRecords = _customerLinkRepository.CountRecordsByPredicate(query);
                 var model = _customerLinkRepository.FindByPredicate(query);
@@ -217,8 +217,8 @@ namespace RefferalLinks.Service.Implementation
                         Note = x.Note,
                         UserName = x.Customer.ApplicationUser.UserName,
                         RefferalCode = x.Customer.ApplicationUser.RefferalCode,
-                        CodeNVCSKH = "",
-                        NvCSKH = "",
+                        CodeNVCSKH = x.Customer.CSKH.RefferalCode,
+                        NvCSKH = x.Customer.CSKH.UserName,
 
                     })
                     .ToList();
@@ -235,13 +235,13 @@ namespace RefferalLinks.Service.Implementation
                     var phoneNumber = item.PhoneNumber;
                     phoneNumber = phoneNumber.Length < 6 ? phoneNumber: phoneNumber.Substring(0, 3) + "XXX" + phoneNumber.Substring(6);
                     item.InforCustomer = String.Format("Tên: {0}; Email: {1}; CCCD: {2}; phone: {3}  ", item.Name, item.Email, item.Passport, phoneNumber);
-                    if (role == "CSKH")
-                    {
-                        item.NvCSKH = item.UserName;
-                        item.CodeNVCSKH = item.RefferalCode;
-                        item.RefferalCode = "";
-                        item.UserName = "";
-                    }
+                    //if (role == "CSKH")
+                    //{
+                    //    item.NvCSKH = item.UserName;
+                    //    item.CodeNVCSKH = item.RefferalCode;
+                    //    item.RefferalCode = "";
+                    //    item.UserName = "";
+                    //}
                 }
 
                 var searchUserResult = new SearchResponse<CustomerLinkDto>
@@ -380,7 +380,7 @@ namespace RefferalLinks.Service.Implementation
                         predicate = predicate.And(m => m.Customer.ApplicationUserId.Contains(user.Id));
                         break;
                     case "CSKH":
-                        predicate = predicate.And(m => m.Customer.ApplicationUserId.Contains(user.Id));
+                        predicate = predicate.And(m => m.Customer.CSKHId.Contains(user.Id));
                         break;
                     case "SUP":
                         {

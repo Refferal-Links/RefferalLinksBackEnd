@@ -1,8 +1,11 @@
 ﻿using System.Data.Entity;
 using AutoMapper;
 using LinqKit;
+using MayNghien.Common.Helpers;
 using MayNghien.Models.Request.Base;
 using MayNghien.Models.Response.Base;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using RefferalLinks.Common.Enum;
 using RefferalLinks.DAL.Contract;
 using RefferalLinks.DAL.Models.Entity;
@@ -22,10 +25,14 @@ namespace RefferalLinks.Service.Implementation
         private IBankRepository _bankRepository;
         private IProvinceRepository _provinceRepository;
         private ICampaignRepository _campaignRepository;
+        private IHttpContextAccessor _httpContextAccessor;
+        private UserManager<ApplicationUser> _userManager;
 
         public CustomerService(ICustomerRespository customerRespository, IMapper mapper,
             ILinkTemplateRepository linkTemplateRepository, IUserespository userespository,
-            ICustomerLinkRepository customerLinkRepository, IBankRepository bankRepository, IProvinceRepository provinceRepository, ICampaignRepository campaignRepository)
+            ICustomerLinkRepository customerLinkRepository, IBankRepository bankRepository,
+            IProvinceRepository provinceRepository, ICampaignRepository campaignRepository,
+            IHttpContextAccessor httpContextAccessor, UserManager<ApplicationUser> userManager)
         {
             _customerRespository = customerRespository;
             _mapper = mapper;
@@ -35,13 +42,16 @@ namespace RefferalLinks.Service.Implementation
             _bankRepository = bankRepository;
             _provinceRepository = provinceRepository;
             _campaignRepository = campaignRepository;
+            _httpContextAccessor = httpContextAccessor;
+            _userManager = userManager;
         }
 
-        public AppResponse<CustomerDto> Create(CustomerDto request)
+        public async Task<AppResponse<CustomerDto>> Create(CustomerDto request)
         {
             var result = new AppResponse<CustomerDto>();
             try
             {
+                var role = ClaimHelper.GetClainByName(_httpContextAccessor, "Roles");
                 if (request.RefferalCode == null)
                 {
                     return result.BuildError("Không để trống mã giớ thiệu");
@@ -67,41 +77,32 @@ namespace RefferalLinks.Service.Implementation
                 //}
                 var customer = _mapper.Map<Customer>(request);
                 customer.Id = Guid.NewGuid();
-                customer.ApplicationUserId = user.Id;
-                _customerRespository.Add(customer);
-                request.Banks = _bankRepository.GetAll().Where(x=>x.IsDeleted != true).Select(x => new BankDto
+                if(role == "Sale")
                 {
-                    Name = x.Name,
-                    Id = x.Id,
-                    CustomerLinks = new List<CustomerLinkDto>()
-                }).ToList();
-                var linktemplatelist = _linkTemplateRepository.GetAll().Where(x => x.IsActive == true && x.IsDeleted == false).Include(x => x.Bank).Include(x=>x.Campaign).ToList();
-                var listcampaign = _campaignRepository.GetAll().ToList();
-                //var TpBank = _bankRepository.FindByPredicate(x=>x.Name == "TPBANK").FirstOrDefault();
-                foreach (var linktemplate in linktemplatelist)
-                {
-                   
-                    //var gettpbank = _userespository.FindById(customer.ApplicationUserId);
-                    var customerlink = new Customerlink();
-                    customerlink.Id = Guid.NewGuid();
-                    customerlink.LinkTemplateId = linktemplate.Id;
-                    customerlink.CustomerId = customer.Id;
-                    customerlink.Url = linktemplate.Url;
-                    //string replaceValue = (TpBank != null && linktemplate.BankId == TpBank.Id) ? gettpbank.TpBank : request.RefferalCode;
-                    //customerlink.Url = customerlink.Url.Replace("{{sale}}", replaceValue);
-                    customerlink.Url = customerlink.Url.Replace("{{sale}}", request.RefferalCode);
-                    customerlink.Url = customerlink.Url.Replace("{{tpbank}}", request.TpBank);
-                    customerlink.Url = customerlink.Url.Replace("{{ten}}", customer.Name);
-                    customerlink.Url = customerlink.Url.Replace("{{phone}}", customer.PhoneNumber);
-                    customerlink.Url = customerlink.Url.Replace("{{cccd}}", customer.Passport);
-                    customerlink.Url = customerlink.Url.Replace("{{email}}", customer.Email);
-                    customerlink.Status = StatusCustomerLink.Pending;
-                    //_customerLinkRepository.Add(customerlink);
-
-                    var data = _mapper.Map<CustomerLinkDto>(customerlink);
-                    data.CamPaignName = listcampaign.Where(x=>x.Id == linktemplate.CampaignId).First().Name;
-                    request.Banks.FirstOrDefault(x => x.Id == linktemplate.BankId).CustomerLinks.Add(data);
+                    customer.ApplicationUserId = user.Id;
                 }
+                else if(role == "CSKH")
+                {
+                    customer.CSKHId = user.Id;
+                    var listCustomer = _customerRespository.GetAll().Where(x => x.IsDeleted != true).ToList();
+                    var listUser = _userespository.FindByPredicate(x => x.IsReceiveAllocation == true).ToList();
+                    foreach (var item in listUser)
+                    {
+                        var roleUser = (await _userManager.GetRolesAsync(item)).First();
+                        if (roleUser != "Sale")
+                        {
+                            listUser.Remove(item);
+                        }
+                    }
+                    var salesReceiveAllocation = listUser.Select(x => new
+                    {
+                        userId = x.Id,
+                        CustomerCount = listCustomer.Count(c => c.ApplicationUserId == x.Id && c.CreatedOn.Value.Month == DateTime.UtcNow.Month)
+                    }).OrderBy(r => r.CustomerCount).FirstOrDefault();
+                    if(salesReceiveAllocation != null)
+                    customer.ApplicationUserId = salesReceiveAllocation.userId;
+                }
+                _customerRespository.Add(customer);
 
                 request.Id = customer.Id;
                 result.BuildResult(request);

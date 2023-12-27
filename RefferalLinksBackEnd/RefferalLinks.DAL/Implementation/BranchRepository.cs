@@ -14,7 +14,7 @@ namespace RefferalLinks.DAL.Implementation
     {
         public BranchRepository(RefferalLinksDbContext unitOfWork) : base(unitOfWork)
         {
-
+            _context = unitOfWork;
         }
     }
 }

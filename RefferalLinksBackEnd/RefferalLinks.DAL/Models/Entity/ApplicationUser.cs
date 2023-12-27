@@ -18,5 +18,7 @@ namespace RefferalLinks.DAL.Models.Entity
         public string? User { get; set; }
 
         public Guid? BranchId { get; set; }
+
+        public bool IsReceiveAllocation { get; set; }
     }
 }

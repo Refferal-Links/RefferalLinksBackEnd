@@ -271,7 +271,7 @@ namespace RefferalLinks.Service.Implementation
                     }
                     else
                     {
-                        var newIdentityUserSale = new ApplicationUser { Email = user.Email, UserName = user.Email, TeamId = user.TeamId, User = user.UserName };
+                        var newIdentityUserSale = new ApplicationUser { Email = user.Email, UserName = user.Email, TeamId = user.TeamId, User = user.UserName, IsReceiveAllocation = true };
                         if(user.Role == "Sale" || user.Role == "CSKH")
                         {
                             newIdentityUserSale.RefferalCode = user.RefferalCode;
@@ -294,7 +294,7 @@ namespace RefferalLinks.Service.Implementation
                 }
                 if(user.Role == "SUP")
                 {
-                    var newIdentityUserSale = new ApplicationUser { Email = user.Email, UserName = user.Email, User = user.UserName, BranchId = user.BranchId };
+                    var newIdentityUserSale = new ApplicationUser { Email = user.Email, UserName = user.Email, User = user.UserName, BranchId = user.BranchId, IsReceiveAllocation = false };
 
                     var createResultSale = await _userManager.CreateAsync(newIdentityUserSale);
                     await _userManager.AddPasswordAsync(newIdentityUserSale, user.Password);
@@ -307,7 +307,7 @@ namespace RefferalLinks.Service.Implementation
                     newIdentityUserSale = await _userManager.FindByEmailAsync(user.Email);
                     return result.BuildResult(INFO_MSG_UserCreated);
                 }
-                var newIdentityUser = new ApplicationUser { Email = user.Email, UserName = user.Email , TeamId = null };
+                var newIdentityUser = new ApplicationUser { Email = user.Email, UserName = user.Email , TeamId = null, IsReceiveAllocation = false };
 
                 var createResult = await _userManager.CreateAsync(newIdentityUser);
                 await _userManager.AddPasswordAsync(newIdentityUser, user.Password);
