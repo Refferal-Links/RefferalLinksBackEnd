@@ -1,7 +1,9 @@
 ﻿using System.Linq.Expressions;
+using Microsoft.EntityFrameworkCore;
 using RefferalLinks.DAL.Contract;
 using RefferalLinks.DAL.Models.Context;
 using RefferalLinks.DAL.Models.Entity;
+using static Microsoft.AspNetCore.Hosting.Internal.HostingApplication;
 
 namespace RefferalLinks.DAL.Implementation
 {
@@ -47,6 +49,25 @@ namespace RefferalLinks.DAL.Implementation
         public void Edit(ApplicationUser user)
         {
             _context.Users.Update(user);
+            _context.SaveChanges();
+        }
+
+        public void Delete(string Id)
+        {
+            const int batchSize = 100;
+            var user =_context.Users.First(x=>x.Id == Id);
+            var customersToDelete = _context.Customer
+                .Where(c => c.ApplicationUserId == Id || c.CSKHId == Id)
+                .Take(batchSize)
+                .ToList();
+            foreach(var i in customersToDelete)
+            {
+                var listCustomerLink = _context.Customerlink.Where(cl => cl.CustomerId == i.Id).ToList();
+                _context.Customerlink.RemoveRange(listCustomerLink);
+            }
+            _context.Customer.RemoveRange(customersToDelete);
+            
+            _context.Users.Remove(user);
             _context.SaveChanges();
         }
     }

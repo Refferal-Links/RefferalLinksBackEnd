@@ -13,5 +13,7 @@ namespace RefferalLinks.DAL.Contract
         public ApplicationUser FindByEmail(string? email);
 
         public void Edit(ApplicationUser user);
+
+        public void Delete(string Id);
     }
 }

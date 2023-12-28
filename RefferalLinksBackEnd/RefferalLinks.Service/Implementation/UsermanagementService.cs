@@ -8,6 +8,7 @@ using MayNghien.Models.Request.Base;
 using MayNghien.Models.Response.Base;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using RefferalLinks.DAL.Contract;
 using RefferalLinks.DAL.Models.Context;
 using RefferalLinks.DAL.Models.Entity;
@@ -247,11 +248,6 @@ namespace RefferalLinks.Service.Implementation
             var result = new AppResponse<string>();
             try
             {
-                //bool endsWithGmail = user.UserName.EndsWith("@gmail.com", StringComparison.OrdinalIgnoreCase);
-                //if (!endsWithGmail)
-                //{
-                //    return result.BuildError("Không đúng định dạng email");
-                //}
                 if (string.IsNullOrEmpty(user.Email))
                 {
                     return result.BuildError(ERR_MSG_EmailIsNullOrEmpty);
@@ -261,9 +257,17 @@ namespace RefferalLinks.Service.Implementation
                 {
                     return result.BuildError(ERR_MSG_UserExisted);
                 }
-
-                if(user.Role == "Sale" || user.Role == "Teamleader" || user.Role == "CSKH")
+                if (user.Role == null)
                 {
+                    return result.BuildError("Phải nhập quyền");
+                }
+                if (user.Role == "Sale" || user.Role == "Teamleader" || user.Role == "CSKH")
+                {
+                    var checkUser = _userRepository.FindByPredicate(x => x.Email == user.Email || x.RefferalCode == user.RefferalCode || x.TpBank == user.TpBank).FirstOrDefault();
+                    if (checkUser != null)
+                    {
+                        return result.BuildError("email, code hoặc codeTPBANK đã bị trùng hoặc chưa điền vào");
+                    }
                     var idteam =  _teamRespository.Get((Guid) user.TeamId);
                     if(user.TeamId == null ||  idteam == null )
                     {
@@ -276,8 +280,10 @@ namespace RefferalLinks.Service.Implementation
                         {
                             newIdentityUserSale.RefferalCode = user.RefferalCode;
                             newIdentityUserSale.TpBank = user.TpBank;
+                            var team = _teamRespository.Get(user.TeamId.Value);
+                            newIdentityUserSale.BranchId = team.BranchId;
                         }
-
+                        
                         var createResultSale = await _userManager.CreateAsync(newIdentityUserSale);
                         await _userManager.AddPasswordAsync(newIdentityUserSale, user.Password);
                         if (!(await _roleManager.RoleExistsAsync(user.Role)))
@@ -294,6 +300,10 @@ namespace RefferalLinks.Service.Implementation
                 }
                 if(user.Role == "SUP")
                 {
+                    if(user.BranchId == null)
+                    {
+                        return result.BuildError("Phải nhập chi nhánh");
+                    }
                     var newIdentityUserSale = new ApplicationUser { Email = user.Email, UserName = user.Email, User = user.UserName, BranchId = user.BranchId, IsReceiveAllocation = false, RefferalCode = user.RefferalCode, TpBank = user.TpBank };
 
                     var createResultSale = await _userManager.CreateAsync(newIdentityUserSale);
@@ -307,7 +317,7 @@ namespace RefferalLinks.Service.Implementation
                     newIdentityUserSale = await _userManager.FindByEmailAsync(user.Email);
                     return result.BuildResult(INFO_MSG_UserCreated);
                 }
-                var newIdentityUser = new ApplicationUser { Email = user.Email, UserName = user.Email , TeamId = null, IsReceiveAllocation = false };
+                var newIdentityUser = new ApplicationUser { Email = user.Email, UserName = user.Email , TeamId = null, IsReceiveAllocation = false, User = user.UserName };
 
                 var createResult = await _userManager.CreateAsync(newIdentityUser);
                 await _userManager.AddPasswordAsync(newIdentityUser, user.Password);
@@ -339,23 +349,7 @@ namespace RefferalLinks.Service.Implementation
                 identityUser = await _userManager.FindByIdAsync(id);
                 if (identityUser != null)
                 {
-                    if (await _userManager.IsInRoleAsync(identityUser, "Sale"))
-                    {
-						//var userRoles = await _userManager.GetRolesAsync(identityUser);
-      //                  foreach(var role in userRoles)
-      //                  {
-						//	await _userManager.RemoveFromRoleAsync(identityUser, role);
-						//}
-						var user = _userRepository.FindUser(id);
-                        await _userManager.DeleteAsync(user);
-                    }
-                    else
-                    {
-						var user = _userRepository.FindUser(id);
-						await _userManager.DeleteAsync(user);
-
-                    }
-
+					_userRepository.Delete(id);
                 }
                 return result.BuildResult(INFO_MSG_UserDeleted);
             }
@@ -440,7 +434,7 @@ namespace RefferalLinks.Service.Implementation
                 var usersList = users.ToList();
                 for (int i = 0; i < usersList.Count; i++)
                 {
-                    if ((await _userManager.GetRolesAsync(usersList[i])).First() == "superadmin")
+                    if ((await _userManager.GetRolesAsync(usersList[i])).FirstOrDefault() == "superadmin")
                     {
                         usersList.Remove(usersList[i]);
                         i--;
@@ -477,7 +471,7 @@ namespace RefferalLinks.Service.Implementation
 					{
 						var dtouser = dtoList[i];
 						var identityUser = UserList[i];
-						dtouser.Role = (await _userManager.GetRolesAsync(identityUser)).First();
+						dtouser.Role = (await _userManager.GetRolesAsync(identityUser)).FirstOrDefault();
 					}
 				}
 				var searchUserResult = new SearchResponse<UserModel>
