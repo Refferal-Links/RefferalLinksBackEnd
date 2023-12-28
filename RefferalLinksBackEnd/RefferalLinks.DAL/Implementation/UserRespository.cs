@@ -54,16 +54,22 @@ namespace RefferalLinks.DAL.Implementation
 
         public void Delete(string Id)
         {
-            const int batchSize = 100;
+            //const int batchSize = 100;
             var user =_context.Users.First(x=>x.Id == Id);
             var customersToDelete = _context.Customer
                 .Where(c => c.ApplicationUserId == Id || c.CSKHId == Id)
-                .Take(batchSize)
+                //.Take(batchSize)
                 .ToList();
             foreach(var i in customersToDelete)
             {
                 var listCustomerLink = _context.Customerlink.Where(cl => cl.CustomerId == i.Id).ToList();
+                foreach(var c in listCustomerLink)
+                {
+                    var ListCustomerLinkImage = _context.CustomerlinkImage.Where(x => x.CustomerLinkId == c.Id).ToList();
+                    _context.CustomerlinkImage.RemoveRange(ListCustomerLinkImage);
+                }
                 _context.Customerlink.RemoveRange(listCustomerLink);
+                
             }
             _context.Customer.RemoveRange(customersToDelete);
             
