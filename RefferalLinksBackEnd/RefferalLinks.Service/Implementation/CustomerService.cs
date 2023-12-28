@@ -77,7 +77,7 @@ namespace RefferalLinks.Service.Implementation
                 //}
                 var customer = _mapper.Map<Customer>(request);
                 customer.Id = Guid.NewGuid();
-                if(role == "Sale")
+                if(role != "CSKH")
                 {
                     customer.ApplicationUserId = user.Id;
                 }
@@ -103,6 +103,17 @@ namespace RefferalLinks.Service.Implementation
                     customer.ApplicationUserId = salesReceiveAllocation.userId;
                 }
                 _customerRespository.Add(customer);
+
+                if(request.Source == "Khác")
+                {
+                    var newCustomerLink = new Customerlink 
+                    { 
+                        CreatedBy = user.UserName,
+                        CustomerId = customer.Id,
+                        Status = 0
+                    };
+                    _customerLinkRepository.Add(newCustomerLink);
+                }
 
                 request.Id = customer.Id;
                 result.BuildResult(request);

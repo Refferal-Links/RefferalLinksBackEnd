@@ -75,6 +75,7 @@ namespace RefferalLinks.Service.Implementation
                     loginResult.TeamId = user.TeamId;
                     loginResult.RefferalCode = user.RefferalCode;
                     loginResult.TpBank = user.TpBank;
+                    loginResult.TypeTeam = user.TeamId != null ? _teamRespository.Get(user.TeamId.Value).Type : null;
                     var roles = await _userManager.GetRolesAsync(identityUser);
                     loginResult.Roles = roles.ToList();
                     return result.BuildResult(loginResult);

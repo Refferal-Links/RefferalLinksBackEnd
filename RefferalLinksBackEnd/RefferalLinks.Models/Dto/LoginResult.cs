@@ -14,5 +14,7 @@ namespace RefferalLinks.Models.Dto
         public List<string>? Roles { get; set; }
         public string Token { get; set; }
         public Guid? TeamId { get; set; }
+
+        public string? TypeTeam { get; set; }
     }
 }

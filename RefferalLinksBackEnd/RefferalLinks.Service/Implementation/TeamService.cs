@@ -98,6 +98,7 @@ namespace RefferalLinks.Service.Implementation
                 team.Modifiedby = UserName;
                 team.name = request.name;
                 team.BranchId = request.BranchId.Value;
+                team.Type = request.Type;
                 //team.RefferalCode = request.RefferalCode;
 
 				_teamRespository.Edit(team);
@@ -183,7 +184,8 @@ namespace RefferalLinks.Service.Implementation
 						Id = x.Id,
 						name = x.name,
                         BranchId = x.BranchId,
-                        NameBranch = x.Branch.Name
+                        NameBranch = x.Branch.Name,
+                        Type = x.Type
 					})
 					.ToList();
 

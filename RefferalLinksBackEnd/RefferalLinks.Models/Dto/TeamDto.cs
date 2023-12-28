@@ -13,5 +13,7 @@ namespace RefferalLinks.Models.Dto
 
         public Guid? BranchId { get; set; }
         public string? NameBranch { get; set; }
+
+        public string? Type { get; set;}
     }
 }

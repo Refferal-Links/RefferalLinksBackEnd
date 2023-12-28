@@ -7,6 +7,8 @@ namespace RefferalLinks.DAL.Models.Entity
     {
         public string name { get; set; }
 
+        public string? Type { get; set; }
+
         [ForeignKey("Branch")]
         public Guid? BranchId { get; set; }
         [ForeignKey("BranchId")]
