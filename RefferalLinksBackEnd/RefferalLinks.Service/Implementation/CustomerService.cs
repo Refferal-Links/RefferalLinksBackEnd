@@ -84,25 +84,8 @@ namespace RefferalLinks.Service.Implementation
                 else if(role == "CSKH")
                 {
                     customer.CSKHId = user.Id;
-                    var listCustomer = _customerRespository.GetAll().Where(x => x.IsDeleted != true).ToList();
-                    var listUser = _userespository.FindByPredicate(x => x.IsReceiveAllocation == true).ToList();
-                    var n = listUser.Count;
-                    for (int i=0;i < n;i++)
-                    {
-                        var roleUser = (await _userManager.GetRolesAsync(listUser[i])).First();
-                        if (roleUser != "Sale")
-                        {
-                            listUser.Remove(listUser[i]);
-                            n--;
-                        }
-                    }
-                    var salesReceiveAllocation = listUser.Select(x => new
-                    {
-                        userId = x.Id,
-                        CustomerCount = listCustomer.Count(c => c.ApplicationUserId == x.Id && c.CreatedOn.Value.Month == DateTime.UtcNow.Month)
-                    }).OrderBy(r => r.CustomerCount).FirstOrDefault();
-                    if(salesReceiveAllocation != null)
-                    customer.ApplicationUserId = salesReceiveAllocation.userId;
+                    var sale = _userespository.UserWithCustomerCount();
+                    customer.ApplicationUserId = sale.Id;
                 }
                 _customerRespository.Add(customer);
 

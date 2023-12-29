@@ -1,6 +1,8 @@
-﻿using System.Linq.Expressions;
+﻿using System.Linq;
+using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore;
 using RefferalLinks.DAL.Contract;
+using RefferalLinks.DAL.Migrations;
 using RefferalLinks.DAL.Models.Context;
 using RefferalLinks.DAL.Models.Entity;
 using static Microsoft.AspNetCore.Hosting.Internal.HostingApplication;
@@ -75,6 +77,23 @@ namespace RefferalLinks.DAL.Implementation
             
             _context.Users.Remove(user);
             _context.SaveChanges();
+        }
+
+        public ApplicationUser UserWithCustomerCount()
+        {
+            var role = _context.Roles.Where(x => x.Name == "Sale").First();
+            var userWithMinCustomers = _context.Users
+            .Select(user => new
+            {
+                User = user,
+                CustomerCount = _context.Customer.Count(customer => customer.CreatedOn.Value.Month == DateTime.UtcNow.Month && customer.CreatedOn.Value.Year == DateTime.UtcNow.Year && customer.ApplicationUserId == user.Id),
+            })
+            .Where(m => _context.UserRoles.Where(r => r.RoleId == role.Id).Select(r => r.UserId).Contains(m.User.Id))
+            .OrderBy(entry => entry.CustomerCount)
+            .FirstOrDefault();
+            var result = userWithMinCustomers.User;
+            return result;
+;
         }
     }
 }

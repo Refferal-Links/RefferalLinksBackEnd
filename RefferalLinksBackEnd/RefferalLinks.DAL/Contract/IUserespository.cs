@@ -15,5 +15,7 @@ namespace RefferalLinks.DAL.Contract
         public void Edit(ApplicationUser user);
 
         public void Delete(string Id);
+
+        ApplicationUser UserWithCustomerCount();
     }
 }
