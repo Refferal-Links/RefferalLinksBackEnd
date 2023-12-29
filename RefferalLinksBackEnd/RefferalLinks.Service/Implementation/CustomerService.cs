@@ -85,7 +85,11 @@ namespace RefferalLinks.Service.Implementation
                 {
                     customer.CSKHId = user.Id;
                     var sale = _userespository.UserWithCustomerCount();
-                    customer.ApplicationUserId = sale.Id;
+                    if (sale != null)
+                    {
+                        customer.ApplicationUserId = sale.Id;
+                    }
+                    
                 }
                 _customerRespository.Add(customer);
 

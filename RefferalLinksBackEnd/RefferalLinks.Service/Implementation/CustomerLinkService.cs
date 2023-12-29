@@ -106,11 +106,13 @@ namespace RefferalLinks.Service.Implementation
             var result = new AppResponse<CustomerLinkDto>();
             try
             {
-                var customer = _customerLinkRepository.Get((Guid)request.Id);
-                customer.Url = request.Url;
-                customer.CustomerId = (Guid)request.CustomerId;
-                customer.LinkTemplateId = request.LinkTemplateId;
-                _customerLinkRepository.Edit(customer);
+                var customerLink = _customerLinkRepository.Get((Guid)request.Id);
+                customerLink.Url = request.Url;
+                customerLink.CustomerId = (Guid)request.CustomerId;
+                customerLink.LinkTemplateId = request.LinkTemplateId;
+                var customer = _customerRespository.Get(customerLink.CustomerId);
+                customer.ApplicationUserId = request.Iduser;
+                _customerLinkRepository.Edit(customerLink);
                 result.BuildResult(request);
             }
             catch (Exception ex)
@@ -469,6 +471,10 @@ namespace RefferalLinks.Service.Implementation
                     }
 
                 predicate = predicate.And(m => m.IsDeleted == false);
+                if (Filters == null || Filters.Where(x=>x.Value == "createOn").FirstOrDefault() == null)
+                {
+                    predicate = predicate.And(x => x.CreatedOn.Value.Month == DateTime.UtcNow.Month);
+                }
                 return predicate;
 
             }
