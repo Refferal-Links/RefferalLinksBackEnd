@@ -86,12 +86,14 @@ namespace RefferalLinks.Service.Implementation
                     customer.CSKHId = user.Id;
                     var listCustomer = _customerRespository.GetAll().Where(x => x.IsDeleted != true).ToList();
                     var listUser = _userespository.FindByPredicate(x => x.IsReceiveAllocation == true).ToList();
-                    foreach (var item in listUser)
+                    var n = listUser.Count;
+                    for (int i=0;i < n;i++)
                     {
-                        var roleUser = (await _userManager.GetRolesAsync(item)).First();
+                        var roleUser = (await _userManager.GetRolesAsync(listUser[i])).First();
                         if (roleUser != "Sale")
                         {
-                            listUser.Remove(item);
+                            listUser.Remove(listUser[i]);
+                            n--;
                         }
                     }
                     var salesReceiveAllocation = listUser.Select(x => new
