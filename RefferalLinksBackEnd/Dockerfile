@@ -11,8 +11,8 @@ RUN dotnet restore
 
 
 RUN dotnet publish -c Release -o out
-
-RUN cd /app/out
+run dir
+RUN cd /out
 
 run dir
 # Build the runtime image
