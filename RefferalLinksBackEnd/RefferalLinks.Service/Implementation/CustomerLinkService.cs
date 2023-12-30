@@ -378,7 +378,7 @@ namespace RefferalLinks.Service.Implementation
                     case "Teamleader":
 
 
-                        predicate = predicate.And(m => m.Customer.ApplicationUser.TeamId.ToString().Contains(user.TeamId.ToString()));
+                        predicate = predicate.And(m => m.Customer.ApplicationUser.TeamId.ToString().Contains(user.TeamId.ToString()) || m.Customer.CSKH.TeamId.ToString().Contains(user.TeamId.ToString()));
 
                         break;
 
