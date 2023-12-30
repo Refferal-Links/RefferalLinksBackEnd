@@ -31,4 +31,4 @@ COPY --from=build-env /app/out .
 EXPOSE 80
 
 # Set the entry point for the application
-ENTRYPOINT ["dotnet", " RefferalLinks.API.dll"]
+ENTRYPOINT ["dotnet", "RefferalLinks.API.dll"]
