@@ -10,4 +10,4 @@ COPY . ./
 EXPOSE 5170
 
 # Set the entry point for the application
-ENTRYPOINT ["dotnet", "run", "--project ./RefferalLinks.API/RefferalLinks.API.csproj"]
+ENTRYPOINT ["dotnet run --project ./RefferalLinks.API/RefferalLinks.API.csproj"]
