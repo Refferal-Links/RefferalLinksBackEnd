@@ -230,9 +230,9 @@ namespace RefferalLinks.Service.Implementation
             {
                 var user = _userRepository.FindUser(Id.ToString());
                 await _userManager.RemovePasswordAsync(user);
-                await _userManager.AddPasswordAsync(user, "dungroi");
+                await _userManager.AddPasswordAsync(user, "Abc@123456");
                 result.IsSuccess = true;
-                result.Data = "dungroi";
+                result.Data = "Abc@123456";
                 return result;
             }
             catch (Exception ex)

@@ -83,6 +83,7 @@ namespace RefferalLinks.DAL.Implementation
         {
             var role = _context.Roles.Where(x => x.Name == "Sale").First();
             var userWithMinCustomers = _context.Users
+            .Where(x=>x.IsReceiveAllocation == true && x.LockoutEnabled == false)
             .Select(user => new
             {
                 User = user,

@@ -44,8 +44,9 @@ namespace RefferalLinks.API.Controllers
 
         [HttpPut]
         [Route("{Id}")]
-        public async Task<IActionResult> RestPassWordUser(string Id)
+        public async Task<IActionResult> RestPassWordUser(UserModel request)
         {
+            var Id = request.Id.Value.ToString();
             var result = await _usermanagementService.ResetPassWordUser(Id);
 
             return Ok(result);
