@@ -1,3 +1,4 @@
+FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build-env
 # Set the working directory in the container
 WORKDIR /app
 
