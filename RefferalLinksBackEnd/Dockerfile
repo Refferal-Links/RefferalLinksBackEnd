@@ -7,11 +7,11 @@ WORKDIR /app
 # Copy the project files and restore as distinct layers
 COPY *.sln ./
 COPY RefferalLinks.API/RefferalLinks.API.csproj ./RefferalLinks.API/
-COPY RefferalLinks.API/RefferalLinks.Common.csproj ./RefferalLinks.Common/
-COPY RefferalLinks.API/Maynhien.Common.csproj ./Maynhien.Common/
-COPY RefferalLinks.API/RefferalLinks.DAL.csproj ./RefferalLinks.DAL/
-COPY RefferalLinks.API/RefferalLinks.Models.csproj ./RefferalLinks.Models/
-COPY RefferalLinks.API/RefferalLinks.Service.csproj ./RefferalLinks.Service/
+COPY RefferalLinks.Common/RefferalLinks.Common.csproj ./RefferalLinks.Common/
+COPY Maynhien.Common/Maynhien.Common.csproj ./Maynhien.Common/
+COPY RefferalLinks.DAL/RefferalLinks.DAL.csproj ./RefferalLinks.DAL/
+COPY RefferalLinks.Models/RefferalLinks.Models.csproj ./RefferalLinks.Models/
+COPY RefferalLinks.Service/RefferalLinks.Service.csproj ./RefferalLinks.Service/
 
 # Restore NuGet packages for all projects
 RUN dotnet restore
