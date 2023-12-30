@@ -12,9 +12,8 @@ RUN dotnet restore
 
 RUN dotnet publish -c Release -o out
 run dir
-RUN cd out
 
-run dir
+RUN ls /app/out
 # Build the runtime image
 FROM mcr.microsoft.com/dotnet/aspnet:6.0
 WORKDIR /app
