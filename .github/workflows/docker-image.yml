@@ -43,7 +43,7 @@ jobs:
             docker stop referallinkapi;
             docker system prune -af;
             docker pull maynghien/referallinkapi;
-            docker run --name referallinkapi-p 5000:5001 -d maynghien/referallinkapi;
+            docker run --name referallinkapi -p 5000:5001 -d maynghien/referallinkapi;
             docker network connect nginx-proxy referallinkapi;
             docker restart nginx-proxy;
           "
