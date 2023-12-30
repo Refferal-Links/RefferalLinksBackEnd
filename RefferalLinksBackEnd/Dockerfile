@@ -4,12 +4,12 @@ FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build-env
 # Set the working directory in the container
 WORKDIR /app
 
-# Copy the .csproj and restore as distinct layers
-COPY *.csproj ./
+# Copy everything and restore as distinct layers
+COPY . ./
+
 RUN dotnet restore
 
-# Copy everything else and build the API
-COPY . ./
+
 RUN dotnet publish -c Release -o out
 
 # Build the runtime image
