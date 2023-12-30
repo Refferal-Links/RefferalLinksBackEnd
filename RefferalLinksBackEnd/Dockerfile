@@ -8,7 +8,7 @@ WORKDIR /app
 COPY *.sln ./
 COPY RefferalLinks.API/RefferalLinks.API.csproj ./RefferalLinks.API/
 COPY RefferalLinks.Common/RefferalLinks.Common.csproj ./RefferalLinks.Common/
-COPY Maynhien.Common/Maynhien.Common.csproj ./Maynhien.Common/
+COPY Maynghien.Common/Maynghien.Common.csproj ./Maynghien.Common/
 COPY RefferalLinks.DAL/RefferalLinks.DAL.csproj ./RefferalLinks.DAL/
 COPY RefferalLinks.Models/RefferalLinks.Models.csproj ./RefferalLinks.Models/
 COPY RefferalLinks.Service/RefferalLinks.Service.csproj ./RefferalLinks.Service/
