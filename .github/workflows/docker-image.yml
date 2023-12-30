@@ -1,0 +1,47 @@
+name: Docker Image CI
+
+on:
+  push:
+    branches:
+      - deploy
+
+jobs:
+
+  build:
+
+    runs-on: ubuntu-latest
+
+    # Set the working directory for all steps in this job
+    defaults:
+      run:
+        working-directory: RefferalLinksBackEnd
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+      
+    
+    - name: Build the Docker image
+      run: docker build . --file Dockerfile -t maynghien/referallinkAPI
+
+    - name: Login to Docker Hub
+      run: docker login -u ${{ secrets.DOCKER_USERNAME }} -p '${{ secrets.DOCKER_PASSWORD }}'
+
+    - name: Push Docker image
+      run: docker push maynghien/referallinkAPI
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+  
+    steps:
+      - name: Install sshpass
+        run: sudo apt-get install -y sshpass
+  
+      - name: SSH to server and pull
+        run: |
+          sshpass -p "${{ secrets.VPS_PASSWORD }}" ssh -o StrictHostKeyChecking=no root@maynghien.ddns.net "
+            docker pull maynghien/referallinkAPI;
+            docker run --name referallinkAPI --expose=80 -d maynghien/referallinkAPI;
+            docker network connect nginx-proxy referallinkAPI;
+             docker restart nginx-proxy;
+          "
