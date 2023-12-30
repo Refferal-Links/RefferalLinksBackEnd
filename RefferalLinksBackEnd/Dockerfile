@@ -12,6 +12,7 @@ COPY Maynghien.Common/Maynghien.Common.csproj ./Maynghien.Common/
 COPY RefferalLinks.DAL/RefferalLinks.DAL.csproj ./RefferalLinks.DAL/
 COPY RefferalLinks.Models/RefferalLinks.Models.csproj ./RefferalLinks.Models/
 COPY RefferalLinks.Service/RefferalLinks.Service.csproj ./RefferalLinks.Service/
+COPY RefferalLinks.TransferCronjob/RefferalLinks.TransferCronjob.csproj ./RefferalLinks.TransferCronjob/
 
 # Restore NuGet packages for all projects
 RUN dotnet restore
