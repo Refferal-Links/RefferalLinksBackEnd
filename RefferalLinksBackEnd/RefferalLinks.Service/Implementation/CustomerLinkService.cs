@@ -672,7 +672,7 @@ namespace RefferalLinks.Service.Implementation
                 var numOfRecords = _customerLinkRepository.CountRecordsByPredicate(query);
                 var model = _customerLinkRepository.FindByPredicate(query).OrderByDescending(p => p.CreatedOn);
                 var teamNames = _teamRespository.GetAllTeamNames();
-                var List = model.Include(x => x.Customer).Include(x => x.LinkTemplate.Bank).Include(x => x.LinkTemplate.Campaign)
+                var List = model
                     .Select(x => new CustomerLinkDto
                     {
                         Id = x.Id,
