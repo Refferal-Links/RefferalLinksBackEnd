@@ -431,15 +431,15 @@ namespace RefferalLinks.Service.Implementation
                 {
                     users = addSort(users, request.SortBy);
                 }
-                var usersList = users.ToList();
-                for (int i = 0; i < usersList.Count; i++)
-                {
-                    if ((await _userManager.GetRolesAsync(usersList[i])).FirstOrDefault() == "superadmin")
-                    {
-                        usersList.Remove(usersList[i]);
-                        i--;
-                    }
-                }
+                var usersList = users/*.ToList()*/;
+                //for (int i = 0; i < usersList.Count; i++)
+                //{
+                //    if ((await _userManager.GetRolesAsync(usersList[i])).FirstOrDefault() == "superadmin")
+                //    {
+                //        usersList.Remove(usersList[i]);
+                //        i--;
+                //    }
+                //}
 
                 int pageIndex = request.PageIndex ?? 1;
 				int pageSize = request.PageSize ?? 1;
