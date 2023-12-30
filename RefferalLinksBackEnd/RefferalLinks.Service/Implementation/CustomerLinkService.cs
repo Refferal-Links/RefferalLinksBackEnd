@@ -562,13 +562,13 @@ namespace RefferalLinks.Service.Implementation
                 //worksheet.Cells[1, 13].Value = "Nguồn khách hàng";
                 //worksheet.Cells[1, 14].Value = "Ghi chú";
                 //worksheet.Cells[1, 15].Value = "Ngày hỗ trợ mới nhất";
-                for (int i = 0; i < columnHeaders.Length; i++)
+                for (int ic = 0; ic < columnHeaders.Length; ic++)
                 {
-                    worksheet.Cells[1, i + 1].Value = columnHeaders[i];
+                    worksheet.Cells[1, ic + 1].Value = columnHeaders[ic];
                 }
-                for (int i = 1; i <= 4; i++)
+                for (int ic = 1; ic <= 4; ic++)
                 {
-                    worksheet.Cells[1, 15 + i].Value = $"Ảnh {i}";
+                    worksheet.Cells[1, 15 + ic].Value = $"Ảnh {ic}";
                 }
 
                 //for (int i = 0; i < data.Data.Data.Count; i++)
@@ -611,9 +611,10 @@ namespace RefferalLinks.Service.Implementation
                 //        worksheet.Cells[i + 2, 15 + j + 1].Value = dto.ListCustomerlinkImage[j].LinkImage;
                 //    }
                 //}
+                int i = 0;
                 foreach (var dto in data.Data.Data)
                 {
-                    int i = 0;
+                    
                     var GetallImg = _customerlinkImageRepository.GetAll().Where(x => x.CustomerLinkId == dto.Id).ToList();
                     var getsale = _userespository.FindById(dto.Iduser);
                     var getleader = _userespository.FindByPredicate(x => x.TeamId == dto.TeamId).ToList();
@@ -654,6 +655,7 @@ namespace RefferalLinks.Service.Implementation
                     {
                         worksheet.Cells[rowIndex, 15 + j + 1].Value = dto.ListCustomerlinkImage[j].LinkImage;
                     }
+                    i++;
                 }
 
                 return package.GetAsByteArray();
