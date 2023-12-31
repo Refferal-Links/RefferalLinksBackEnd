@@ -177,6 +177,7 @@ namespace RefferalLinks.Service.Implementation
             try
             {
                 //var userRole = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.Role)?.Value;
+                var role = ClaimHelper.GetClainByName(_httpContextAccessor, "Roles");
                 var query = await BuildFilterExpression(request.Filters);
                 var numOfRecords = _customerLinkRepository.CountRecordsByPredicate(query);
                 var model = _customerLinkRepository.FindByPredicate(query);
@@ -225,7 +226,7 @@ namespace RefferalLinks.Service.Implementation
                         RefferalCode = x.Customer.ApplicationUser.RefferalCode,
                         CodeNVCSKH = x.Customer.CSKH.RefferalCode,
                         NvCSKH = x.Customer.CSKH.UserName,
-
+                        Watched = role == "Sale" ? x.Watched : null
                     })
                     .ToList();
                 foreach (var item in List)
@@ -257,7 +258,19 @@ namespace RefferalLinks.Service.Implementation
                     CurrentPage = pageIndex,
                     Data = List,
                 };
-
+                if (role == "Sale")
+                {
+                    var viewedLinkList = List.Where(x => x.Watched == false).ToList();
+                    if (viewedLinkList != null && viewedLinkList.Count > 0)
+                    {
+                        foreach (var link in viewedLinkList)
+                        {
+                            var customerlink = _customerLinkRepository.Get(link.Id.Value);
+                            customerlink.Watched = true;
+                            _customerLinkRepository.Edit(customerlink);
+                        }
+                    }
+                }
                 result.BuildResult(searchUserResult);
             }
             catch (Exception ex)
@@ -762,7 +775,11 @@ namespace RefferalLinks.Service.Implementation
                 
                 var customerLink = _mapper.Map<Customerlink>(request);
                 customerLink.Id = Guid.NewGuid();
-
+                var checkDataCustomer = customer.First();
+                if(checkDataCustomer.ApplicationUserId != null && checkDataCustomer.CSKHId != null)
+                {
+                    customerLink.Watched = false;
+                }
                 _customerLinkRepository.Add(customerLink);
 
                 request.Id = customerLink.Id;
