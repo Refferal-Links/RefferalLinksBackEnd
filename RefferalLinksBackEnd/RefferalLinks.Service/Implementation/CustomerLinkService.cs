@@ -443,7 +443,7 @@ namespace RefferalLinks.Service.Implementation
                                 break;
                             case "teamId":
                                 if (userRole == "Teamleader" || userRole == "Sale") break;
-                                predicate = predicate.And(m => m.Customer.ApplicationUser.TeamId.ToString().Contains(filter.Value));
+                                predicate = predicate.And(m => m.Customer.ApplicationUser.TeamId.ToString().Contains(filter.Value) || m.Customer.CSKH.TeamId.ToString().Equals(filter.Value));
                                 break;
                             case "userName":
                                 if (userRole == "Sale") break;
@@ -454,23 +454,42 @@ namespace RefferalLinks.Service.Implementation
                                 break;
                             case "createOn":
                                 {
-                                    var day = DateTime.ParseExact(filter.Value, "dd/MM/yyyy", System.Globalization.CultureInfo.InvariantCulture);
+                                    string[] dateStrings = filter.Value.Split(',');
+                                    var dayStart = DateTime.ParseExact(dateStrings[0], "dd/MM/yyyy", System.Globalization.CultureInfo.InvariantCulture);
                                     //if (filter.Value != "")
-                                    predicate = predicate.And(m => m.CreatedOn.Value.Day.Equals(day.Day) && m.CreatedOn.Value.Month.Equals(day.Month) && m.CreatedOn.Value.Year.Equals(day.Year));
+                                    predicate = predicate.And(m => m.CreatedOn.Value.AddHours(7).Day >= dayStart.Day && m.CreatedOn.Value.AddHours(7).Month >= dayStart.Month && m.CreatedOn.Value.AddHours(7).Year >= dayStart.Year);
+                                    if (dateStrings[1] != null)
+                                    {
+                                        var dayEnd = DateTime.ParseExact(dateStrings[1], "dd/MM/yyyy", System.Globalization.CultureInfo.InvariantCulture);
+                                        predicate = predicate.And(m => m.CreatedOn.Value.AddHours(7).Day <= dayEnd.Day && m.CreatedOn.Value.AddHours(7).Month <= dayEnd.Month && m.CreatedOn.Value.AddHours(7).Year <= dayEnd.Year);
+                                    }
                                 }
                                 break;
                             case "modifiedOn":
                                 {
-                                    var day = DateTime.ParseExact(filter.Value, "dd/MM/yyyy", System.Globalization.CultureInfo.InvariantCulture);
+                                    string[] dateStrings = filter.Value.Split(',');
+                                    var dayStart = DateTime.ParseExact(dateStrings[0], "dd/MM/yyyy", System.Globalization.CultureInfo.InvariantCulture);
                                     //if (filter.Value != "")
-                                    predicate = predicate.And(m => m.CreatedOn.Value.Day.Equals(day.Day) && m.CreatedOn.Value.Month.Equals(day.Month) && m.CreatedOn.Value.Year.Equals(day.Year));
+                                    predicate = predicate.And(m => m.ModifiedOn.Value.AddHours(7).Day >= dayStart.Day && m.ModifiedOn.Value.AddHours(7).Month >= dayStart.Month && m.ModifiedOn.Value.AddHours(7).Year >= dayStart.Year);
+                                    if (dateStrings[1] != null)
+                                    {
+                                        var dayEnd = DateTime.ParseExact(dateStrings[1], "dd/MM/yyyy", System.Globalization.CultureInfo.InvariantCulture);
+                                        predicate = predicate.And(m => m.ModifiedOn.Value.AddHours(7).Day <= dayEnd.Day && m.ModifiedOn.Value.AddHours(7).Month <= dayEnd.Month && m.ModifiedOn.Value.AddHours(7).Year <= dayEnd.Year);
+                                    }
                                 }
                                 break;
                             case "statusText":
                                 {
                                     var value = int.Parse(filter.Value);
                                     StatusCustomerLink status = (StatusCustomerLink)Enum.ToObject(typeof(StatusCustomerLink), value);
-                                    predicate = predicate.And(m => m.Status == status);
+                                    if(value == 0)
+                                    {
+                                        predicate = predicate.And(m => m.Status == status || m.Status == null);
+                                    }
+                                    else
+                                    {
+                                        predicate = predicate.And(m => m.Status == status);
+                                    }
                                 }
                                 break;
                             case "nvCSKH":
@@ -484,7 +503,7 @@ namespace RefferalLinks.Service.Implementation
                     }
 
                 predicate = predicate.And(m => m.IsDeleted == false);
-                if (Filters == null || Filters.Where(x=>x.Value == "createOn").FirstOrDefault() == null)
+                if (Filters == null)
                 {
                     predicate = predicate.And(x => x.CreatedOn.Value.Month == DateTime.UtcNow.Month);
                 }
@@ -775,6 +794,7 @@ namespace RefferalLinks.Service.Implementation
                 
                 var customerLink = _mapper.Map<Customerlink>(request);
                 customerLink.Id = Guid.NewGuid();
+                customerLink.Status = 0;
                 var checkDataCustomer = customer.First();
                 if(checkDataCustomer.ApplicationUserId != null && checkDataCustomer.CSKHId != null)
                 {
