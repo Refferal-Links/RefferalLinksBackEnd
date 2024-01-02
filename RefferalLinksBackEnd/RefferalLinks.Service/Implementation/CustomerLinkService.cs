@@ -470,11 +470,11 @@ namespace RefferalLinks.Service.Implementation
                                     string[] dateStrings = filter.Value.Split(',');
                                     var dayStart = DateTime.ParseExact(dateStrings[0], "dd/MM/yyyy", System.Globalization.CultureInfo.InvariantCulture);
                                     //if (filter.Value != "")
-                                    predicate = predicate.And(m => m.ModifiedOn.Value.AddHours(7).Day >= dayStart.Day && m.ModifiedOn.Value.AddHours(7).Month >= dayStart.Month && m.ModifiedOn.Value.AddHours(7).Year >= dayStart.Year);
+                                    predicate = predicate.And(m => m.ModifiedOn.Value.Date >= dayStart);
                                     if (dateStrings[1] != null)
                                     {
                                         var dayEnd = DateTime.ParseExact(dateStrings[1], "dd/MM/yyyy", System.Globalization.CultureInfo.InvariantCulture);
-                                        predicate = predicate.And(m => m.ModifiedOn.Value.AddHours(7).Day <= dayEnd.Day && m.ModifiedOn.Value.AddHours(7).Month <= dayEnd.Month && m.ModifiedOn.Value.AddHours(7).Year <= dayEnd.Year);
+                                        predicate = predicate.And(m => m.ModifiedOn.Value.Date <= dayEnd);
                                     }
                                 }
                                 break;
