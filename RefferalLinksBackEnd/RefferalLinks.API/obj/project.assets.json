@@ -6372,24 +6372,19 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\ANH KIET\\.nuget\\packages\\": {},
-    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
+    "C:\\Users\\binh.phan\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\GitHub\\RefferalLinksBackEnd\\RefferalLinksBackEnd\\RefferalLinks.API\\RefferalLinks.API.csproj",
+      "projectUniqueName": "D:\\project\\referal\\API\\RefferalLinksBackEnd\\RefferalLinksBackEnd\\RefferalLinks.API\\RefferalLinks.API.csproj",
       "projectName": "RefferalLinks.API",
-      "projectPath": "D:\\GitHub\\RefferalLinksBackEnd\\RefferalLinksBackEnd\\RefferalLinks.API\\RefferalLinks.API.csproj",
-      "packagesPath": "C:\\Users\\ANH KIET\\.nuget\\packages\\",
-      "outputPath": "D:\\GitHub\\RefferalLinksBackEnd\\RefferalLinksBackEnd\\RefferalLinks.API\\obj\\",
+      "projectPath": "D:\\project\\referal\\API\\RefferalLinksBackEnd\\RefferalLinksBackEnd\\RefferalLinks.API\\RefferalLinks.API.csproj",
+      "packagesPath": "C:\\Users\\binh.phan\\.nuget\\packages\\",
+      "outputPath": "D:\\project\\referal\\API\\RefferalLinksBackEnd\\RefferalLinksBackEnd\\RefferalLinks.API\\obj\\",
       "projectStyle": "PackageReference",
-      "fallbackFolders": [
-        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
-      ],
       "configFilePaths": [
-        "C:\\Users\\ANH KIET\\AppData\\Roaming\\NuGet\\NuGet.Config",
-        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+        "C:\\Users\\binh.phan\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -6403,17 +6398,17 @@
         "net6.0": {
           "targetAlias": "net6.0",
           "projectReferences": {
-            "D:\\GitHub\\RefferalLinksBackEnd\\RefferalLinksBackEnd\\Maynghien.Common\\Maynghien.Common.csproj": {
-              "projectPath": "D:\\GitHub\\RefferalLinksBackEnd\\RefferalLinksBackEnd\\Maynghien.Common\\Maynghien.Common.csproj"
+            "D:\\project\\referal\\API\\RefferalLinksBackEnd\\RefferalLinksBackEnd\\Maynghien.Common\\Maynghien.Common.csproj": {
+              "projectPath": "D:\\project\\referal\\API\\RefferalLinksBackEnd\\RefferalLinksBackEnd\\Maynghien.Common\\Maynghien.Common.csproj"
             },
-            "D:\\GitHub\\RefferalLinksBackEnd\\RefferalLinksBackEnd\\RefferalLinks.DAL\\RefferalLinks.DAL.csproj": {
-              "projectPath": "D:\\GitHub\\RefferalLinksBackEnd\\RefferalLinksBackEnd\\RefferalLinks.DAL\\RefferalLinks.DAL.csproj"
+            "D:\\project\\referal\\API\\RefferalLinksBackEnd\\RefferalLinksBackEnd\\RefferalLinks.DAL\\RefferalLinks.DAL.csproj": {
+              "projectPath": "D:\\project\\referal\\API\\RefferalLinksBackEnd\\RefferalLinksBackEnd\\RefferalLinks.DAL\\RefferalLinks.DAL.csproj"
             },
-            "D:\\GitHub\\RefferalLinksBackEnd\\RefferalLinksBackEnd\\RefferalLinks.Models\\RefferalLinks.Models.csproj": {
-              "projectPath": "D:\\GitHub\\RefferalLinksBackEnd\\RefferalLinksBackEnd\\RefferalLinks.Models\\RefferalLinks.Models.csproj"
+            "D:\\project\\referal\\API\\RefferalLinksBackEnd\\RefferalLinksBackEnd\\RefferalLinks.Models\\RefferalLinks.Models.csproj": {
+              "projectPath": "D:\\project\\referal\\API\\RefferalLinksBackEnd\\RefferalLinksBackEnd\\RefferalLinks.Models\\RefferalLinks.Models.csproj"
             },
-            "D:\\GitHub\\RefferalLinksBackEnd\\RefferalLinksBackEnd\\RefferalLinks.Service\\RefferalLinks.Service.csproj": {
-              "projectPath": "D:\\GitHub\\RefferalLinksBackEnd\\RefferalLinksBackEnd\\RefferalLinks.Service\\RefferalLinks.Service.csproj"
+            "D:\\project\\referal\\API\\RefferalLinksBackEnd\\RefferalLinksBackEnd\\RefferalLinks.Service\\RefferalLinks.Service.csproj": {
+              "projectPath": "D:\\project\\referal\\API\\RefferalLinksBackEnd\\RefferalLinksBackEnd\\RefferalLinks.Service\\RefferalLinks.Service.csproj"
             }
           }
         }
@@ -6492,7 +6487,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.400\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.100\\RuntimeIdentifierGraph.json"
       }
     }
   },

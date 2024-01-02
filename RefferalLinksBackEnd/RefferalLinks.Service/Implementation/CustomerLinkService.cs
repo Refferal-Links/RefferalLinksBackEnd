@@ -182,11 +182,11 @@ namespace RefferalLinks.Service.Implementation
                 var numOfRecords = _customerLinkRepository.CountRecordsByPredicate(query);
                 var model = _customerLinkRepository.FindByPredicate(query);
 
-                if(request.SortBy != null)
+                if (request.SortBy != null)
                 {
                     model = AddSort(model, request.SortBy);
                 }
-                if(request.SortBy == null)
+                if (request.SortBy == null)
                 {
                     model = model.OrderByDescending(x => x.CreatedOn.Value);
                 }
@@ -200,7 +200,7 @@ namespace RefferalLinks.Service.Implementation
                         Id = x.Id,
                         Url = x.Url != null ? x.Url : "",
                         CustomerId = x.CustomerId,
-                        LinkTemplateId = x.LinkTemplateId != null ?(Guid)x.LinkTemplateId : null,
+                        LinkTemplateId = x.LinkTemplateId != null ? (Guid)x.LinkTemplateId : null,
                         Email = x.Customer.Email,
                         PhoneNumber = x.Customer.PhoneNumber,
                         Passport = x.Customer.Passport,
@@ -218,7 +218,7 @@ namespace RefferalLinks.Service.Implementation
                                        ? teamNames[x.Customer.ApplicationUser.TeamId.Value] : string.Empty,
                         //InforCustomer = String.Format("Tên: {0}; Email: {1}; CCCD: {2}; phone: {3}  ", x.Customer.Name, x.Customer.Email, x.Customer.Passport, x.Customer.PhoneNumber),
                         Status = x.Status != null ? x.Status : 0,
-                        StatusText = x.Status != null ?( x.Status == StatusCustomerLink.Pending ? "Pending" : x.Status == StatusCustomerLink.Approved ? "Approved" : x.Status == StatusCustomerLink.Cancel ? "Cancel" : "Rejected") : "Pending",
+                        StatusText = x.Status != null ? (x.Status == StatusCustomerLink.Pending ? "Pending" : x.Status == StatusCustomerLink.Approved ? "Approved" : x.Status == StatusCustomerLink.Cancel ? "Cancel" : "Rejected") : "Pending",
                         CreateOn = x.CreatedOn.Value.AddHours(7).ToString("dd/MM/yyyy-HH:mm:ss"),
                         ModifiedOn = x.ModifiedOn.Value.AddHours(7).ToString("dd/MM/yyyy-HH:mm:ss"),
                         Note = x.Note != null ? x.Note : "",
@@ -240,7 +240,7 @@ namespace RefferalLinks.Service.Implementation
                     //var user = await _userManager.FindByNameAsync(item.UserName);
                     //var role = (await _userManager.GetRolesAsync(user)).First();
                     var phoneNumber = item.PhoneNumber;
-                    phoneNumber = phoneNumber.Length < 6 ? phoneNumber: phoneNumber.Substring(0, 3) + "XXX" + phoneNumber.Substring(6);
+                    phoneNumber = phoneNumber.Length < 6 ? phoneNumber : phoneNumber.Substring(0, 3) + "XXX" + phoneNumber.Substring(6);
                     item.InforCustomer = String.Format("Tên: {0}; Email: {1}; CCCD: {2}; phone: {3}  ", item.Name, item.Email, item.Passport, phoneNumber);
                     //if (role == "CSKH")
                     //{
@@ -457,11 +457,11 @@ namespace RefferalLinks.Service.Implementation
                                     string[] dateStrings = filter.Value.Split(',');
                                     var dayStart = DateTime.ParseExact(dateStrings[0], "dd/MM/yyyy", System.Globalization.CultureInfo.InvariantCulture);
                                     //if (filter.Value != "")
-                                    predicate = predicate.And(m => m.CreatedOn.Value.AddHours(7).Day >= dayStart.Day && m.CreatedOn.Value.AddHours(7).Month >= dayStart.Month && m.CreatedOn.Value.AddHours(7).Year >= dayStart.Year);
+                                    predicate = predicate.And(m => m.CreatedOn.Value.Date < dayStart);
                                     if (dateStrings[1] != null)
                                     {
                                         var dayEnd = DateTime.ParseExact(dateStrings[1], "dd/MM/yyyy", System.Globalization.CultureInfo.InvariantCulture);
-                                        predicate = predicate.And(m => m.CreatedOn.Value.AddHours(7).Day <= dayEnd.Day && m.CreatedOn.Value.AddHours(7).Month <= dayEnd.Month && m.CreatedOn.Value.AddHours(7).Year <= dayEnd.Year);
+                                        predicate = predicate.And(m => m.CreatedOn.Value.Date <= dayEnd);
                                     }
                                 }
                                 break;
@@ -470,11 +470,11 @@ namespace RefferalLinks.Service.Implementation
                                     string[] dateStrings = filter.Value.Split(',');
                                     var dayStart = DateTime.ParseExact(dateStrings[0], "dd/MM/yyyy", System.Globalization.CultureInfo.InvariantCulture);
                                     //if (filter.Value != "")
-                                    predicate = predicate.And(m => m.ModifiedOn.Value.AddHours(7).Day >= dayStart.Day && m.ModifiedOn.Value.AddHours(7).Month >= dayStart.Month && m.ModifiedOn.Value.AddHours(7).Year >= dayStart.Year);
+                                    predicate = predicate.And(m => m.ModifiedOn.Value.Date >= dayStart);
                                     if (dateStrings[1] != null)
                                     {
                                         var dayEnd = DateTime.ParseExact(dateStrings[1], "dd/MM/yyyy", System.Globalization.CultureInfo.InvariantCulture);
-                                        predicate = predicate.And(m => m.ModifiedOn.Value.AddHours(7).Day <= dayEnd.Day && m.ModifiedOn.Value.AddHours(7).Month <= dayEnd.Month && m.ModifiedOn.Value.AddHours(7).Year <= dayEnd.Year);
+                                        predicate = predicate.And(m => m.ModifiedOn.Value.Date <= dayEnd);
                                     }
                                 }
                                 break;
@@ -482,7 +482,7 @@ namespace RefferalLinks.Service.Implementation
                                 {
                                     var value = int.Parse(filter.Value);
                                     StatusCustomerLink status = (StatusCustomerLink)Enum.ToObject(typeof(StatusCustomerLink), value);
-                                    if(value == 0)
+                                    if (value == 0)
                                     {
                                         predicate = predicate.And(m => m.Status == status || m.Status == null);
                                     }
@@ -566,7 +566,7 @@ namespace RefferalLinks.Service.Implementation
 
         public async Task<byte[]> ExportToExcel(SearchRequest request)
         {
-            request.Filters = request.Filters.Where(x=>x.Value != "" && x.Value != null).ToList();
+            request.Filters = request.Filters.Where(x => x.Value != "" && x.Value != null).ToList();
             var data = await Export(request);
             using (var package = new ExcelPackage())
             {
@@ -647,7 +647,7 @@ namespace RefferalLinks.Service.Implementation
                 int stt = 1;
                 foreach (var dto in data.Data.Data)
                 {
-                    
+
                     var GetallImg = _customerlinkImageRepository.GetAll().Where(x => x.CustomerLinkId == dto.Id).ToList();
                     var getsale = _userespository.FindById(dto.Iduser);
                     var getleader = _userespository.FindByPredicate(x => x.TeamId == dto.TeamId).ToList();
@@ -765,7 +765,7 @@ namespace RefferalLinks.Service.Implementation
             var result = new AppResponse<CustomerLinkDto>();
             try
             {
-                if(request.CustomerId == null)
+                if (request.CustomerId == null)
                 {
                     return result.BuildError("Không bỏ trống khách hàng");
                 }
@@ -783,8 +783,8 @@ namespace RefferalLinks.Service.Implementation
                 {
                     return result.BuildError("Không tìm thấy liên kết");
                 }
-                var CheckCustomerLink =_customerLinkRepository.FindBy(x=>x.CustomerId == request.CustomerId && x.LinkTemplateId == request.LinkTemplateId);
-                if(CheckCustomerLink.Count() != 0)
+                var CheckCustomerLink = _customerLinkRepository.FindBy(x => x.CustomerId == request.CustomerId && x.LinkTemplateId == request.LinkTemplateId);
+                if (CheckCustomerLink.Count() != 0)
                 {
                     var checkIsDelete = CheckCustomerLink.First();
                     if (CheckCustomerLink.First().IsDeleted == true)
@@ -794,12 +794,12 @@ namespace RefferalLinks.Service.Implementation
                     }
                     return result.BuildResult(request);
                 }
-                
+
                 var customerLink = _mapper.Map<Customerlink>(request);
                 customerLink.Id = Guid.NewGuid();
                 customerLink.Status = 0;
                 var checkDataCustomer = customer.First();
-                if(checkDataCustomer.ApplicationUserId != null && checkDataCustomer.CSKHId != null)
+                if (checkDataCustomer.ApplicationUserId != null && checkDataCustomer.CSKHId != null)
                 {
                     customerLink.Watched = false;
                 }
@@ -808,7 +808,7 @@ namespace RefferalLinks.Service.Implementation
                 request.Id = customerLink.Id;
                 result.BuildResult(request);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 result.BuildError(ex.Message);
             }
