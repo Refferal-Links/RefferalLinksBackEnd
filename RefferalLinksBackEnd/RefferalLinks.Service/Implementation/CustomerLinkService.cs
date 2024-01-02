@@ -572,7 +572,7 @@ namespace RefferalLinks.Service.Implementation
             {
                 var columnHeaders = new string[]
 {
-    "Họ tên khách hàng", "PhoneNumber", "Căn cước công dân", "Email", "Ngày đăng kí thành công",
+    "STT","Họ tên khách hàng", "PhoneNumber", "Căn cước công dân", "Email", "Ngày đăng kí thành công",
     "Dự án", "Sản phẩm", "Code Sale", "Tên Team", "Tên Quản Lý", "Tên Sale",
     "Trạng thái", "Nguồn khách hàng", "Ghi chú", "Ngày hỗ trợ mới nhất"
 };
@@ -600,7 +600,7 @@ namespace RefferalLinks.Service.Implementation
                 }
                 for (int ic = 1; ic <= 4; ic++)
                 {
-                    worksheet.Cells[1, 15 + ic].Value = $"Ảnh {ic}";
+                    worksheet.Cells[1, 15 + 1 + ic].Value = $"Ảnh {ic}";
                 }
 
                 //for (int i = 0; i < data.Data.Data.Count; i++)
@@ -644,6 +644,7 @@ namespace RefferalLinks.Service.Implementation
                 //    }
                 //}
                 int i = 0;
+                int stt = 1;
                 foreach (var dto in data.Data.Data)
                 {
                     
@@ -655,20 +656,21 @@ namespace RefferalLinks.Service.Implementation
                     dto.ListCustomerlinkImage = convertedItems;
 
                     var rowIndex = i + 2;
-                    worksheet.Cells[rowIndex, 1].Value = dto.Name;
-                    worksheet.Cells[rowIndex, 2].Value = dto.PhoneNumber;
-                    worksheet.Cells[i + 2, 2].Value = dto.PhoneNumber;
-                    worksheet.Cells[i + 2, 3].Value = dto.Passport;
-                    worksheet.Cells[i + 2, 4].Value = dto.Email;
-                    worksheet.Cells[i + 2, 5].Value = dto.CreatedOn.Value.AddHours(7).ToString("dd/MM/yyyy-HH:mm:ss");
-                    worksheet.Cells[i + 2, 6].Value = dto.BankName;
-                    worksheet.Cells[i + 2, 7].Value = dto.CamPaignName;
-                    worksheet.Cells[i + 2, 8].Value = dto.RefferalCode;
-                    worksheet.Cells[i + 2, 9].Value = dto.TeamName;
-                    worksheet.Cells[i + 2, 12].Value = dto.Status == StatusCustomerLink.Pending ? "Pending" : dto.Status == StatusCustomerLink.Approved ? "Approved" : dto.Status == StatusCustomerLink.Cancel ? "Cancel" : "Rejected";
-                    worksheet.Cells[i + 2, 13].Value = dto.SourceCustomer;
-                    worksheet.Cells[i + 2, 14].Value = dto.Note;
-                    worksheet.Cells[i + 2, 15].Value = dto.ModifiedOn;
+                    worksheet.Cells[rowIndex, 1].Value = stt;
+                    worksheet.Cells[rowIndex, 2].Value = dto.Name;
+                    worksheet.Cells[rowIndex, 3].Value = dto.PhoneNumber;
+                    worksheet.Cells[i + 2, 3].Value = dto.PhoneNumber;
+                    worksheet.Cells[i + 2, 4].Value = dto.Passport;
+                    worksheet.Cells[i + 2, 5].Value = dto.Email;
+                    worksheet.Cells[i + 2, 6].Value = dto.CreatedOn.Value.AddHours(7).ToString("dd/MM/yyyy-HH:mm:ss");
+                    worksheet.Cells[i + 2, 7].Value = dto.BankName;
+                    worksheet.Cells[i + 2, 8].Value = dto.CamPaignName;
+                    worksheet.Cells[i + 2, 9].Value = dto.RefferalCode;
+                    worksheet.Cells[i + 2, 10].Value = dto.TeamName;
+                    worksheet.Cells[i + 2, 13].Value = dto.Status == StatusCustomerLink.Pending ? "Pending" : dto.Status == StatusCustomerLink.Approved ? "Approved" : dto.Status == StatusCustomerLink.Cancel ? "Cancel" : "Rejected";
+                    worksheet.Cells[i + 2, 14].Value = dto.SourceCustomer;
+                    worksheet.Cells[i + 2, 15].Value = dto.Note;
+                    worksheet.Cells[i + 2, 16].Value = dto.ModifiedOn;
                     var leader = "";
                     foreach (var t in getleader)
                     {
@@ -680,14 +682,15 @@ namespace RefferalLinks.Service.Implementation
                         }
                     }
 
-                    worksheet.Cells[rowIndex, 10].Value = getsale?.RefferalCode != null ? leader : "";
-                    worksheet.Cells[rowIndex, 11].Value = getsale?.RefferalCode != null ? getsale.UserName : "";
+                    worksheet.Cells[rowIndex, 11].Value = getsale?.RefferalCode != null ? leader : "";
+                    worksheet.Cells[rowIndex, 12].Value = getsale?.RefferalCode != null ? getsale.UserName : "";
 
                     for (int j = 0; j < GetallImg.Count; j++)
                     {
-                        worksheet.Cells[rowIndex, 15 + j + 1].Value = dto.ListCustomerlinkImage[j].LinkImage;
+                        worksheet.Cells[rowIndex, 16 + j + 1].Value = dto.ListCustomerlinkImage[j].LinkImage;
                     }
                     i++;
+                    stt++;
                 }
 
                 return package.GetAsByteArray();
