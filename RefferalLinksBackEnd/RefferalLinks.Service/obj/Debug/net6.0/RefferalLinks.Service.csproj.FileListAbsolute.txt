@@ -42,6 +42,7 @@ D:\DoAn3\RefferalLinksBackEnd\RefferalLinksBackEnd\RefferalLinks.Service\obj\Deb
 D:\DoAn3\RefferalLinksBackEnd\RefferalLinksBackEnd\RefferalLinks.Service\obj\Debug\net6.0\refint\RefferalLinks.Service.dll
 D:\DoAn3\RefferalLinksBackEnd\RefferalLinksBackEnd\RefferalLinks.Service\obj\Debug\net6.0\RefferalLinks.Service.pdb
 D:\DoAn3\RefferalLinksBackEnd\RefferalLinksBackEnd\RefferalLinks.Service\obj\Debug\net6.0\ref\RefferalLinks.Service.dll
+<<<<<<< HEAD
 D:\binh\projects\refferal\RefferalLinksBackEnd\RefferalLinksBackEnd\RefferalLinks.Service\bin\Debug\net6.0\RefferalLinks.Service.deps.json
 D:\binh\projects\refferal\RefferalLinksBackEnd\RefferalLinksBackEnd\RefferalLinks.Service\bin\Debug\net6.0\RefferalLinks.Service.dll
 D:\binh\projects\refferal\RefferalLinksBackEnd\RefferalLinksBackEnd\RefferalLinks.Service\bin\Debug\net6.0\RefferalLinks.Service.pdb
@@ -63,3 +64,27 @@ D:\binh\projects\refferal\RefferalLinksBackEnd\RefferalLinksBackEnd\RefferalLink
 D:\binh\projects\refferal\RefferalLinksBackEnd\RefferalLinksBackEnd\RefferalLinks.Service\obj\Debug\net6.0\refint\RefferalLinks.Service.dll
 D:\binh\projects\refferal\RefferalLinksBackEnd\RefferalLinksBackEnd\RefferalLinks.Service\obj\Debug\net6.0\RefferalLinks.Service.pdb
 D:\binh\projects\refferal\RefferalLinksBackEnd\RefferalLinksBackEnd\RefferalLinks.Service\obj\Debug\net6.0\ref\RefferalLinks.Service.dll
+=======
+D:\project\referal\API\RefferalLinksBackEnd\RefferalLinksBackEnd\RefferalLinks.Service\bin\Debug\net6.0\RefferalLinks.Service.deps.json
+D:\project\referal\API\RefferalLinksBackEnd\RefferalLinksBackEnd\RefferalLinks.Service\bin\Debug\net6.0\RefferalLinks.Service.dll
+D:\project\referal\API\RefferalLinksBackEnd\RefferalLinksBackEnd\RefferalLinks.Service\bin\Debug\net6.0\RefferalLinks.Service.pdb
+D:\project\referal\API\RefferalLinksBackEnd\RefferalLinksBackEnd\RefferalLinks.Service\bin\Debug\net6.0\Maynghien.Common.dll
+D:\project\referal\API\RefferalLinksBackEnd\RefferalLinksBackEnd\RefferalLinks.Service\bin\Debug\net6.0\RefferalLinks.Common.dll
+D:\project\referal\API\RefferalLinksBackEnd\RefferalLinksBackEnd\RefferalLinks.Service\bin\Debug\net6.0\RefferalLinks.DAL.dll
+D:\project\referal\API\RefferalLinksBackEnd\RefferalLinksBackEnd\RefferalLinks.Service\bin\Debug\net6.0\RefferalLinks.Models.dll
+D:\project\referal\API\RefferalLinksBackEnd\RefferalLinksBackEnd\RefferalLinks.Service\bin\Debug\net6.0\Maynghien.Common.pdb
+D:\project\referal\API\RefferalLinksBackEnd\RefferalLinksBackEnd\RefferalLinks.Service\bin\Debug\net6.0\RefferalLinks.DAL.pdb
+D:\project\referal\API\RefferalLinksBackEnd\RefferalLinksBackEnd\RefferalLinks.Service\bin\Debug\net6.0\RefferalLinks.Models.pdb
+D:\project\referal\API\RefferalLinksBackEnd\RefferalLinksBackEnd\RefferalLinks.Service\bin\Debug\net6.0\RefferalLinks.Common.pdb
+D:\project\referal\API\RefferalLinksBackEnd\RefferalLinksBackEnd\RefferalLinks.Service\obj\Debug\net6.0\RefferalLinks.Service.csproj.AssemblyReference.cache
+D:\project\referal\API\RefferalLinksBackEnd\RefferalLinksBackEnd\RefferalLinks.Service\obj\Debug\net6.0\RefferalLinks.Service.GeneratedMSBuildEditorConfig.editorconfig
+D:\project\referal\API\RefferalLinksBackEnd\RefferalLinksBackEnd\RefferalLinks.Service\obj\Debug\net6.0\RefferalLinks.Service.AssemblyInfoInputs.cache
+D:\project\referal\API\RefferalLinksBackEnd\RefferalLinksBackEnd\RefferalLinks.Service\obj\Debug\net6.0\RefferalLinks.Service.AssemblyInfo.cs
+D:\project\referal\API\RefferalLinksBackEnd\RefferalLinksBackEnd\RefferalLinks.Service\obj\Debug\net6.0\RefferalLinks.Service.csproj.CoreCompileInputs.cache
+D:\project\referal\API\RefferalLinksBackEnd\RefferalLinksBackEnd\RefferalLinks.Service\obj\Debug\net6.0\RefferalLinks.Service.csproj.CopyComplete
+D:\project\referal\API\RefferalLinksBackEnd\RefferalLinksBackEnd\RefferalLinks.Service\obj\Debug\net6.0\RefferalLinks.Service.dll
+D:\project\referal\API\RefferalLinksBackEnd\RefferalLinksBackEnd\RefferalLinks.Service\obj\Debug\net6.0\refint\RefferalLinks.Service.dll
+D:\project\referal\API\RefferalLinksBackEnd\RefferalLinksBackEnd\RefferalLinks.Service\obj\Debug\net6.0\RefferalLinks.Service.pdb
+D:\project\referal\API\RefferalLinksBackEnd\RefferalLinksBackEnd\RefferalLinks.Service\obj\Debug\net6.0\ref\RefferalLinks.Service.dll
+D:\project\referal\API\RefferalLinksBackEnd\RefferalLinksBackEnd\RefferalLinks.Service\obj\Debug\net6.0\RefferalLinks.Service.sourcelink.json
+>>>>>>> sprint5/Kiet/main

@@ -46,6 +46,7 @@ D:\DoAn3\RefferalLinksBackEnd\RefferalLinksBackEnd\Maynghien.Common\obj\Debug\ne
 D:\DoAn3\RefferalLinksBackEnd\RefferalLinksBackEnd\Maynghien.Common\obj\Debug\net6.0\refint\Maynghien.Common.dll
 D:\DoAn3\RefferalLinksBackEnd\RefferalLinksBackEnd\Maynghien.Common\obj\Debug\net6.0\Maynghien.Common.pdb
 D:\DoAn3\RefferalLinksBackEnd\RefferalLinksBackEnd\Maynghien.Common\obj\Debug\net6.0\ref\Maynghien.Common.dll
+<<<<<<< HEAD
 D:\binh\projects\refferal\RefferalLinksBackEnd\RefferalLinksBackEnd\Maynghien.Common\bin\Debug\net6.0\Maynghien.Common.deps.json
 D:\binh\projects\refferal\RefferalLinksBackEnd\RefferalLinksBackEnd\Maynghien.Common\bin\Debug\net6.0\Maynghien.Common.dll
 D:\binh\projects\refferal\RefferalLinksBackEnd\RefferalLinksBackEnd\Maynghien.Common\bin\Debug\net6.0\Maynghien.Common.pdb
@@ -58,3 +59,18 @@ D:\binh\projects\refferal\RefferalLinksBackEnd\RefferalLinksBackEnd\Maynghien.Co
 D:\binh\projects\refferal\RefferalLinksBackEnd\RefferalLinksBackEnd\Maynghien.Common\obj\Debug\net6.0\refint\Maynghien.Common.dll
 D:\binh\projects\refferal\RefferalLinksBackEnd\RefferalLinksBackEnd\Maynghien.Common\obj\Debug\net6.0\Maynghien.Common.pdb
 D:\binh\projects\refferal\RefferalLinksBackEnd\RefferalLinksBackEnd\Maynghien.Common\obj\Debug\net6.0\ref\Maynghien.Common.dll
+=======
+D:\project\referal\API\RefferalLinksBackEnd\RefferalLinksBackEnd\Maynghien.Common\bin\Debug\net6.0\Maynghien.Common.deps.json
+D:\project\referal\API\RefferalLinksBackEnd\RefferalLinksBackEnd\Maynghien.Common\bin\Debug\net6.0\Maynghien.Common.dll
+D:\project\referal\API\RefferalLinksBackEnd\RefferalLinksBackEnd\Maynghien.Common\bin\Debug\net6.0\Maynghien.Common.pdb
+D:\project\referal\API\RefferalLinksBackEnd\RefferalLinksBackEnd\Maynghien.Common\obj\Debug\net6.0\Maynghien.Common.csproj.AssemblyReference.cache
+D:\project\referal\API\RefferalLinksBackEnd\RefferalLinksBackEnd\Maynghien.Common\obj\Debug\net6.0\Maynghien.Common.GeneratedMSBuildEditorConfig.editorconfig
+D:\project\referal\API\RefferalLinksBackEnd\RefferalLinksBackEnd\Maynghien.Common\obj\Debug\net6.0\Maynghien.Common.AssemblyInfoInputs.cache
+D:\project\referal\API\RefferalLinksBackEnd\RefferalLinksBackEnd\Maynghien.Common\obj\Debug\net6.0\Maynghien.Common.AssemblyInfo.cs
+D:\project\referal\API\RefferalLinksBackEnd\RefferalLinksBackEnd\Maynghien.Common\obj\Debug\net6.0\Maynghien.Common.csproj.CoreCompileInputs.cache
+D:\project\referal\API\RefferalLinksBackEnd\RefferalLinksBackEnd\Maynghien.Common\obj\Debug\net6.0\Maynghien.Common.dll
+D:\project\referal\API\RefferalLinksBackEnd\RefferalLinksBackEnd\Maynghien.Common\obj\Debug\net6.0\refint\Maynghien.Common.dll
+D:\project\referal\API\RefferalLinksBackEnd\RefferalLinksBackEnd\Maynghien.Common\obj\Debug\net6.0\Maynghien.Common.pdb
+D:\project\referal\API\RefferalLinksBackEnd\RefferalLinksBackEnd\Maynghien.Common\obj\Debug\net6.0\ref\Maynghien.Common.dll
+D:\project\referal\API\RefferalLinksBackEnd\RefferalLinksBackEnd\Maynghien.Common\obj\Debug\net6.0\Maynghien.Common.sourcelink.json
+>>>>>>> sprint5/Kiet/main

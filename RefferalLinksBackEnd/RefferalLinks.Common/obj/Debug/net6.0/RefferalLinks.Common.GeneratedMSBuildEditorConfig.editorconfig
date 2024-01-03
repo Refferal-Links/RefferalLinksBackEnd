@@ -8,4 +8,10 @@ build_property.PlatformNeutralAssembly =
 build_property.EnforceExtendedAnalyzerRules = 
 build_property._SupportedPlatformList = Linux,macOS,Windows
 build_property.RootNamespace = RefferalLinks.Common
+<<<<<<< HEAD
 build_property.ProjectDir = D:\binh\projects\refferal\RefferalLinksBackEnd\RefferalLinksBackEnd\RefferalLinks.Common\
+=======
+build_property.ProjectDir = D:\project\referal\API\RefferalLinksBackEnd\RefferalLinksBackEnd\RefferalLinks.Common\
+build_property.EnableComHosting = 
+build_property.EnableGeneratedComInterfaceComImportInterop = 
+>>>>>>> sprint5/Kiet/main

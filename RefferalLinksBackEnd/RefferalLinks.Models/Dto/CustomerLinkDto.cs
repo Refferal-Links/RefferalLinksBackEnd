@@ -49,5 +49,7 @@ namespace RefferalLinks.Models.Dto
         public string? CodeNVCSKH { get; set; }
 
         public string? SourceCustomer { get; set; }
+
+        public bool? Watched { get; set; }
     }
 }

@@ -83,16 +83,16 @@ namespace RefferalLinks.DAL.Implementation
         {
             var role = _context.Roles.Where(x => x.Name == "Sale").First();
             var userWithMinCustomers = _context.Users
-            .Where(x=>x.IsReceiveAllocation == true && x.LockoutEnabled == false)
+            .Where(x=>x.IsReceiveAllocation == true && x.LockoutEnabled == true)
             .Select(user => new
             {
                 User = user,
-                CustomerCount = _context.Customer.Count(customer => customer.CreatedOn.Value.Month == DateTime.UtcNow.Month && customer.CreatedOn.Value.Year == DateTime.UtcNow.Year && customer.ApplicationUserId == user.Id),
+                CustomerCount = _context.Customer.Count(customer => customer.CreatedOn.Value.Date == DateTime.UtcNow.Date && customer.ApplicationUserId == user.Id && customer.CSKHId != null),
             })
             .Where(m => _context.UserRoles.Where(r => r.RoleId == role.Id).Select(r => r.UserId).Contains(m.User.Id))
             .OrderBy(entry => entry.CustomerCount)
             .FirstOrDefault();
-            var result = userWithMinCustomers.User;
+            var result = userWithMinCustomers != null ? userWithMinCustomers.User : null;
             return result;
 ;
         }

@@ -19,6 +19,8 @@ namespace RefferalLinks.DAL.Models.Entity
         public string? Url { get; set; }
         public StatusCustomerLink? Status { get; set; }
         public string? Note { get; set; }
+        public bool? Watched { get; set; }
+
 
         [ForeignKey("LinkTemplate")]
         public Guid? LinkTemplateId { get; set; }

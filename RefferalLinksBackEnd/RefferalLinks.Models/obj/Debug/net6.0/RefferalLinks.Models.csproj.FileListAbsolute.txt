@@ -30,6 +30,7 @@ D:\DoAn3\RefferalLinksBackEnd\RefferalLinksBackEnd\RefferalLinks.Models\obj\Debu
 D:\DoAn3\RefferalLinksBackEnd\RefferalLinksBackEnd\RefferalLinks.Models\obj\Debug\net6.0\ref\RefferalLinks.Models.dll
 D:\GitHub\RefferalLinksBackEnd\RefferalLinksBackEnd\RefferalLinks.Models\bin\Debug\net6.0\RefferalLinks.Common.dll
 D:\GitHub\RefferalLinksBackEnd\RefferalLinksBackEnd\RefferalLinks.Models\bin\Debug\net6.0\RefferalLinks.Common.pdb
+<<<<<<< HEAD
 D:\binh\projects\refferal\RefferalLinksBackEnd\RefferalLinksBackEnd\RefferalLinks.Models\bin\Debug\net6.0\RefferalLinks.Models.deps.json
 D:\binh\projects\refferal\RefferalLinksBackEnd\RefferalLinksBackEnd\RefferalLinks.Models\bin\Debug\net6.0\RefferalLinks.Models.dll
 D:\binh\projects\refferal\RefferalLinksBackEnd\RefferalLinksBackEnd\RefferalLinks.Models\bin\Debug\net6.0\RefferalLinks.Models.pdb
@@ -47,3 +48,23 @@ D:\binh\projects\refferal\RefferalLinksBackEnd\RefferalLinksBackEnd\RefferalLink
 D:\binh\projects\refferal\RefferalLinksBackEnd\RefferalLinksBackEnd\RefferalLinks.Models\obj\Debug\net6.0\refint\RefferalLinks.Models.dll
 D:\binh\projects\refferal\RefferalLinksBackEnd\RefferalLinksBackEnd\RefferalLinks.Models\obj\Debug\net6.0\RefferalLinks.Models.pdb
 D:\binh\projects\refferal\RefferalLinksBackEnd\RefferalLinksBackEnd\RefferalLinks.Models\obj\Debug\net6.0\ref\RefferalLinks.Models.dll
+=======
+D:\project\referal\API\RefferalLinksBackEnd\RefferalLinksBackEnd\RefferalLinks.Models\bin\Debug\net6.0\RefferalLinks.Models.deps.json
+D:\project\referal\API\RefferalLinksBackEnd\RefferalLinksBackEnd\RefferalLinks.Models\bin\Debug\net6.0\RefferalLinks.Models.dll
+D:\project\referal\API\RefferalLinksBackEnd\RefferalLinksBackEnd\RefferalLinks.Models\bin\Debug\net6.0\RefferalLinks.Models.pdb
+D:\project\referal\API\RefferalLinksBackEnd\RefferalLinksBackEnd\RefferalLinks.Models\bin\Debug\net6.0\Maynghien.Common.dll
+D:\project\referal\API\RefferalLinksBackEnd\RefferalLinksBackEnd\RefferalLinks.Models\bin\Debug\net6.0\RefferalLinks.Common.dll
+D:\project\referal\API\RefferalLinksBackEnd\RefferalLinksBackEnd\RefferalLinks.Models\bin\Debug\net6.0\Maynghien.Common.pdb
+D:\project\referal\API\RefferalLinksBackEnd\RefferalLinksBackEnd\RefferalLinks.Models\bin\Debug\net6.0\RefferalLinks.Common.pdb
+D:\project\referal\API\RefferalLinksBackEnd\RefferalLinksBackEnd\RefferalLinks.Models\obj\Debug\net6.0\RefferalLinks.Models.csproj.AssemblyReference.cache
+D:\project\referal\API\RefferalLinksBackEnd\RefferalLinksBackEnd\RefferalLinks.Models\obj\Debug\net6.0\RefferalLinks.Models.GeneratedMSBuildEditorConfig.editorconfig
+D:\project\referal\API\RefferalLinksBackEnd\RefferalLinksBackEnd\RefferalLinks.Models\obj\Debug\net6.0\RefferalLinks.Models.AssemblyInfoInputs.cache
+D:\project\referal\API\RefferalLinksBackEnd\RefferalLinksBackEnd\RefferalLinks.Models\obj\Debug\net6.0\RefferalLinks.Models.AssemblyInfo.cs
+D:\project\referal\API\RefferalLinksBackEnd\RefferalLinksBackEnd\RefferalLinks.Models\obj\Debug\net6.0\RefferalLinks.Models.csproj.CoreCompileInputs.cache
+D:\project\referal\API\RefferalLinksBackEnd\RefferalLinksBackEnd\RefferalLinks.Models\obj\Debug\net6.0\RefferalLinks.Models.csproj.CopyComplete
+D:\project\referal\API\RefferalLinksBackEnd\RefferalLinksBackEnd\RefferalLinks.Models\obj\Debug\net6.0\RefferalLinks.Models.dll
+D:\project\referal\API\RefferalLinksBackEnd\RefferalLinksBackEnd\RefferalLinks.Models\obj\Debug\net6.0\refint\RefferalLinks.Models.dll
+D:\project\referal\API\RefferalLinksBackEnd\RefferalLinksBackEnd\RefferalLinks.Models\obj\Debug\net6.0\RefferalLinks.Models.pdb
+D:\project\referal\API\RefferalLinksBackEnd\RefferalLinksBackEnd\RefferalLinks.Models\obj\Debug\net6.0\ref\RefferalLinks.Models.dll
+D:\project\referal\API\RefferalLinksBackEnd\RefferalLinksBackEnd\RefferalLinks.Models\obj\Debug\net6.0\RefferalLinks.Models.sourcelink.json
+>>>>>>> sprint5/Kiet/main

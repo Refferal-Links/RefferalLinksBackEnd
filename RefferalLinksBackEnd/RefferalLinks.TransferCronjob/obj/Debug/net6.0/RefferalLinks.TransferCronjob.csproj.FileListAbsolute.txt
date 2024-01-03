@@ -21,6 +21,7 @@ D:\DoAn3\RefferalLinksBackEnd\RefferalLinksBackEnd\RefferalLinks.TransferCronjob
 D:\DoAn3\RefferalLinksBackEnd\RefferalLinksBackEnd\RefferalLinks.TransferCronjob\obj\Debug\net6.0\refint\RefferalLinks.TransferCronjob.dll
 D:\DoAn3\RefferalLinksBackEnd\RefferalLinksBackEnd\RefferalLinks.TransferCronjob\obj\Debug\net6.0\RefferalLinks.TransferCronjob.pdb
 D:\DoAn3\RefferalLinksBackEnd\RefferalLinksBackEnd\RefferalLinks.TransferCronjob\obj\Debug\net6.0\ref\RefferalLinks.TransferCronjob.dll
+<<<<<<< HEAD
 D:\binh\projects\refferal\RefferalLinksBackEnd\RefferalLinksBackEnd\RefferalLinks.TransferCronjob\bin\Debug\net6.0\RefferalLinks.TransferCronjob.deps.json
 D:\binh\projects\refferal\RefferalLinksBackEnd\RefferalLinksBackEnd\RefferalLinks.TransferCronjob\bin\Debug\net6.0\RefferalLinks.TransferCronjob.dll
 D:\binh\projects\refferal\RefferalLinksBackEnd\RefferalLinksBackEnd\RefferalLinks.TransferCronjob\bin\Debug\net6.0\RefferalLinks.TransferCronjob.pdb
@@ -33,3 +34,17 @@ D:\binh\projects\refferal\RefferalLinksBackEnd\RefferalLinksBackEnd\RefferalLink
 D:\binh\projects\refferal\RefferalLinksBackEnd\RefferalLinksBackEnd\RefferalLinks.TransferCronjob\obj\Debug\net6.0\refint\RefferalLinks.TransferCronjob.dll
 D:\binh\projects\refferal\RefferalLinksBackEnd\RefferalLinksBackEnd\RefferalLinks.TransferCronjob\obj\Debug\net6.0\RefferalLinks.TransferCronjob.pdb
 D:\binh\projects\refferal\RefferalLinksBackEnd\RefferalLinksBackEnd\RefferalLinks.TransferCronjob\obj\Debug\net6.0\ref\RefferalLinks.TransferCronjob.dll
+=======
+D:\project\referal\API\RefferalLinksBackEnd\RefferalLinksBackEnd\RefferalLinks.TransferCronjob\bin\Debug\net6.0\RefferalLinks.TransferCronjob.deps.json
+D:\project\referal\API\RefferalLinksBackEnd\RefferalLinksBackEnd\RefferalLinks.TransferCronjob\bin\Debug\net6.0\RefferalLinks.TransferCronjob.dll
+D:\project\referal\API\RefferalLinksBackEnd\RefferalLinksBackEnd\RefferalLinks.TransferCronjob\bin\Debug\net6.0\RefferalLinks.TransferCronjob.pdb
+D:\project\referal\API\RefferalLinksBackEnd\RefferalLinksBackEnd\RefferalLinks.TransferCronjob\obj\Debug\net6.0\RefferalLinks.TransferCronjob.GeneratedMSBuildEditorConfig.editorconfig
+D:\project\referal\API\RefferalLinksBackEnd\RefferalLinksBackEnd\RefferalLinks.TransferCronjob\obj\Debug\net6.0\RefferalLinks.TransferCronjob.AssemblyInfoInputs.cache
+D:\project\referal\API\RefferalLinksBackEnd\RefferalLinksBackEnd\RefferalLinks.TransferCronjob\obj\Debug\net6.0\RefferalLinks.TransferCronjob.AssemblyInfo.cs
+D:\project\referal\API\RefferalLinksBackEnd\RefferalLinksBackEnd\RefferalLinks.TransferCronjob\obj\Debug\net6.0\RefferalLinks.TransferCronjob.csproj.CoreCompileInputs.cache
+D:\project\referal\API\RefferalLinksBackEnd\RefferalLinksBackEnd\RefferalLinks.TransferCronjob\obj\Debug\net6.0\RefferalLinks.TransferCronjob.dll
+D:\project\referal\API\RefferalLinksBackEnd\RefferalLinksBackEnd\RefferalLinks.TransferCronjob\obj\Debug\net6.0\refint\RefferalLinks.TransferCronjob.dll
+D:\project\referal\API\RefferalLinksBackEnd\RefferalLinksBackEnd\RefferalLinks.TransferCronjob\obj\Debug\net6.0\RefferalLinks.TransferCronjob.pdb
+D:\project\referal\API\RefferalLinksBackEnd\RefferalLinksBackEnd\RefferalLinks.TransferCronjob\obj\Debug\net6.0\ref\RefferalLinks.TransferCronjob.dll
+D:\project\referal\API\RefferalLinksBackEnd\RefferalLinksBackEnd\RefferalLinks.TransferCronjob\obj\Debug\net6.0\RefferalLinks.TransferCronjob.sourcelink.json
+>>>>>>> sprint5/Kiet/main
