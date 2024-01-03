@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "zXpzAoNkAEjdINXMDH2wxnuStGsDWPNVIsUuFOLoWXTjpk+vhoqCS+gPFtn/gd9N/jK6MvKgrj0sE+4XMOZS+g==",
+  "dgSpecHash": "u9rjYhp0674o9SKF4tO0AZpJv5b2XZHVpamEWtcHczh8BflE0B7AA+Uvh49nfhONgds37zJqbTAuyin4UW7kuQ==",
   "success": true,
-  "projectFilePath": "D:\\project\\referal\\API\\RefferalLinksBackEnd\\RefferalLinksBackEnd\\RefferalLinks.TransferCronjob\\RefferalLinks.TransferCronjob.csproj",
+  "projectFilePath": "D:\\binh\\projects\\refferal\\RefferalLinksBackEnd\\RefferalLinksBackEnd\\RefferalLinks.TransferCronjob\\RefferalLinks.TransferCronjob.csproj",
   "expectedPackageFiles": [],
   "logs": []
 }
