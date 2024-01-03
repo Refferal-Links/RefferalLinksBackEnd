@@ -1780,18 +1780,6 @@
           }
         }
       },
-      "RTX.EPPlus.Helpers/1.0.0": {
-        "type": "package",
-        "dependencies": {
-          "EPPlus": "4.1.1"
-        },
-        "compile": {
-          "lib/net45/RTX.EPPlus.Helpers.dll": {}
-        },
-        "runtime": {
-          "lib/net45/RTX.EPPlus.Helpers.dll": {}
-        }
-      },
       "runtime.native.System.Data.SqlClient.sni/4.7.0": {
         "type": "package",
         "dependencies": {
@@ -4253,18 +4241,6 @@
         "pomelo.entityframeworkcore.mysql.nuspec"
       ]
     },
-    "RTX.EPPlus.Helpers/1.0.0": {
-      "sha512": "r6+zQe/45fwTXy8Y9O2/J+8Mesqx10imW5MOGkseCGPcMIoq6chG7/rZbVIvsTvchteQAyOqH3ZQWlWqy9IaPg==",
-      "type": "package",
-      "path": "rtx.epplus.helpers/1.0.0",
-      "files": [
-        ".nupkg.metadata",
-        ".signature.p7s",
-        "lib/net45/RTX.EPPlus.Helpers.dll",
-        "rtx.epplus.helpers.1.0.0.nupkg.sha512",
-        "rtx.epplus.helpers.nuspec"
-      ]
-    },
     "runtime.native.System.Data.SqlClient.sni/4.7.0": {
       "sha512": "9kyFSIdN3T0qjDQ2R0HRXYIhS3l5psBzQi6qqhdLz+SzFyEy4sVxNOke+yyYv8Cu8rPER12c3RDjLT8wF3WBYQ==",
       "type": "package",
@@ -5372,22 +5348,16 @@
       "EPPlus >= 6.2.13",
       "LinqKit >= 1.2.4",
       "Maynghien.Common >= 1.0.0",
-      "RTX.EPPlus.Helpers >= 1.0.0",
       "RefferalLinks.DAL >= 1.0.0",
       "RefferalLinks.Models >= 1.0.0"
     ]
   },
   "packageFolders": {
-<<<<<<< HEAD
     "C:\\Users\\ITEL\\.nuget\\packages\\": {}
-=======
-    "C:\\Users\\binh.phan\\.nuget\\packages\\": {}
->>>>>>> sprint5/Kiet/main
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-<<<<<<< HEAD
       "projectUniqueName": "D:\\binh\\projects\\refferal\\RefferalLinksBackEnd\\RefferalLinksBackEnd\\RefferalLinks.Service\\RefferalLinks.Service.csproj",
       "projectName": "RefferalLinks.Service",
       "projectPath": "D:\\binh\\projects\\refferal\\RefferalLinksBackEnd\\RefferalLinksBackEnd\\RefferalLinks.Service\\RefferalLinks.Service.csproj",
@@ -5396,16 +5366,6 @@
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\ITEL\\AppData\\Roaming\\NuGet\\NuGet.Config",
-=======
-      "projectUniqueName": "D:\\project\\referal\\API\\RefferalLinksBackEnd\\RefferalLinksBackEnd\\RefferalLinks.Service\\RefferalLinks.Service.csproj",
-      "projectName": "RefferalLinks.Service",
-      "projectPath": "D:\\project\\referal\\API\\RefferalLinksBackEnd\\RefferalLinksBackEnd\\RefferalLinks.Service\\RefferalLinks.Service.csproj",
-      "packagesPath": "C:\\Users\\binh.phan\\.nuget\\packages\\",
-      "outputPath": "D:\\project\\referal\\API\\RefferalLinksBackEnd\\RefferalLinksBackEnd\\RefferalLinks.Service\\obj\\",
-      "projectStyle": "PackageReference",
-      "configFilePaths": [
-        "C:\\Users\\binh.phan\\AppData\\Roaming\\NuGet\\NuGet.Config",
->>>>>>> sprint5/Kiet/main
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -5419,7 +5379,6 @@
         "net6.0": {
           "targetAlias": "net6.0",
           "projectReferences": {
-<<<<<<< HEAD
             "D:\\binh\\projects\\refferal\\RefferalLinksBackEnd\\RefferalLinksBackEnd\\Maynghien.Common\\Maynghien.Common.csproj": {
               "projectPath": "D:\\binh\\projects\\refferal\\RefferalLinksBackEnd\\RefferalLinksBackEnd\\Maynghien.Common\\Maynghien.Common.csproj"
             },
@@ -5428,16 +5387,6 @@
             },
             "D:\\binh\\projects\\refferal\\RefferalLinksBackEnd\\RefferalLinksBackEnd\\RefferalLinks.Models\\RefferalLinks.Models.csproj": {
               "projectPath": "D:\\binh\\projects\\refferal\\RefferalLinksBackEnd\\RefferalLinksBackEnd\\RefferalLinks.Models\\RefferalLinks.Models.csproj"
-=======
-            "D:\\project\\referal\\API\\RefferalLinksBackEnd\\RefferalLinksBackEnd\\Maynghien.Common\\Maynghien.Common.csproj": {
-              "projectPath": "D:\\project\\referal\\API\\RefferalLinksBackEnd\\RefferalLinksBackEnd\\Maynghien.Common\\Maynghien.Common.csproj"
-            },
-            "D:\\project\\referal\\API\\RefferalLinksBackEnd\\RefferalLinksBackEnd\\RefferalLinks.DAL\\RefferalLinks.DAL.csproj": {
-              "projectPath": "D:\\project\\referal\\API\\RefferalLinksBackEnd\\RefferalLinksBackEnd\\RefferalLinks.DAL\\RefferalLinks.DAL.csproj"
-            },
-            "D:\\project\\referal\\API\\RefferalLinksBackEnd\\RefferalLinksBackEnd\\RefferalLinks.Models\\RefferalLinks.Models.csproj": {
-              "projectPath": "D:\\project\\referal\\API\\RefferalLinksBackEnd\\RefferalLinksBackEnd\\RefferalLinks.Models\\RefferalLinks.Models.csproj"
->>>>>>> sprint5/Kiet/main
             }
           }
         }
@@ -5463,10 +5412,6 @@
           "LinqKit": {
             "target": "Package",
             "version": "[1.2.4, )"
-          },
-          "RTX.EPPlus.Helpers": {
-            "target": "Package",
-            "version": "[1.0.0, )"
           }
         },
         "imports": [
@@ -5485,24 +5430,8 @@
             "privateAssets": "all"
           }
         },
-<<<<<<< HEAD
         "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.304\\RuntimeIdentifierGraph.json"
-=======
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.100\\RuntimeIdentifierGraph.json"
->>>>>>> sprint5/Kiet/main
       }
     }
-  },
-  "logs": [
-    {
-      "code": "NU1701",
-      "level": "Warning",
-      "warningLevel": 1,
-      "message": "Package 'RTX.EPPlus.Helpers 1.0.0' was restored using '.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8, .NETFramework,Version=v4.8.1' instead of the project target framework 'net6.0'. This package may not be fully compatible with your project.",
-      "libraryId": "RTX.EPPlus.Helpers",
-      "targetGraphs": [
-        "net6.0"
-      ]
-    }
-  ]
+  }
 }

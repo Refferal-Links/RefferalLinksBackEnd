@@ -1,14 +1,8 @@
 {
   "version": 2,
-<<<<<<< HEAD
   "dgSpecHash": "d00+9sZPAThKPtkJx3oqET/oKw7D16o3LUDAYl8jbDJVX7YGnRewZOY9mQhjHgWF3Js2CgHYEtvnSVMuHSYyIQ==",
   "success": true,
   "projectFilePath": "D:\\binh\\projects\\refferal\\RefferalLinksBackEnd\\RefferalLinksBackEnd\\RefferalLinks.Common\\RefferalLinks.Common.csproj",
-=======
-  "dgSpecHash": "cKYTgNphG2JFgkGtbr0N032T0K236JYSX5JQzkZCpE+X44fNkMF7CV/XFMQRMPms9BNNZs3jlHpHZ9+FD3i+3g==",
-  "success": true,
-  "projectFilePath": "D:\\project\\referal\\API\\RefferalLinksBackEnd\\RefferalLinksBackEnd\\RefferalLinks.Common\\RefferalLinks.Common.csproj",
->>>>>>> sprint5/Kiet/main
   "expectedPackageFiles": [],
   "logs": []
 }

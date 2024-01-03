@@ -12,7 +12,7 @@
           "EPPlus": "6.2.13",
           "LinqKit": "1.2.4",
           "Maynghien.Common": "1.0.0",
-          "RTX.EPPlus.Helpers": "1.0.0",
+          
           "RefferalLinks.DAL": "1.0.0",
           "RefferalLinks.Models": "1.0.0"
         },
@@ -1259,17 +1259,7 @@
           }
         }
       },
-      "RTX.EPPlus.Helpers/1.0.0": {
-        "dependencies": {
-          "EPPlus": "6.2.13"
-        },
-        "runtime": {
-          "lib/net45/RTX.EPPlus.Helpers.dll": {
-            "assemblyVersion": "1.0.0.0",
-            "fileVersion": "1.0.0.0"
-          }
-        }
-      },
+      
       "runtime.native.System.Data.SqlClient.sni/4.7.0": {
         "dependencies": {
           "runtime.win-arm64.runtime.native.System.Data.SqlClient.sni": "4.4.0",
@@ -2272,13 +2262,7 @@
       "path": "pomelo.entityframeworkcore.mysql/6.0.2",
       "hashPath": "pomelo.entityframeworkcore.mysql.6.0.2.nupkg.sha512"
     },
-    "RTX.EPPlus.Helpers/1.0.0": {
-      "type": "package",
-      "serviceable": true,
-      "sha512": "sha512-r6+zQe/45fwTXy8Y9O2/J+8Mesqx10imW5MOGkseCGPcMIoq6chG7/rZbVIvsTvchteQAyOqH3ZQWlWqy9IaPg==",
-      "path": "rtx.epplus.helpers/1.0.0",
-      "hashPath": "rtx.epplus.helpers.1.0.0.nupkg.sha512"
-    },
+    
     "runtime.native.System.Data.SqlClient.sni/4.7.0": {
       "type": "package",
       "serviceable": true,
