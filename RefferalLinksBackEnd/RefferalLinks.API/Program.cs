@@ -23,19 +23,6 @@ builder.Services.AddEndpointsApiExplorer();
 
 new ServiceRepoMapping().Mapping(builder);
 
-builder.Services.AddSwaggerGen();
-builder.Services.AddAutoMapper(typeof(MappingProfile));
-builder.Services.AddCors(options =>
-{
-	// this defines a CORS policy called "default"
-	options.AddPolicy("default", policy =>
-	{
-		policy
-			.AllowAnyHeader()
-			.AllowAnyOrigin()
-			.AllowAnyMethod();
-	});
-});
 //builder.Services.AddIdentity<IdentityUser, IdentityRole>(options =>
 //{
 //	options.User.RequireUniqueEmail = false;
