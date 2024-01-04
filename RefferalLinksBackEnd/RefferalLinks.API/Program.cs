@@ -25,17 +25,17 @@ new ServiceRepoMapping().Mapping(builder);
 
 builder.Services.AddSwaggerGen();
 builder.Services.AddAutoMapper(typeof(MappingProfile));
-builder.Services.AddCors(options =>
-{
-	// this defines a CORS policy called "default"
-	options.AddPolicy("default", policy =>
-	{
-		policy.WithOrigins("http://localhost:5173", "*")
-			.AllowAnyHeader()
-			.AllowAnyOrigin()
-			.AllowAnyMethod();
-	});
-});
+//builder.Services.AddCors(options =>
+//{
+//	// this defines a CORS policy called "default"
+//	options.AddPolicy("default", policy =>
+//	{
+//		policy.WithOrigins("http://localhost:5173", "*")
+//			.AllowAnyHeader()
+//			.AllowAnyOrigin()
+//			.AllowAnyMethod();
+//	});
+//});
 //builder.Services.AddIdentity<IdentityUser, IdentityRole>(options =>
 //{
 //	options.User.RequireUniqueEmail = false;
@@ -104,4 +104,5 @@ app.UseAuthorization();
 
 app.MapControllers();
 
+app.UseDeveloperExceptionPage();
 app.Run();
