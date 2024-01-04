@@ -457,7 +457,7 @@ namespace RefferalLinks.Service.Implementation
                                     string[] dateStrings = filter.Value.Split(',');
                                     var dayStart = DateTime.ParseExact(dateStrings[0], "dd/MM/yyyy", System.Globalization.CultureInfo.InvariantCulture);
                                     //if (filter.Value != "")
-                                    predicate = predicate.And(m => m.CreatedOn.Value.Date < dayStart);
+                                    predicate = predicate.And(m => m.CreatedOn.Value.Date >= dayStart);
                                     if (dateStrings[1] != null)
                                     {
                                         var dayEnd = DateTime.ParseExact(dateStrings[1], "dd/MM/yyyy", System.Globalization.CultureInfo.InvariantCulture);
