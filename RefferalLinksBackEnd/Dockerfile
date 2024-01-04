@@ -26,7 +26,7 @@ WORKDIR /app
 COPY --from=build-env /app/out .
 
 # Expose the port the app will run on
-EXPOSE 80
+EXPOSE 5000
 
 # Set the entry point for the application
 ENTRYPOINT ["dotnet", "RefferalLinks.API.dll"]
