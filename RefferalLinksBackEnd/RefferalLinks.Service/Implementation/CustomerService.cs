@@ -52,6 +52,7 @@ namespace RefferalLinks.Service.Implementation
             try
             {
                 var role = ClaimHelper.GetClainByName(_httpContextAccessor, "Roles");
+                var typeTeam = ClaimHelper.GetClainByName(_httpContextAccessor, "TypeTeam");
                 if (request.RefferalCode == null)
                 {
                     return result.BuildError("Không để trống mã giớ thiệu");
@@ -77,11 +78,11 @@ namespace RefferalLinks.Service.Implementation
                 //}
                 var customer = _mapper.Map<Customer>(request);
                 customer.Id = Guid.NewGuid();
-                if(role != "CSKH")
+                if(role == "Sale" || typeTeam=="Sale")
                 {
                     customer.ApplicationUserId = user.Id;
                 }
-                else if(role == "CSKH")
+                else if(role == "CSKH" || typeTeam=="CSKH")
                 {
                     customer.CSKHId = user.Id;
                     var sale = _userespository.UserWithCustomerCount();

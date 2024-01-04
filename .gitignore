@@ -128,3 +128,9 @@ src/.vs/config/applicationhost.config
 
 # JetBrains Rider's auto generated files
 .idea/
+/RefferalLinksBackEnd/.vs/RefferalLinksBackEnd/DesignTimeBuild/*
+/RefferalLinksBackEnd/.vs/RefferalLinksBackEnd/v17/*
+/RefferalLinksBackEnd/.vs/RefferalLinksBackEnd/v17/*
+/RefferalLinksBackEnd/*/obj/Debug/net6.0/*
+/RefferalLinksBackEnd/*/obj/*
+/RefferalLinksBackEnd/*/obj/Debug/net6.0/*

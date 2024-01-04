@@ -118,6 +118,7 @@ namespace RefferalLinks.Service.Implementation
                 new Claim("Email", user.Email),
                 new Claim("RefferalCode", user.RefferalCode != null ? user.RefferalCode: ""),
                 new Claim("TpBank", user.TpBank != null ? user.TpBank : ""),
+                new Claim("TypeTeam",user.TeamId != null ? _teamRespository.Get(user.TeamId.Value).Type : "")
             };
             var roles = await _userManager.GetRolesAsync(identityUser);
             foreach (var role in roles)
