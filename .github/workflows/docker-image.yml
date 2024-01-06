@@ -44,11 +44,7 @@ jobs:
             docker system prune -af;
             docker pull maynghien/referallinkapi;
             docker run --name referallinkapi -e ASPNETCORE_ENVIRONMENT=Development -p 5001:5000 -d maynghien/referallinkapi;
-            docker network connect nginx-proxy referallinkapi;
-             docker restart nginx-proxy;
-             docker exec referallinkapi ls /app;
-             
-             docker logs referallinkapi;
+            
           "
 
       - name: recheck
@@ -56,7 +52,7 @@ jobs:
           sshpass -p "${{ secrets.VPS_PASSWORD }}" ssh -o StrictHostKeyChecking=no root@maynghien.ddns.net "
            
              docker logs referallinkapi;
-             docker exec referallinkapi ls /app;
+             
              docker container ls
              
           "
