@@ -50,3 +50,13 @@ jobs:
              
              docker logs referallinkapi;
           "
+
+      - name: recheck
+        run: |
+          sshpass -p "${{ secrets.VPS_PASSWORD }}" ssh -o StrictHostKeyChecking=no root@maynghien.ddns.net "
+           
+             docker logs referallinkapi;
+             docker exec referallinkapi ls /app;
+             docker container ls
+             
+          "
