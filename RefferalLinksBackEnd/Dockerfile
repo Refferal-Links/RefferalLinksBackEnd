@@ -19,7 +19,7 @@ RUN dotnet restore
 # Copy the remaining files
 COPY . ./
 
-RUN dotnet publish -c Release -o out
+RUN dotnet publish -o out
 
 # Build the runtime image
 FROM mcr.microsoft.com/dotnet/sdk:6.0
