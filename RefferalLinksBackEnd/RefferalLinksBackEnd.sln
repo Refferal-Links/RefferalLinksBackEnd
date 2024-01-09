@@ -25,6 +25,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Maynghien.Common", "Maynghi
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{A8D57A28-360A-4A35-A8A4-A45E09283D0E}"
 	ProjectSection(SolutionItems) = preProject
+		..\.github\workflows\docker-image.yml = ..\.github\workflows\docker-image.yml
 		Dockerfile = Dockerfile
 	EndProjectSection
 EndProject

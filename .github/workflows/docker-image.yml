@@ -43,7 +43,7 @@ jobs:
             docker stop referallinkapi;
             docker system prune -af;
             docker pull maynghien/referallinkapi;
-            docker run --name referallinkapi -e ASPNETCORE_ENVIRONMENT=Development -p 5004:5000 -d maynghien/referallinkapi;
+            docker run --name referallinkapi -e ASPNETCORE_ENVIRONMENT=Development --expose 5000 -d maynghien/referallinkapi;
             
           "
 
