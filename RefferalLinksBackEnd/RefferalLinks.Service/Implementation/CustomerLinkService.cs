@@ -112,6 +112,10 @@ namespace RefferalLinks.Service.Implementation
                 customerLink.LinkTemplateId = request.LinkTemplateId;
                 var customer = _customerRespository.Get(customerLink.CustomerId);
                 customer.ApplicationUserId = request.Iduser;
+                customer.Email = request.Email;
+                customer.Name = request.Name;
+                customer.Passport = request.Passport;
+                customer.ProvinceId = (Guid)request.ProvinceId;
                 _customerLinkRepository.Edit(customerLink);
                 result.BuildResult(request);
             }
@@ -159,6 +163,7 @@ namespace RefferalLinks.Service.Implementation
                     CreateOn = x.CreatedOn.Value.ToString("dd/MM/yyyy"),
                     ModifiedOn = x.ModifiedOn.Value.ToString("dd/MM/yyyy"),
                     Note = x.Note,
+                    NoteCSKH = x.NoteCSKH
 
                 }).First();
                 result.BuildResult(data);
@@ -226,7 +231,8 @@ namespace RefferalLinks.Service.Implementation
                         RefferalCode = x.Customer.ApplicationUser.RefferalCode,
                         CodeNVCSKH = x.Customer.CSKH.RefferalCode,
                         NvCSKH = x.Customer.CSKH.UserName,
-                        Watched = role == "Sale" ? x.Watched : null
+                        Watched = role == "Sale" ? x.Watched : null,
+                        NoteCSKH = x.NoteCSKH
                     })
                     .ToList();
                 foreach (var item in List)
@@ -450,7 +456,7 @@ namespace RefferalLinks.Service.Implementation
                                 predicate = predicate.And(m => m.Customer.ApplicationUserId.Contains(filter.Value));
                                 break;
                             case "refferalCode":
-                                predicate = predicate.And(m => m.Customer.ApplicationUser.RefferalCode.Contains(filter.Value));
+                                predicate = predicate.And(m => m.Customer.ApplicationUser.RefferalCode.Contains(filter.Value) || m.Customer.CSKH.RefferalCode.Contains(filter.Value));
                                 break;
                             case "createOn":
                                 {
@@ -494,7 +500,7 @@ namespace RefferalLinks.Service.Implementation
                                 break;
                             case "nvCSKH":
                                 {
-                                    predicate = predicate.And(m => m.Customer.ApplicationUserId.Equals(filter.Value));
+                                    predicate = predicate.And(m => m.Customer.CSKHId.Equals(filter.Value));
                                 }
                                 break;
                             default:
@@ -549,6 +555,7 @@ namespace RefferalLinks.Service.Implementation
                 customerLink.Status = request.Status.Value;
                 customerLink.ModifiedOn = DateTime.UtcNow;
                 customerLink.Note = request.Note;
+                customerLink.NoteCSKH = request.NoteCSKH;
                 _customerLinkRepository.Edit(customerLink);
 
                 result.BuildResult("OK");

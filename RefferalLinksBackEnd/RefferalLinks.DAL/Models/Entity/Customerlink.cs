@@ -20,6 +20,7 @@ namespace RefferalLinks.DAL.Models.Entity
         public StatusCustomerLink? Status { get; set; }
         public string? Note { get; set; }
         public bool? Watched { get; set; }
+        public string? NoteCSKH { get; set; }
 
 
         [ForeignKey("LinkTemplate")]
