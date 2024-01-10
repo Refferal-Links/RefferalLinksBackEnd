@@ -533,6 +533,10 @@ namespace RefferalLinks.Service.Implementation
                 {
                     return result.BuildError("Cannot find Account by this user");
                 }
+                if((request.Status == StatusCustomerLink.Approved  || request.Status == StatusCustomerLink.Rejected) && request.ListCustomerlinkImage.Count == 0)
+                {
+                    return result.BuildError("Phải upload tối thiếu 1 ảnh để thực hiện đổi trạng thái");
+                }
                 //if (request.ListCustomerlinkImage == null)
                 //{
                 //    return result.BuildError("Không để trống danh sách hình ảnh");

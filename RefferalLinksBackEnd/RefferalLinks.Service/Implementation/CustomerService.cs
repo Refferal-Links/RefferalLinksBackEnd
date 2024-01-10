@@ -92,6 +92,7 @@ namespace RefferalLinks.Service.Implementation
                     }
                     
                 }
+                customer.Email = customer.Email != null ?  customer.Email + "@gmail.com" : null ;
                 _customerRespository.Add(customer);
 
                 if(request.Source == "Khác")
