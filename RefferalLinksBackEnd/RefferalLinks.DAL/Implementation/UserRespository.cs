@@ -96,5 +96,14 @@ namespace RefferalLinks.DAL.Implementation
             return result;
 ;
         }
+        public List<ApplicationUser> GetListTeamLeader()
+        {
+            var role = _context.Roles.Where(x => x.Name == "Teamleader").First();
+            var data = _context.Users
+            .Where(m => _context.UserRoles.Where(r => r.RoleId == role.Id).Select(r => r.UserId).Contains(m.Id))
+            .ToList();
+            var result = data != null ? data : null;
+            return result;
+        }
     }
 }

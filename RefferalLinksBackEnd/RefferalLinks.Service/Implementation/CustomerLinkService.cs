@@ -599,12 +599,14 @@ namespace RefferalLinks.Service.Implementation
                 }
                 int i = 0;
                 int stt = 1;
+                var listTeamLeader = _userespository.GetListTeamLeader();
+                var listNV = _userespository.GetAll();
                 foreach (var dto in data.Data.Data)
                 {
 
                     var GetallImg = _customerlinkImageRepository.GetAll().Where(x => x.CustomerLinkId == dto.Id).ToList();
-                    var getsale = _userespository.FindById(dto.Iduser);
-                    var getleader = _userespository.FindByPredicate(x => x.TeamId == dto.TeamId).ToList();
+                    var getsale = listNV.Find(x=>x.Id == dto.Iduser);
+                    //var getleader = _userespository.FindByPredicate(x => x.TeamId == dto.TeamId).ToList();
 
                     var convertedItems = _mapper.Map<List<CustomerlinkImageDto>>(GetallImg);
                     dto.ListCustomerlinkImage = convertedItems;
@@ -628,16 +630,16 @@ namespace RefferalLinks.Service.Implementation
                     worksheet.Cells[i + 2, 17].Value = dto.Note;
                     worksheet.Cells[i + 2, 18].Value = dto.NoteCSKH;
                     worksheet.Cells[i + 2, 19].Value = dto.ModifiedOn;
-                    var leader = "";
-                    foreach (var t in getleader)
-                    {
-                        var roles = await _userManager.GetRolesAsync(t);
-                        if (roles.Equals("Teamleader"))
-                        {
-                            leader = t.UserName;
-                            break;
-                        }
-                    }
+                    var leader = listTeamLeader.Find(x=>x.TeamId == dto.TeamId);
+                    //foreach (var t in getleader)
+                    //{
+                    //    var roles = await _userManager.GetRolesAsync(t);
+                    //    if (roles.Equals("Teamleader"))
+                    //    {
+                    //        leader = t.UserName;
+                    //        break;
+                    //    }
+                    //}
 
                     worksheet.Cells[rowIndex, 11].Value = getsale?.RefferalCode != null ? leader : "";
                     worksheet.Cells[rowIndex, 12].Value = getsale?.RefferalCode != null ? getsale.UserName : "";
