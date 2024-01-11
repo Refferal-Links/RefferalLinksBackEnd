@@ -271,12 +271,13 @@ namespace RefferalLinks.Service.Implementation
 
 
                     var checkTPank = _userRepository.FindByPredicate(x => x.TpBank ==  user.TpBank ).FirstOrDefault();
-                    if(checkTPank.TpBank == null)
-                    {
-                        goto tieptheo;
-                    }
+                    
                     if (checkTPank != null)
                     {
+                        if (checkTPank.TpBank == null)
+                        {
+                            goto tieptheo;
+                        }
                         return result.BuildResult("Code TPBANK đã bị trùng");
                     }
                     tieptheo:
