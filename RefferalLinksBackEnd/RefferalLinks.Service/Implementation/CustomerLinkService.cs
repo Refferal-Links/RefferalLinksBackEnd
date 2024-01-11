@@ -73,7 +73,8 @@ namespace RefferalLinks.Service.Implementation
         : string.Empty,
                     CamPaignName = x.LinkTemplate.Campaign.Name,
                     CreatedOn = x.CreatedOn,
-                    InforCustomer = String.Format("Name:{0} , Email:{1} , Cccd:{2} , PhoneNumber:{3} , PassPort:{4}  ", x.Customer.Name, x.Customer.Email, x.Customer.Passport, x.Customer.PhoneNumber, x.Customer.Passport)
+                    InforCustomer = String.Format("Name:{0} , Email:{1} , Cccd:{2} , PhoneNumber:{3} , PassPort:{4}  ", x.Customer.Name, x.Customer.Email, x.Customer.Passport, x.Customer.PhoneNumber, x.Customer.Passport),
+
                 }).ToList();
                 result.BuildResult(list);
             }
@@ -163,7 +164,8 @@ namespace RefferalLinks.Service.Implementation
                     CreateOn = x.CreatedOn.Value.ToString("dd/MM/yyyy"),
                     ModifiedOn = x.ModifiedOn.Value.ToString("dd/MM/yyyy"),
                     Note = x.Note,
-                    NoteCSKH = x.NoteCSKH
+                    NoteCSKH = x.NoteCSKH,
+                    ProvinceName = x.Customer.Province.Name,
 
                 }).First();
                 result.BuildResult(data);
@@ -232,7 +234,8 @@ namespace RefferalLinks.Service.Implementation
                         CodeNVCSKH = x.Customer.CSKH.RefferalCode,
                         NvCSKH = x.Customer.CSKH.UserName,
                         Watched = role == "Sale" ? x.Watched : null,
-                        NoteCSKH = x.NoteCSKH
+                        NoteCSKH = x.NoteCSKH,
+                        ProvinceName = x.Customer.Province.Name,
                     })
                     .ToList();
                 foreach (var item in List)
@@ -585,7 +588,7 @@ namespace RefferalLinks.Service.Implementation
 {
     "STT","Họ tên khách hàng", "PhoneNumber", "Căn cước công dân", "Email", "Ngày đăng kí thành công",
     "Dự án", "Sản phẩm", "Code Sale", "Tên Team", "Tên Quản Lý", "Tên Sale","Tên CSKH","Code CSKH",
-    "Trạng thái", "Nguồn khách hàng", "Ghi chú Sale","Ghi chú CSKH", "Ngày hỗ trợ mới nhất"
+    "Trạng thái", "Nguồn khách hàng", "Ghi chú Sale","Ghi chú CSKH", "Ngày hỗ trợ mới nhất" , "Tỉnh thành",
 };//17
                 var worksheet = package.Workbook.Worksheets.Add("SelectedRows");
                 var UserName = ClaimHelper.GetClainByName(_httpContextAccessor, "UserName");
@@ -595,7 +598,7 @@ namespace RefferalLinks.Service.Implementation
                 }
                 for (int ic = 1; ic <= 4; ic++)
                 {
-                    worksheet.Cells[1, 18 + 1 + ic].Value = $"Ảnh {ic}";
+                    worksheet.Cells[1, 19 + 1 + ic].Value = $"Ảnh {ic}";
                 }
                 int i = 0;
                 int stt = 1;
@@ -630,6 +633,7 @@ namespace RefferalLinks.Service.Implementation
                     worksheet.Cells[i + 2, 17].Value = dto.Note;
                     worksheet.Cells[i + 2, 18].Value = dto.NoteCSKH;
                     worksheet.Cells[i + 2, 19].Value = dto.ModifiedOn;
+                    worksheet.Cells[i + 2 , 20].Value = dto.ProvinceName;
                     var leader = listTeamLeader.Find(x=>x.TeamId == dto.TeamId);
                     //foreach (var t in getleader)
                     //{
@@ -646,7 +650,7 @@ namespace RefferalLinks.Service.Implementation
 
                     for (int j = 0; j < GetallImg.Count; j++)
                     {
-                        worksheet.Cells[rowIndex, 19 + j + 1].Value = dto.ListCustomerlinkImage[j].LinkImage;
+                        worksheet.Cells[rowIndex, 20 + j + 1].Value = dto.ListCustomerlinkImage[j].LinkImage;
                     }
                     i++;
                     stt++;
@@ -666,7 +670,7 @@ namespace RefferalLinks.Service.Implementation
                 var numOfRecords = _customerLinkRepository.CountRecordsByPredicate(query);
                 var model = _customerLinkRepository.FindByPredicate(query).OrderByDescending(p => p.CreatedOn);
                 var teamNames = _teamRespository.GetAllTeamNames();
-                var List = model
+                var List = model.Include(x => x.Customer).Include(x => x.LinkTemplate.Bank).Include(x => x.LinkTemplate.Campaign).Include(x => x.Customer.Province)
                     .Select(x => new CustomerLinkDto
                     {
                         Id = x.Id,
@@ -698,7 +702,8 @@ namespace RefferalLinks.Service.Implementation
                         CreateOn = x.CreatedOn.Value.AddHours(7).ToString("dd/MM/yyyy-HH:mm:ss"),
                         ModifiedOn = x.ModifiedOn.Value.AddHours(7).ToString("dd/MM/yyyy-HH:mm:ss"),
                         NvCSKH = x.Customer.CSKH.User,
-                        NoteCSKH = x.NoteCSKH
+                        NoteCSKH = x.NoteCSKH,
+                        ProvinceName = x.Customer.Province.Name,
                     })
                     .ToList();
 
