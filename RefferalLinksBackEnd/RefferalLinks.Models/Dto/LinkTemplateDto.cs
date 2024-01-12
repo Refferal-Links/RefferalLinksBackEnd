@@ -18,5 +18,6 @@ namespace RefferalLinks.Models.Dto
         public string? CampaignName { get; set;}
         public string? InstructionsLink { get; set; }
         public string? Note { get; set; }
+        public string? ExchangeLead { get; set; }
     }
 }

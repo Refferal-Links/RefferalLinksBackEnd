@@ -263,11 +263,26 @@ namespace RefferalLinks.Service.Implementation
                 }
                 if (user.Role == "Sale" || user.Role == "Teamleader" || user.Role == "CSKH")
                 {
-                    var checkUser = _userRepository.FindByPredicate(x => x.Email == user.Email || x.RefferalCode == user.RefferalCode || x.TpBank == user.TpBank).FirstOrDefault();
+                    var checkUser = _userRepository.FindByPredicate(x => x.Email == user.Email || x.RefferalCode == user.RefferalCode).FirstOrDefault();
                     if (checkUser != null)
                     {
-                        return result.BuildError("email, code hoặc codeTPBANK đã bị trùng hoặc chưa điền vào");
+                        return result.BuildError("email, code đã bị trùng hoặc chưa điền vào");
                     }
+
+
+                    var checkTPank = _userRepository.FindByPredicate(x => x.TpBank ==  user.TpBank ).FirstOrDefault();
+                    
+                    if (checkTPank != null)
+                    {
+                        if (checkTPank.TpBank == null)
+                        {
+                            goto tieptheo;
+                        }
+                        return result.BuildResult("Code TPBANK đã bị trùng");
+                    }
+                    tieptheo:
+
+
                     var idteam =  _teamRespository.Get((Guid) user.TeamId);
                     if(user.TeamId == null ||  idteam == null )
                     {
