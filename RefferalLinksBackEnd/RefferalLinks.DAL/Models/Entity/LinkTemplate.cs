@@ -24,5 +24,7 @@ namespace RefferalLinks.DAL.Models.Entity
         public Guid CampaignId { get; set; }
         [ForeignKey("CampaignId")]
         public Campaign Campaign { get; set; }
+
+        public string? ExchangeLead { get; set; }
     }
 }

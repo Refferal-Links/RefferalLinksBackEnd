@@ -132,6 +132,7 @@ namespace RefferalLinks.Service.Implementation
                     linkTemplate.Modifiedby = UserName;
                     linkTemplate.InstructionsLink = request.InstructionsLink;
                     linkTemplate.Note= request.Note;
+                    linkTemplate.ExchangeLead = request.ExchangeLead;
                     _linkTemplateRepository.Edit(linkTemplate);
                     result.BuildResult(request);
                 }
@@ -213,6 +214,7 @@ namespace RefferalLinks.Service.Implementation
                         CampaignName = x.Campaign.Name,
                         InstructionsLink = x.InstructionsLink,
                         Note = x.Note,
+                        ExchangeLead = x.ExchangeLead,
                     })
                     .ToList();
                 var role = ClaimHelper.GetClainByName(_httpContextAccessor, "Roles");

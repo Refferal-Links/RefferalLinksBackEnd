@@ -201,7 +201,7 @@ namespace RefferalLinks.Service.Implementation
                 int pageSize = request.PageSize ?? 1;
                 int startIndex = (pageIndex - 1) * (int)pageSize;
                 var teamNames = _teamRespository.GetAllTeamNames();
-                var List = model.Skip(startIndex).Take(pageSize).Include(x => x.Customer).Include(x => x.LinkTemplate.Bank).Include(x => x.LinkTemplate.Campaign)
+                var List = model.Skip(startIndex).Take(pageSize).Include(x => x.Customer).Include(x => x.LinkTemplate.Bank).Include(x => x.LinkTemplate.Campaign).Include(x => x.LinkTemplate)
                     .Select(x => new CustomerLinkDto
                     {
                         Id = x.Id,
@@ -236,6 +236,7 @@ namespace RefferalLinks.Service.Implementation
                         Watched = role == "Sale" ? x.Watched : null,
                         NoteCSKH = x.NoteCSKH,
                         ProvinceName = x.Customer.Province.Name,
+                        ExchangeLead = x.Status == StatusCustomerLink.Approved ? x.LinkTemplate.ExchangeLead : "",
                     })
                     .ToList();
                 foreach (var item in List)
@@ -593,7 +594,7 @@ namespace RefferalLinks.Service.Implementation
 {
     "STT","Họ tên khách hàng", "PhoneNumber", "Căn cước công dân", "Email", "Ngày đăng kí thành công",
     "Dự án", "Sản phẩm", "Code Sale", "Tên Team", "Tên Quản Lý", "Tên Sale","Tên CSKH","Code CSKH",
-    "Trạng thái", "Nguồn khách hàng", "Ghi chú Sale","Ghi chú CSKH", "Ngày hỗ trợ mới nhất" , "Tỉnh thành",
+    "Trạng thái", "Nguồn khách hàng", "Ghi chú Sale","Ghi chú CSKH", "Ngày hỗ trợ mới nhất" , "Tỉnh thành","Quy đổi Lead",
 };//17
                 var worksheet = package.Workbook.Worksheets.Add("SelectedRows");
                 var UserName = ClaimHelper.GetClainByName(_httpContextAccessor, "UserName");
@@ -603,7 +604,7 @@ namespace RefferalLinks.Service.Implementation
                 }
                 for (int ic = 1; ic <= 4; ic++)
                 {
-                    worksheet.Cells[1, 19 + 1 + ic].Value = $"Ảnh {ic}";
+                    worksheet.Cells[1, 20 + 1 + ic].Value = $"Ảnh {ic}";
                 }
                 int i = 0;
                 int stt = 1;
@@ -639,6 +640,7 @@ namespace RefferalLinks.Service.Implementation
                     worksheet.Cells[i + 2, 18].Value = dto.NoteCSKH;
                     worksheet.Cells[i + 2, 19].Value = dto.ModifiedOn;
                     worksheet.Cells[i + 2 , 20].Value = dto.ProvinceName;
+                    worksheet.Cells[i + 2, 21].Value = dto.Status == StatusCustomerLink.Approved ? dto.ExchangeLead : "";
                     var leader = listTeamLeader.Find(x=>x.TeamId == dto.TeamId);
                     //foreach (var t in getleader)
                     //{
@@ -655,7 +657,7 @@ namespace RefferalLinks.Service.Implementation
 
                     for (int j = 0; j < GetallImg.Count; j++)
                     {
-                        worksheet.Cells[rowIndex, 20 + j + 1].Value = dto.ListCustomerlinkImage[j].LinkImage;
+                        worksheet.Cells[rowIndex, 21 + j + 1].Value = dto.ListCustomerlinkImage[j].LinkImage;
                     }
                     i++;
                     stt++;
@@ -675,7 +677,7 @@ namespace RefferalLinks.Service.Implementation
                 var numOfRecords = _customerLinkRepository.CountRecordsByPredicate(query);
                 var model = _customerLinkRepository.FindByPredicate(query).OrderByDescending(p => p.CreatedOn);
                 var teamNames = _teamRespository.GetAllTeamNames();
-                var List = model.Include(x => x.Customer).Include(x => x.LinkTemplate.Bank).Include(x => x.LinkTemplate.Campaign).Include(x => x.Customer.Province)
+                var List = model.Include(x => x.Customer).Include(x => x.LinkTemplate.Bank).Include(x => x.LinkTemplate.Campaign).Include(x => x.Customer.Province).Include(x => x.LinkTemplate)
                     .Select(x => new CustomerLinkDto
                     {
                         Id = x.Id,
@@ -709,6 +711,7 @@ namespace RefferalLinks.Service.Implementation
                         NvCSKH = x.Customer.CSKH.User,
                         NoteCSKH = x.NoteCSKH,
                         ProvinceName = x.Customer.Province.Name,
+                        ExchangeLead = x.LinkTemplate.ExchangeLead ,
                     })
                     .ToList();
 
