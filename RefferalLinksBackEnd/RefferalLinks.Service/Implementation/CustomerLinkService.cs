@@ -532,6 +532,7 @@ namespace RefferalLinks.Service.Implementation
             try
             {
                 var UserName = ClaimHelper.GetClainByName(_httpContextAccessor, "UserName");
+                var userRole = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.Role)?.Value;
                 if (UserName == null)
                 {
                     return result.BuildError("Cannot find Account by this user");
@@ -539,6 +540,10 @@ namespace RefferalLinks.Service.Implementation
                 if((request.Status == StatusCustomerLink.Approved  || request.Status == StatusCustomerLink.Rejected) && request.ListCustomerlinkImage.Count == 0)
                 {
                     return result.BuildError("Phải upload tối thiếu 1 ảnh để thực hiện đổi trạng thái");
+                }
+                if((userRole == "CSKH" && request.Status == StatusCustomerLink.Cancel )||( userRole == "Sale" && request.Status == StatusCustomerLink.Cancel))
+                {
+                    return result.BuildError("ERROR");
                 }
                 //if (request.ListCustomerlinkImage == null)
                 //{
