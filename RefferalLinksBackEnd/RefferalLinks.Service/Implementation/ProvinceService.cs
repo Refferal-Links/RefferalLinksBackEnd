@@ -120,6 +120,10 @@ namespace RefferalLinks.Service.Implementation
                 {
                     model = AddSort(model, request.SortBy);
                 }
+				else
+				{
+					model = model.OrderBy(x => x.Name);
+				}
                 int pageIndex = request.PageIndex ?? 1;
 				int pageSize = request.PageSize ?? 1;
 				int startIndex = (pageIndex - 1) * (int)pageSize;

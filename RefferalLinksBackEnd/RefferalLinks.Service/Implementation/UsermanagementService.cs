@@ -446,6 +446,10 @@ namespace RefferalLinks.Service.Implementation
                 {
                     users = addSort(users, request.SortBy);
                 }
+                else
+                {
+                    users = users.OrderBy(x => x.Email);
+                }
                 var usersList = users/*.ToList()*/;
                 //for (int i = 0; i < usersList.Count; i++)
                 //{
