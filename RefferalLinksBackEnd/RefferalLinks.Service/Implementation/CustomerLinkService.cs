@@ -544,7 +544,7 @@ namespace RefferalLinks.Service.Implementation
                 }
                 if((userRole == "CSKH" && request.Status == StatusCustomerLink.Cancel )||( userRole == "Sale" && request.Status == StatusCustomerLink.Cancel))
                 {
-                    return result.BuildError("ERROR");
+                    return result.BuildError("Bạn không có đủ quyền để cancle hồ sơ");
                 }
                 //if (request.ListCustomerlinkImage == null)
                 //{
