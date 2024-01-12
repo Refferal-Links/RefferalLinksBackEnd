@@ -93,6 +93,7 @@ namespace RefferalLinks.Service.Implementation
                     
                 }
                 customer.Email = customer.Email != null ?  customer.Email + "@gmail.com" : null ;
+                customer.Name = customer.Name.ToUpper();
                 _customerRespository.Add(customer);
 
                 if(request.Source == "Khác")

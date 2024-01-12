@@ -201,7 +201,7 @@ namespace RefferalLinks.Service.Implementation
                 int pageSize = request.PageSize ?? 1;
                 int startIndex = (pageIndex - 1) * (int)pageSize;
                 var teamNames = _teamRespository.GetAllTeamNames();
-                var List = model.Skip(startIndex).Take(pageSize).Include(x => x.Customer).Include(x => x.LinkTemplate.Bank).Include(x => x.LinkTemplate.Campaign).Include(x => x.LinkTemplate)
+                var List = model.Skip(startIndex).Take(pageSize).Include(x => x.Customer).Include(x => x.LinkTemplate.Bank).Include(x => x.LinkTemplate.Campaign).Include(x => x.LinkTemplate).Include(x=>x.Customer.Province)
                     .Select(x => new CustomerLinkDto
                     {
                         Id = x.Id,
