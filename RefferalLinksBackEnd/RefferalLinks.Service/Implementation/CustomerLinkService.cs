@@ -143,7 +143,7 @@ namespace RefferalLinks.Service.Implementation
                     LinkTemplateId = x.LinkTemplateId.Value,
                     Passport = x.Customer.Passport,
                     PhoneNumber = x.Customer.PhoneNumber,
-                    Name = x.Customer.Name,
+                    Name = x.Customer.Name.ToUpper(),
                     BankId = x.LinkTemplate.BankId,
                     CampaignId = x.LinkTemplate.CampaignId,
                     CreatedOn = x.CreatedOn,
@@ -211,7 +211,7 @@ namespace RefferalLinks.Service.Implementation
                         Email = x.Customer.Email,
                         PhoneNumber = x.Customer.PhoneNumber,
                         Passport = x.Customer.Passport,
-                        Name = x.Customer.Name,
+                        Name = x.Customer.Name.ToUpper(),
                         BankId = x.LinkTemplate.BankId,
                         CampaignId = x.LinkTemplate.CampaignId,
                         BankName = x.LinkTemplate.Bank.Name,
@@ -622,7 +622,7 @@ namespace RefferalLinks.Service.Implementation
 
                     var rowIndex = i + 2;
                     worksheet.Cells[rowIndex, 1].Value = stt;
-                    worksheet.Cells[rowIndex, 2].Value = dto.Name;
+                    worksheet.Cells[rowIndex, 2].Value = dto.Name.ToUpper();
                     worksheet.Cells[rowIndex, 3].Value = dto.PhoneNumber;
                     worksheet.Cells[i + 2, 3].Value = dto.PhoneNumber;
                     worksheet.Cells[i + 2, 4].Value = dto.Passport;
