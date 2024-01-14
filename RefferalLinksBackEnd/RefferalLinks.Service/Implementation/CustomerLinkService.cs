@@ -17,7 +17,9 @@ using RefferalLinks.DAL.Models.Entity;
 using RefferalLinks.Models.Dto;
 using RefferalLinks.Service.Contract;
 using static Maynghien.Common.Helpers.SearchHelper;
+using System.Text.RegularExpressions;
 namespace RefferalLinks.Service.Implementation
+   
 {
     public class CustomerLinkService : ICustomerLinkService
     {
@@ -526,7 +528,20 @@ namespace RefferalLinks.Service.Implementation
                 throw;
             }
         }
+        static int CountOccurrences(string input, string pattern)
+        {
+            
+            if (input == null)
+            {
+                return 0;
+            }
 
+  
+            Regex regex = new Regex(Regex.Escape(pattern));
+            MatchCollection matches = regex.Matches(input);
+
+            return matches.Count;
+        }
         public AppResponse<string> StatusChange(CustomerLinkDto request)
         {
             var result = new AppResponse<string>();
@@ -565,10 +580,22 @@ namespace RefferalLinks.Service.Implementation
                     _customerlinkImageRepository.Add(customerLinkImage);
                 });
                 var customerLink = _customerLinkRepository.Get(request.Id.Value);
+
+                if (!string.IsNullOrEmpty(request.Note))
+                {
+                    int count = CountOccurrences(customerLink.Note , "Lần thứ ") + 1;
+                    customerLink.Note += $" / - Lần thứ {count} : {request.Note}"; 
+                }
+                if (!string.IsNullOrEmpty(request.NoteCSKH))
+                {
+                    int count = CountOccurrences(customerLink.NoteCSKH , "Lần thứ ") + 1;
+                    customerLink.NoteCSKH += $" / - Lần thứ {count} : {request.NoteCSKH}";
+                }
+
                 customerLink.Status = request.Status.Value;
                 customerLink.ModifiedOn = DateTime.UtcNow;
-                customerLink.Note = request.Note;
-                customerLink.NoteCSKH = request.NoteCSKH;
+                
+               
                 _customerLinkRepository.Edit(customerLink);
 
                 result.BuildResult("OK");
