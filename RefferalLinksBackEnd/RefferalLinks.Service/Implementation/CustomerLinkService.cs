@@ -814,5 +814,176 @@ namespace RefferalLinks.Service.Implementation
             }
             return result;
         }
+
+
+        
+        public async Task<AppResponse<SearchResponse<StatisticalStatusDto>>> SearchUpdate(SearchRequest request)
+        {
+            var result = new AppResponse<SearchResponse<StatisticalStatusDto>>();
+            try
+            {
+                var role = ClaimHelper.GetClainByName(_httpContextAccessor, "Roles");
+                var query = await BuildFilterExpression3(request.Filters);
+                var numOfRecords = _customerLinkRepository.CountRecordsByPredicate(query);
+                var model = _customerLinkRepository.FindByPredicate(query);
+
+                if (request.SortBy != null)
+                {
+                    model = AddSort(model, request.SortBy);
+                }
+                if (request.SortBy == null)
+                {
+                    model = model.OrderByDescending(x => x.CreatedOn.Value);
+                }
+
+                int pageIndex = request.PageIndex ?? 1;
+                int pageSize = request.PageSize ?? 1;
+                int startIndex = (pageIndex - 1) * pageSize;
+
+                var teamNames = _teamRespository.GetAllTeamNames();
+                var branhNames = _teamRespository.GetAllbranhName();
+
+
+                var List = model
+                    .Skip(startIndex)
+                    .Take(pageSize)
+                    .Include(x => x.Customer.ApplicationUser).Include(x => x.LinkTemplate.Bank).Include(x => x.LinkTemplate.Campaign).Include(x => x.Customer.Province).Include(x => x.LinkTemplate)
+                    .Select(x => new StatisticalStatusDto
+                    {
+                        Id = x.Id,
+                        TeamId = x.Customer.ApplicationUser.TeamId,
+                        TeamName = x.Customer.ApplicationUser.TeamId.HasValue && teamNames.ContainsKey(x.Customer.ApplicationUser.TeamId.Value)
+                                       ? teamNames[x.Customer.ApplicationUser.TeamId.Value] : string.Empty,
+                        BranchName = x.Customer.ApplicationUser.TeamId.HasValue && branhNames.ContainsKey(x.Customer.ApplicationUser.TeamId.Value)
+                       ? branhNames[x.Customer.ApplicationUser.TeamId.Value] : string.Empty,
+                        BankName = x.LinkTemplate.Bank.Name,
+                        Sale = x.Customer.ApplicationUser.RefferalCode != null ? x.Customer.ApplicationUser.UserName : "",
+                        Approved = model.Count(y => y.Customer.ApplicationUser.RefferalCode == x.Customer.ApplicationUser.RefferalCode && (int)y.Status == 1),
+                        Pending = model.Count(y => y.Customer.ApplicationUser.RefferalCode == x.Customer.ApplicationUser.RefferalCode && (int)y.Status == 0),
+                        Rejected = model.Count(y => y.Customer.ApplicationUser.RefferalCode == x.Customer.ApplicationUser.RefferalCode && (int)y.Status == 2),
+                        Cancel = model.Count(y => y.Customer.ApplicationUser.RefferalCode == x.Customer.ApplicationUser.RefferalCode && (int)y.Status == 3),
+                        Total = model.Count(y => y.Customer.ApplicationUser.RefferalCode == x.Customer.ApplicationUser.RefferalCode),
+                    })
+                    .ToList();
+
+                var searchUserResult = new SearchResponse<StatisticalStatusDto>
+                {
+                    TotalRows = numOfRecords,
+                    TotalPages = CalculateNumOfPages(numOfRecords, pageSize),
+                    CurrentPage = pageIndex,
+                    Data = List,
+                };
+
+                
+
+                result.BuildResult(searchUserResult);
+            }
+            catch (Exception ex)
+            {
+                return result.BuildError(ex.ToString());
+            }
+
+            return result;
+        }
+        private async Task<ExpressionStarter<Customerlink>> BuildFilterExpression3(IList<Filter> Filters)
+        {
+            try
+            {
+                var userRole = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.Role)?.Value;
+                var UserName = ClaimHelper.GetClainByName(_httpContextAccessor, "UserName");
+                var predicate = PredicateBuilder.New<Customerlink>(true);
+                var user = await _userManager.FindByNameAsync(UserName);
+                switch (userRole)
+                {
+
+                    case "Teamleader":
+
+
+                        predicate = predicate.And(m => m.Customer.ApplicationUser.TeamId.ToString().Contains(user.TeamId.ToString()) || m.Customer.CSKH.TeamId.ToString().Contains(user.TeamId.ToString()));
+
+                        break;
+
+                    case "Sale":
+                        predicate = predicate.And(m => m.Customer.ApplicationUserId.Contains(user.Id));
+                        break;
+                    case "CSKH":
+                        predicate = predicate.And(m => m.Customer.CSKHId.Contains(user.Id));
+                        break;
+                    case "SUP":
+                        {
+                            var listTeam = _teamRespository.FindBy(x => x.Branch.Id == user.BranchId).ToList();
+                            foreach (var team in listTeam)
+                            {
+                                predicate = predicate.Or(x => x.Customer.ApplicationUser.TeamId == team.Id);
+                            }
+                        }
+                        break;
+                    default:
+                        break;
+                }
+
+                if (Filters != null)
+                {
+                    foreach (var filter in Filters)
+                    {
+                        switch (filter.FieldName)
+                        {
+                            case "createOn":
+                                {
+                                    string[] dateStrings = filter.Value.Split(',');
+                                    var dayStart = DateTime.ParseExact(dateStrings[0], "dd/MM/yyyy", System.Globalization.CultureInfo.InvariantCulture);
+
+                                    predicate = predicate.And(m => m.CreatedOn.Value.Date >= dayStart);
+                                    if (dateStrings[1] != null)
+                                    {
+                                        var dayEnd = DateTime.ParseExact(dateStrings[1], "dd/MM/yyyy", System.Globalization.CultureInfo.InvariantCulture);
+                                        predicate = predicate.And(m => m.CreatedOn.Value.Date <= dayEnd);
+                                    }
+                                }
+                                break;
+                            case "modifiedOn":
+                                {
+                                    string[] dateStrings = filter.Value.Split(',');
+                                    var dayStart = DateTime.ParseExact(dateStrings[0], "dd/MM/yyyy", System.Globalization.CultureInfo.InvariantCulture);
+
+                                    predicate = predicate.And(m => m.ModifiedOn.Value.Date >= dayStart);
+                                    if (dateStrings[1] != null)
+                                    {
+                                        var dayEnd = DateTime.ParseExact(dateStrings[1], "dd/MM/yyyy", System.Globalization.CultureInfo.InvariantCulture);
+                                        predicate = predicate.And(m => m.ModifiedOn.Value.Date <= dayEnd);
+                                    }
+                                }
+                                break;
+                            case "branchId":
+                                predicate = predicate.And(m => m.Customer.ApplicationUser.BranchId.Equals(Guid.Parse(filter.Value)));
+                                break;
+                            case "teamId":
+                                if (userRole == "Teamleader" || userRole == "Sale") break;
+                                predicate = predicate.And(m => m.Customer.ApplicationUser.TeamId.ToString().Contains(filter.Value) || m.Customer.CSKH.TeamId.ToString().Equals(filter.Value));
+                                break;
+                            case "Sale":
+                                predicate = predicate.And(m => m.Customer.ApplicationUser.RefferalCode.Contains(filter.Value));
+                                break;
+                            case "bankId":
+                                predicate = predicate.And(m => m.LinkTemplate.BankId.Equals(Guid.Parse(filter.Value)));
+                                break;
+                            case "campaignId":
+                                predicate = predicate.And(m => m.LinkTemplate.CampaignId.ToString().Contains(filter.Value));
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+                }
+
+                predicate = predicate.And(m => m.IsDeleted == false);
+                return predicate;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
     }
+
 }
