@@ -25,7 +25,10 @@ namespace RefferalLinks.Models.Dto
         public int? Cancel { get; set; }
         public int? Total { get; set; }
         
-
+        public Guid? BankId { get; set; }
+        public Guid? CampaignId { get; set; }
+        public string? CreateOn { get; set; }
+        public string? ModifiedOn { get; set;}
 
     }
 }
