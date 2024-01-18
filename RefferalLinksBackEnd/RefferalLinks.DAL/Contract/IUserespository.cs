@@ -17,6 +17,6 @@ namespace RefferalLinks.DAL.Contract
         public void Delete(string Id);
 
         ApplicationUser UserWithCustomerCount();
-        List<ApplicationUser> GetListTeamLeader();
+        public List<ApplicationUser> GetListByRole(string Role);
     }
 }

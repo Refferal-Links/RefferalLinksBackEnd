@@ -13,9 +13,9 @@ namespace RefferalLinks.Models.Dto
     {
        
         public string? BranchName { get; set; }
+        public Guid? BranchId { get; set; }
         public string? TeamName { get; set; }
         public string? Sale { get; set; }
-        public string? BankName { get; set; }
         public string? CampaignName { get;set; }
         public StatusCustomerLink? Status { get; set; }
         public Guid? TeamId { get; set; }

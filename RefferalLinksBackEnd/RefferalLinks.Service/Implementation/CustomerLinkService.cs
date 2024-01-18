@@ -635,7 +635,7 @@ namespace RefferalLinks.Service.Implementation
                 }
                 int i = 0;
                 int stt = 1;
-                var listTeamLeader = _userespository.GetListTeamLeader();
+                var listTeamLeader = _userespository.GetListByRole("Teamleader");
                 var listNV = _userespository.GetAll();
                 foreach (var dto in data.Data.Data)
                 {
@@ -816,15 +816,16 @@ namespace RefferalLinks.Service.Implementation
         }
 
 
-        
+
         public async Task<AppResponse<SearchResponse<StatisticalStatusDto>>> SearchUpdate(SearchRequest request)
         {
             var result = new AppResponse<SearchResponse<StatisticalStatusDto>>();
             try
             {
                 var role = ClaimHelper.GetClainByName(_httpContextAccessor, "Roles");
+                var listNV = _userespository.GetListByRole("Sale");
                 var query = await BuildFilterExpression3(request.Filters);
-                var numOfRecords = _customerLinkRepository.CountRecordsByPredicate(query);
+                var numOfRecords = listNV.Count(); /*_customerLinkRepository.CountRecordsByPredicate(query)*/;
                 var model = _customerLinkRepository.FindByPredicate(query);
 
                 if (request.SortBy != null)
@@ -842,27 +843,26 @@ namespace RefferalLinks.Service.Implementation
 
                 var teamNames = _teamRespository.GetAllTeamNames();
                 var branhNames = _teamRespository.GetAllbranhName();
-
-
-                var List = model
+                //var listNV = _userespository.GetListByRole("Sale");
+                
+                var List = listNV
                     .Skip(startIndex)
                     .Take(pageSize)
-                    .Include(x => x.Customer.ApplicationUser).Include(x => x.LinkTemplate.Bank).Include(x => x.LinkTemplate.Campaign).Include(x => x.Customer.Province).Include(x => x.LinkTemplate)
                     .Select(x => new StatisticalStatusDto
                     {
-                        Id = x.Id,
-                        TeamId = x.Customer.ApplicationUser.TeamId,
-                        TeamName = x.Customer.ApplicationUser.TeamId.HasValue && teamNames.ContainsKey(x.Customer.ApplicationUser.TeamId.Value)
-                                       ? teamNames[x.Customer.ApplicationUser.TeamId.Value] : string.Empty,
-                        BranchName = x.Customer.ApplicationUser.TeamId.HasValue && branhNames.ContainsKey(x.Customer.ApplicationUser.TeamId.Value)
-                       ? branhNames[x.Customer.ApplicationUser.TeamId.Value] : string.Empty,
-                        BankName = x.LinkTemplate.Bank.Name,
-                        Sale = x.Customer.ApplicationUser.RefferalCode != null ? x.Customer.ApplicationUser.UserName : "",
-                        Approved = model.Count(y => y.Customer.ApplicationUser.RefferalCode == x.Customer.ApplicationUser.RefferalCode && (int)y.Status == 1),
-                        Pending = model.Count(y => y.Customer.ApplicationUser.RefferalCode == x.Customer.ApplicationUser.RefferalCode && (int)y.Status == 0),
-                        Rejected = model.Count(y => y.Customer.ApplicationUser.RefferalCode == x.Customer.ApplicationUser.RefferalCode && (int)y.Status == 2),
-                        Cancel = model.Count(y => y.Customer.ApplicationUser.RefferalCode == x.Customer.ApplicationUser.RefferalCode && (int)y.Status == 3),
-                        Total = model.Count(y => y.Customer.ApplicationUser.RefferalCode == x.Customer.ApplicationUser.RefferalCode),
+                        Id = Guid.Parse(x.Id),
+                        TeamId = x.TeamId,
+                        TeamName = x.TeamId.HasValue && teamNames.ContainsKey(x.TeamId.Value)
+                                       ? teamNames[x.TeamId.Value] : string.Empty,
+                        BranchName = x.TeamId.HasValue && branhNames.ContainsKey(x.TeamId.Value)
+                       ? branhNames[x.TeamId.Value] : string.Empty,
+                        BranchId = x.BranchId,
+                        Sale = x.UserName,
+                        Approved = model.Count(y => y.Customer.ApplicationUserId == x.Id && y.Status == StatusCustomerLink.Approved),
+                        Pending = model.Count(y => y.Customer.ApplicationUserId == x.Id && ( y.Status == StatusCustomerLink.Pending || y.Status == null)),
+                        Rejected = model.Count(y => y.Customer.ApplicationUserId == x.Id && y.Status == StatusCustomerLink.Rejected),
+                        Cancel = model.Count(y => y.Customer.ApplicationUserId == x.Id && y.Status == StatusCustomerLink.Cancel),
+                        Total = model.Count(y => y.Customer.ApplicationUserId == x.Id),
                     })
                     .ToList();
 
@@ -874,7 +874,7 @@ namespace RefferalLinks.Service.Implementation
                     Data = List,
                 };
 
-                
+
 
                 result.BuildResult(searchUserResult);
             }
@@ -961,8 +961,8 @@ namespace RefferalLinks.Service.Implementation
                                 if (userRole == "Teamleader" || userRole == "Sale") break;
                                 predicate = predicate.And(m => m.Customer.ApplicationUser.TeamId.ToString().Contains(filter.Value) || m.Customer.CSKH.TeamId.ToString().Equals(filter.Value));
                                 break;
-                            case "Sale":
-                                predicate = predicate.And(m => m.Customer.ApplicationUser.RefferalCode.Contains(filter.Value));
+                            case "sale":
+                                predicate = predicate.And(m => m.Customer.ApplicationUserId.Contains(filter.Value));
                                 break;
                             case "bankId":
                                 predicate = predicate.And(m => m.LinkTemplate.BankId.Equals(Guid.Parse(filter.Value)));
