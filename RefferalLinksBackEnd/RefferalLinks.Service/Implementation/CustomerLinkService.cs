@@ -635,7 +635,7 @@ namespace RefferalLinks.Service.Implementation
                 }
                 int i = 0;
                 int stt = 1;
-                var listTeamLeader = _userespository.GetListByRole("Teamleader");
+                var listTeamLeader = _userespository.GetListByRole("Teamleader").ToList();
                 var listNV = _userespository.GetAll();
                 foreach (var dto in data.Data.Data)
                 {
