@@ -825,7 +825,7 @@ namespace RefferalLinks.Service.Implementation
                 var role = ClaimHelper.GetClainByName(_httpContextAccessor, "Roles");
                 var listNV = _userespository.GetListByRole("Sale");
                 var query = await BuildFilterExpression3(request.Filters);
-                var numOfRecords = listNV.Count(); 
+                var numOfRecords = listNV.Count();
                 var model = _customerLinkRepository.FindByPredicate(query);
 
                 if (request.SortBy != null)
@@ -844,8 +844,11 @@ namespace RefferalLinks.Service.Implementation
                 var teamNames = _teamRespository.GetAllTeamNames();
                 var branhNames = _teamRespository.GetAllbranhName();
                 //var listNV = _userespository.GetListByRole("Sale");
-                
+                var listIdSale = model.Select(x=>x.Customer.ApplicationUserId).Distinct().ToList();
+
+
                 var List = listNV
+                    .Where(c => listIdSale.Contains(c.Id))
                     .Skip(startIndex)
                     .Take(pageSize)
                     .Select(x => new StatisticalStatusDto
@@ -864,12 +867,11 @@ namespace RefferalLinks.Service.Implementation
                         Cancel = model.Count(y => y.Customer.ApplicationUserId == x.Id && y.Status == StatusCustomerLink.Cancel),
                         Total = model.Count(y => y.Customer.ApplicationUserId == x.Id),
                     })
-                    .Where(x=>x.Total != 0)
                     .ToList();
 
                 var searchUserResult = new SearchResponse<StatisticalStatusDto>
                 {
-                    TotalRows = List.Count(),
+                    TotalRows = listIdSale.Count(),
                     TotalPages = CalculateNumOfPages(numOfRecords, pageSize),
                     CurrentPage = pageIndex,
                     Data = List,
