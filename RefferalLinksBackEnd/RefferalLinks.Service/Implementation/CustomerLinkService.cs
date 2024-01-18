@@ -825,7 +825,7 @@ namespace RefferalLinks.Service.Implementation
                 var role = ClaimHelper.GetClainByName(_httpContextAccessor, "Roles");
                 var listNV = _userespository.GetListByRole("Sale");
                 var query = await BuildFilterExpression3(request.Filters);
-                var numOfRecords = listNV.Count(); /*_customerLinkRepository.CountRecordsByPredicate(query)*/;
+                var numOfRecords = listNV.Count(); 
                 var model = _customerLinkRepository.FindByPredicate(query);
 
                 if (request.SortBy != null)
@@ -864,11 +864,12 @@ namespace RefferalLinks.Service.Implementation
                         Cancel = model.Count(y => y.Customer.ApplicationUserId == x.Id && y.Status == StatusCustomerLink.Cancel),
                         Total = model.Count(y => y.Customer.ApplicationUserId == x.Id),
                     })
+                    .Where(x=>x.Total != 0)
                     .ToList();
 
                 var searchUserResult = new SearchResponse<StatisticalStatusDto>
                 {
-                    TotalRows = numOfRecords,
+                    TotalRows = List.Count(),
                     TotalPages = CalculateNumOfPages(numOfRecords, pageSize),
                     CurrentPage = pageIndex,
                     Data = List,
@@ -959,7 +960,7 @@ namespace RefferalLinks.Service.Implementation
                                 break;
                             case "teamId":
                                 if (userRole == "Teamleader" || userRole == "Sale") break;
-                                predicate = predicate.And(m => m.Customer.ApplicationUser.TeamId.ToString().Contains(filter.Value) || m.Customer.CSKH.TeamId.ToString().Equals(filter.Value));
+                                predicate = predicate.And(m => m.Customer.ApplicationUser.TeamId.ToString().Contains(filter.Value));
                                 break;
                             case "sale":
                                 predicate = predicate.And(m => m.Customer.ApplicationUserId.Contains(filter.Value));
