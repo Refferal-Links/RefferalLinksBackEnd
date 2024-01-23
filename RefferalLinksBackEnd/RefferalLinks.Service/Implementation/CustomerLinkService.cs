@@ -365,6 +365,19 @@ namespace RefferalLinks.Service.Implementation
                         }
                     }
                     break;
+                case "branchName":
+                    {
+                        if (sortByInfo.Ascending != null && sortByInfo.Ascending.Value)
+                        {
+                            result = result.OrderBy(m => m.Customer.ApplicationUser.BranchId.Value).ThenBy(m => m.Customer.CSKH.BranchId.Value);
+
+                        }
+                        else
+                        {
+                            result = result.OrderByDescending(m => m.Customer.ApplicationUser.BranchId.Value).ThenBy(m => m.Customer.CSKH.BranchId.Value);
+                        }
+                    }
+                    break;
                 default:
                     break;
             }
@@ -829,11 +842,57 @@ namespace RefferalLinks.Service.Implementation
             try
             {
                 var role = ClaimHelper.GetClainByName(_httpContextAccessor, "Roles");
-                var listNV = _userespository.GetListByRole("Sale");
+                var UserName = ClaimHelper.GetClainByName(_httpContextAccessor, "UserName");
+                var typeTeam = ClaimHelper.GetClainByName(_httpContextAccessor, "TypeTeam");
+                var listNV = new List<ApplicationUser>();
+                var listIdNV = new List<string>();
+                Guid teamId;
+                if(role == "Teamleader")
+                {
+                    var user = await _userManager.FindByNameAsync(UserName);
+                    teamId = user.TeamId.Value;
+                    if (typeTeam == "CSKH")
+                    {
+                        var listUser = _userespository.GetListByRole("CSKH").Where(x => x.TeamId == teamId).ToList();
+                        listNV.AddRange(listUser);
+                        
+                    }
+                    else if(typeTeam == "Sale")
+                    {
+                        var listUser = _userespository.GetListByRole("Sale").Where(x => x.TeamId == teamId).ToList();
+                        listNV.AddRange(listUser);
+                    }
+                    listIdNV.AddRange(_userespository.FindByPredicate(x => x.TeamId == teamId).Select(x => x.Id).ToList());
+                }
+                else if (role == "Sale" || role == "CSKH")
+                {
+                    var user = await _userManager.FindByNameAsync(UserName);
+                    listNV.Add(user);
+                    listIdNV.Add(user.Id);
+                }
+                else if (role == "SUP")
+                {
+                    var user = await _userManager.FindByNameAsync(UserName);
+                    Guid branchId = user.BranchId.Value;
+                    var listUserSale = _userespository.GetListByRole("Sale").Where(x => x.BranchId == branchId).ToList();
+                    var listUserCSKH = _userespository.GetListByRole("CSKH").Where(x => x.BranchId == branchId).ToList();
+                    listNV.AddRange(listUserSale);
+                    listNV.AddRange(listUserCSKH);
+                    listIdNV.AddRange(_userespository.FindByPredicate(x => x.BranchId == branchId).Select(x => x.Id).ToList());
+                }
+                else if(role =="Admin" || role == "superadmin")
+                {
+                    var listUserSale = _userespository.GetListByRole("Sale").ToList();
+                    var listUserCSKH = _userespository.GetListByRole("CSKH").ToList();
+                    listNV.AddRange(listUserSale);
+                    listNV.AddRange(listUserCSKH);
+                    listIdNV.AddRange(listUserSale.Select(x=>x.Id).ToList());
+                    listIdNV.AddRange(listUserCSKH.Select(x=>x.Id).ToList());
+                }
                 var query = await BuildFilterExpression3(request.Filters);
                 var numOfRecords = listNV.Count();
                 var model = _customerLinkRepository.FindByPredicate(query);
-
+                var count = model.Count();
                 if (request.SortBy != null)
                 {
                     model = AddSort(model, request.SortBy);
@@ -850,11 +909,27 @@ namespace RefferalLinks.Service.Implementation
                 var teamNames = _teamRespository.GetAllTeamNames();
                 var branhNames = _teamRespository.GetAllbranhName();
                 //var listNV = _userespository.GetListByRole("Sale");
-                var listIdSale = model.Select(x=>x.Customer.ApplicationUserId).Distinct().ToList();
-
-
+                //listIdNV.AddRange(model.Select(x=>x.Customer.ApplicationUserId).Distinct().ToList());
+                var searchTeam = request.Filters != null ? request.Filters.Find(x => x.FieldName == "teamId") : null;
+                if(searchTeam != null)
+                {
+                    //var test = _userespository.FindByPredicate(x => x.TeamId.Equals(Guid.Parse(searchTeam.Value))).Select(x => new {id= x.Id, name =x.UserName }).ToList();
+                    listIdNV.Clear();
+                    listIdNV.AddRange(_userespository.FindByPredicate(x => x.TeamId.Equals(Guid.Parse(searchTeam.Value))).Select(x => x.Id).ToList());
+                    listNV.Clear();
+                    listNV.AddRange(_userespository.FindByPredicate(x => x.TeamId.Equals(Guid.Parse(searchTeam.Value))).ToList());
+                }
+                var searchSale = request.Filters != null ? request.Filters.Find(x => x.FieldName == "sale") : null;
+                if (searchSale != null)
+                {
+                    //var test = _userespository.FindByPredicate(x => x.Id.Equals(searchSale.Value)).Select(x => new { id = x.Id, name = x.UserName }).ToList();
+                    listIdNV.Clear();
+                    listIdNV.AddRange(_userespository.FindByPredicate(x => x.Id.Equals(searchSale.Value)).Select(x => x.Id).ToList());
+                    listNV.Clear();
+                    listNV.AddRange(_userespository.FindByPredicate(x => x.Id.Equals(searchSale.Value)).ToList());
+                }
                 var List = listNV
-                    .Where(c => listIdSale.Contains(c.Id))
+                    .Where(c => listIdNV.Contains(c.Id))
                     .Skip(startIndex)
                     .Take(pageSize)
                     .Select(x => new StatisticalStatusDto
@@ -867,17 +942,30 @@ namespace RefferalLinks.Service.Implementation
                        ? branhNames[x.TeamId.Value] : string.Empty,
                         BranchId = x.BranchId,
                         Sale = x.UserName,
-                        Approved = model.Count(y => y.Customer.ApplicationUserId == x.Id && y.Status == StatusCustomerLink.Approved),
-                        Pending = model.Count(y => y.Customer.ApplicationUserId == x.Id && ( y.Status == StatusCustomerLink.Pending || y.Status == null)),
-                        Rejected = model.Count(y => y.Customer.ApplicationUserId == x.Id && y.Status == StatusCustomerLink.Rejected),
-                        Cancel = model.Count(y => y.Customer.ApplicationUserId == x.Id && y.Status == StatusCustomerLink.Cancel),
-                        Total = model.Count(y => y.Customer.ApplicationUserId == x.Id),
+                        Approved = model.Count(y =>(y.Customer.ApplicationUserId == x.Id || y.Customer.CSKHId == x.Id) && y.Status == StatusCustomerLink.Approved),
+                        Pending = model.Count(y => (y.Customer.ApplicationUserId == x.Id || y.Customer.CSKHId == x.Id) && ( y.Status == StatusCustomerLink.Pending || y.Status == null)),
+                        Rejected = model.Count(y => (y.Customer.ApplicationUserId == x.Id || y.Customer.CSKHId == x.Id) && y.Status == StatusCustomerLink.Rejected),
+                        Cancel = model.Count(y => (y.Customer.ApplicationUserId == x.Id || y.Customer.CSKHId == x.Id) && y.Status == StatusCustomerLink.Cancel),
+                        Total = model.Count(y => (y.Customer.ApplicationUserId == x.Id || y.Customer.CSKHId == x.Id)),
                     })
                     .ToList();
-
+                List.Add(new StatisticalStatusDto
+                {
+                    Id = null,
+                    TeamId = null,
+                    TeamName = "",
+                    BranchName = "",
+                    BranchId = null,
+                    Sale = "Tổng số trạng thái khách hàng",
+                    Approved = model.Count(y =>  y.Status == StatusCustomerLink.Approved),
+                    Pending = model.Count(y =>  (y.Status == StatusCustomerLink.Pending || y.Status == null)),
+                    Rejected = model.Count(y =>  y.Status == StatusCustomerLink.Rejected),
+                    Cancel = model.Count(y =>  y.Status == StatusCustomerLink.Cancel),
+                    Total = model.Count(),
+                });
                 var searchUserResult = new SearchResponse<StatisticalStatusDto>
                 {
-                    TotalRows = listIdSale.Count(),
+                    TotalRows = listIdNV.Count(),
                     TotalPages = CalculateNumOfPages(numOfRecords, pageSize),
                     CurrentPage = pageIndex,
                     Data = List,
@@ -968,7 +1056,7 @@ namespace RefferalLinks.Service.Implementation
                                 break;
                             case "teamId":
                                 if (userRole == "Teamleader" || userRole == "Sale") break;
-                                predicate = predicate.And(m => m.Customer.ApplicationUser.TeamId.ToString().Contains(filter.Value));
+                                predicate = predicate.And(m => m.Customer.ApplicationUser.TeamId.ToString().Contains(filter.Value) || m.Customer.CSKH.TeamId.ToString().Contains(filter.Value));
                                 break;
                             case "sale":
                                 predicate = predicate.And(m => m.Customer.ApplicationUserId.Contains(filter.Value));
