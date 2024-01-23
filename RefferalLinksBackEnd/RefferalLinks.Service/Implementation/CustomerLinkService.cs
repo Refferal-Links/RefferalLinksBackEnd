@@ -76,6 +76,7 @@ namespace RefferalLinks.Service.Implementation
                     CamPaignName = x.LinkTemplate.Campaign.Name,
                     CreatedOn = x.CreatedOn,
                     InforCustomer = String.Format("Name:{0} , Email:{1} , Cccd:{2} , PhoneNumber:{3} , PassPort:{4}  ", x.Customer.Name, x.Customer.Email, x.Customer.Passport, x.Customer.PhoneNumber, x.Customer.Passport),
+                    ProvinceId = x.Customer.ProvinceId,
 
                 }).ToList();
                 result.BuildResult(list);
@@ -239,6 +240,7 @@ namespace RefferalLinks.Service.Implementation
                         NoteCSKH = x.NoteCSKH,
                         ProvinceName = x.Customer.Province.Name,
                         ExchangeLead = x.Status == StatusCustomerLink.Approved ? x.LinkTemplate.ExchangeLead : "",
+                        ProvinceId = x.Customer.ProvinceId
                     })
                     .ToList();
                 foreach (var item in List)

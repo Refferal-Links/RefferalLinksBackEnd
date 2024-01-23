@@ -53,7 +53,7 @@ namespace RefferalLinks.Service.Implementation
                 var query = await BuildFilterExpression2(Filters);
                 var users = _userRepository.FindByPredicate(query);
                 var UserList = users.ToList();
-                var dtoList = UserList.Select(x =>
+                var dtoList = UserList.OrderBy(x=>x.UserName).Select(x =>
                 {
                     var user = new UserModel
                     {
@@ -116,7 +116,7 @@ namespace RefferalLinks.Service.Implementation
                 var query = await BuildFilterExpression2(Filters);
                 var users = _userRepository.FindByPredicate(query);
                 var UserList = users.ToList();
-                var dtoList = UserList.Select(x =>
+                var dtoList = UserList.OrderBy(x => x.UserName).Select(x =>
                 {
                     var user = new UserModel
                     {
@@ -630,7 +630,7 @@ namespace RefferalLinks.Service.Implementation
                     default:
                         break;
                 }
-
+                predicate = predicate.And(x => x.LockoutEnabled == true);
                 return predicate;
             }
             catch (Exception)

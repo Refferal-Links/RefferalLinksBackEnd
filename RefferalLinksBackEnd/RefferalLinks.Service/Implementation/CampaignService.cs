@@ -95,7 +95,7 @@ namespace RefferalLinks.Service.Implementation
 			var result = new AppResponse<List<CampaignDto>>();
 			try
 			{
-				var list = _campaignRepository.GetAll().Where(x => x.IsDeleted == false).Select(x => new CampaignDto
+				var list = _campaignRepository.GetAll().OrderBy(x => x.Name).Where(x => x.IsDeleted == false).Select(x => new CampaignDto
 				{
 					Id = x.Id,
 					Name = x.Name,
