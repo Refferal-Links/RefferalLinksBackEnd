@@ -585,15 +585,19 @@ namespace RefferalLinks.Service.Implementation
 
                 if (!string.IsNullOrEmpty(request.Note))
                 {
-                    int count = CountOccurrences(customerLink.Note , "Lần thứ ") + 1;
-                    customerLink.Note += $" / - Lần thứ {count} : {request.Note}"; 
+                    int count = CountOccurrences(customerLink.Note, "Lần thứ ") + 1;
+                    customerLink.Note += $" / - Lần thứ {count} : {request.Note}";
                 }
                 if (!string.IsNullOrEmpty(request.NoteCSKH))
                 {
-                    int count = CountOccurrences(customerLink.NoteCSKH , "Lần thứ ") + 1;
+                    int count = CountOccurrences(customerLink.NoteCSKH, "Lần thứ ") + 1;
                     customerLink.NoteCSKH += $" / - Lần thứ {count} : {request.NoteCSKH}";
                 }
-
+                if(userRole == "Admin" || userRole == "superadmin")
+                {
+                    customerLink.Note = request.Note;
+                    customerLink.NoteCSKH = request.NoteCSKH;
+                }
                 customerLink.Status = request.Status.Value;
                 customerLink.ModifiedOn = DateTime.UtcNow;
                 
