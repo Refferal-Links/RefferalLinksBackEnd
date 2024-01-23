@@ -81,7 +81,7 @@ namespace RefferalLinks.Service.Implementation
 				{
 					Id = x.Id,
 					Name = x.Name,
-				}).ToList();
+				}).OrderBy(x => x.Name).ToList();
 				result.BuildResult(list);
 			}
 			catch (Exception ex)

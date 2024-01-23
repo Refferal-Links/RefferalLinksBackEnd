@@ -67,8 +67,15 @@ namespace RefferalLinks.API.Controllers
             MemoryStream stream = new MemoryStream(ex);
             return File(stream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "SelectedRows.xlsx");
         }
-
 		[HttpPost]
+        [Route("search2")]
+        public async Task<IActionResult> Search2(SearchRequest request)
+        {
+            var result = await _customerService.SearchUpdate(request);
+            return Ok(result);
+        }
+
+        [HttpPost]
 		public IActionResult Create(CustomerLinkDto request)
 		{
 			var result = _customerService.Create(request);

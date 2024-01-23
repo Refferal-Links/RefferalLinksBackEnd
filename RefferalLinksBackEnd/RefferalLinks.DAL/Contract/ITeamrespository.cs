@@ -16,5 +16,6 @@ namespace RefferalLinks.DAL.Contract
         public IQueryable<Team> FindByPredicate(Expression<Func<Team, bool>> predicate);
         public string GetTeamById(Guid teamId);
         public Dictionary<Guid, string> GetAllTeamNames();
+        public Dictionary<Guid, string> GetAllbranhName();
     }
 }

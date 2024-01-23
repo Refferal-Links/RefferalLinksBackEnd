@@ -96,12 +96,11 @@ namespace RefferalLinks.DAL.Implementation
             return result;
 ;
         }
-        public List<ApplicationUser> GetListTeamLeader()
+        public IQueryable<ApplicationUser> GetListByRole(string Role)
         {
-            var role = _context.Roles.Where(x => x.Name == "Teamleader").First();
+            var role = _context.Roles.Where(x => x.Name == Role).First();
             var data = _context.Users
-            .Where(m => _context.UserRoles.Where(r => r.RoleId == role.Id).Select(r => r.UserId).Contains(m.Id))
-            .ToList();
+            .Where(m => _context.UserRoles.Where(r => r.RoleId == role.Id).Select(r => r.UserId).Contains(m.Id));
             var result = data != null ? data : null;
             return result;
         }

@@ -1,5 +1,6 @@
 ﻿using Maynghien.Common.Repository;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using RefferalLinks.DAL.Contract;
 using RefferalLinks.DAL.Models.Context;
 using RefferalLinks.DAL.Models.Entity;
@@ -37,6 +38,13 @@ namespace RefferalLinks.DAL.Implementation
         public Dictionary<Guid, string> GetAllTeamNames()
         {
             var teamNames = _context.Team.ToDictionary(team => team.Id, team => team.name);
+            // Replace Teams, TeamId, and TeamName with your actual entity and property names
+
+            return teamNames;
+        }
+        public Dictionary<Guid, string> GetAllbranhName()
+        {
+            var teamNames = _context.Team.Include(x => x.Branch).ToDictionary(team => team.Id, team => team.Branch.Name);
             // Replace Teams, TeamId, and TeamName with your actual entity and property names
 
             return teamNames;

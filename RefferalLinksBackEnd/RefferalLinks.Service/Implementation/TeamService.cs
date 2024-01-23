@@ -122,7 +122,7 @@ namespace RefferalLinks.Service.Implementation
             try
             {
                 var query = _teamRespository.GetAll().Where(x => x.IsDeleted == false).Include(x => x.Branch);
-                var list = query.Select(m => new TeamDto
+                var list = query.OrderBy(x=>x.name).Select(m => new TeamDto
                 {
                     Id = m.Id,
                     name = m.name,

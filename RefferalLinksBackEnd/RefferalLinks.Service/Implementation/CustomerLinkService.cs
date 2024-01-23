@@ -17,7 +17,9 @@ using RefferalLinks.DAL.Models.Entity;
 using RefferalLinks.Models.Dto;
 using RefferalLinks.Service.Contract;
 using static Maynghien.Common.Helpers.SearchHelper;
+using System.Text.RegularExpressions;
 namespace RefferalLinks.Service.Implementation
+   
 {
     public class CustomerLinkService : ICustomerLinkService
     {
@@ -74,6 +76,7 @@ namespace RefferalLinks.Service.Implementation
                     CamPaignName = x.LinkTemplate.Campaign.Name,
                     CreatedOn = x.CreatedOn,
                     InforCustomer = String.Format("Name:{0} , Email:{1} , Cccd:{2} , PhoneNumber:{3} , PassPort:{4}  ", x.Customer.Name, x.Customer.Email, x.Customer.Passport, x.Customer.PhoneNumber, x.Customer.Passport),
+                    ProvinceId = x.Customer.ProvinceId,
 
                 }).ToList();
                 result.BuildResult(list);
@@ -237,6 +240,7 @@ namespace RefferalLinks.Service.Implementation
                         NoteCSKH = x.NoteCSKH,
                         ProvinceName = x.Customer.Province.Name,
                         ExchangeLead = x.Status == StatusCustomerLink.Approved ? x.LinkTemplate.ExchangeLead : "",
+                        ProvinceId = x.Customer.ProvinceId
                     })
                     .ToList();
                 foreach (var item in List)
@@ -526,7 +530,20 @@ namespace RefferalLinks.Service.Implementation
                 throw;
             }
         }
+        static int CountOccurrences(string input, string pattern)
+        {
+            
+            if (input == null)
+            {
+                return 0;
+            }
 
+  
+            Regex regex = new Regex(Regex.Escape(pattern));
+            MatchCollection matches = regex.Matches(input);
+
+            return matches.Count;
+        }
         public AppResponse<string> StatusChange(CustomerLinkDto request)
         {
             var result = new AppResponse<string>();
@@ -565,10 +582,22 @@ namespace RefferalLinks.Service.Implementation
                     _customerlinkImageRepository.Add(customerLinkImage);
                 });
                 var customerLink = _customerLinkRepository.Get(request.Id.Value);
+
+                if (!string.IsNullOrEmpty(request.Note))
+                {
+                    int count = CountOccurrences(customerLink.Note , "Lần thứ ") + 1;
+                    customerLink.Note += $" / - Lần thứ {count} : {request.Note}"; 
+                }
+                if (!string.IsNullOrEmpty(request.NoteCSKH))
+                {
+                    int count = CountOccurrences(customerLink.NoteCSKH , "Lần thứ ") + 1;
+                    customerLink.NoteCSKH += $" / - Lần thứ {count} : {request.NoteCSKH}";
+                }
+
                 customerLink.Status = request.Status.Value;
                 customerLink.ModifiedOn = DateTime.UtcNow;
-                customerLink.Note = request.Note;
-                customerLink.NoteCSKH = request.NoteCSKH;
+                
+               
                 _customerLinkRepository.Edit(customerLink);
 
                 result.BuildResult("OK");
@@ -608,7 +637,7 @@ namespace RefferalLinks.Service.Implementation
                 }
                 int i = 0;
                 int stt = 1;
-                var listTeamLeader = _userespository.GetListTeamLeader();
+                var listTeamLeader = _userespository.GetListByRole("Teamleader").ToList();
                 var listNV = _userespository.GetAll();
                 foreach (var dto in data.Data.Data)
                 {
@@ -787,5 +816,179 @@ namespace RefferalLinks.Service.Implementation
             }
             return result;
         }
+
+
+
+        public async Task<AppResponse<SearchResponse<StatisticalStatusDto>>> SearchUpdate(SearchRequest request)
+        {
+            var result = new AppResponse<SearchResponse<StatisticalStatusDto>>();
+            try
+            {
+                var role = ClaimHelper.GetClainByName(_httpContextAccessor, "Roles");
+                var listNV = _userespository.GetListByRole("Sale");
+                var query = await BuildFilterExpression3(request.Filters);
+                var numOfRecords = listNV.Count();
+                var model = _customerLinkRepository.FindByPredicate(query);
+
+                if (request.SortBy != null)
+                {
+                    model = AddSort(model, request.SortBy);
+                }
+                if (request.SortBy == null)
+                {
+                    model = model.OrderByDescending(x => x.CreatedOn.Value);
+                }
+
+                int pageIndex = request.PageIndex ?? 1;
+                int pageSize = request.PageSize ?? 1;
+                int startIndex = (pageIndex - 1) * pageSize;
+
+                var teamNames = _teamRespository.GetAllTeamNames();
+                var branhNames = _teamRespository.GetAllbranhName();
+                //var listNV = _userespository.GetListByRole("Sale");
+                var listIdSale = model.Select(x=>x.Customer.ApplicationUserId).Distinct().ToList();
+
+
+                var List = listNV
+                    .Where(c => listIdSale.Contains(c.Id))
+                    .Skip(startIndex)
+                    .Take(pageSize)
+                    .Select(x => new StatisticalStatusDto
+                    {
+                        Id = Guid.Parse(x.Id),
+                        TeamId = x.TeamId,
+                        TeamName = x.TeamId.HasValue && teamNames.ContainsKey(x.TeamId.Value)
+                                       ? teamNames[x.TeamId.Value] : string.Empty,
+                        BranchName = x.TeamId.HasValue && branhNames.ContainsKey(x.TeamId.Value)
+                       ? branhNames[x.TeamId.Value] : string.Empty,
+                        BranchId = x.BranchId,
+                        Sale = x.UserName,
+                        Approved = model.Count(y => y.Customer.ApplicationUserId == x.Id && y.Status == StatusCustomerLink.Approved),
+                        Pending = model.Count(y => y.Customer.ApplicationUserId == x.Id && ( y.Status == StatusCustomerLink.Pending || y.Status == null)),
+                        Rejected = model.Count(y => y.Customer.ApplicationUserId == x.Id && y.Status == StatusCustomerLink.Rejected),
+                        Cancel = model.Count(y => y.Customer.ApplicationUserId == x.Id && y.Status == StatusCustomerLink.Cancel),
+                        Total = model.Count(y => y.Customer.ApplicationUserId == x.Id),
+                    })
+                    .ToList();
+
+                var searchUserResult = new SearchResponse<StatisticalStatusDto>
+                {
+                    TotalRows = listIdSale.Count(),
+                    TotalPages = CalculateNumOfPages(numOfRecords, pageSize),
+                    CurrentPage = pageIndex,
+                    Data = List,
+                };
+
+
+
+                result.BuildResult(searchUserResult);
+            }
+            catch (Exception ex)
+            {
+                return result.BuildError(ex.ToString());
+            }
+
+            return result;
+        }
+        private async Task<ExpressionStarter<Customerlink>> BuildFilterExpression3(IList<Filter> Filters)
+        {
+            try
+            {
+                var userRole = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.Role)?.Value;
+                var UserName = ClaimHelper.GetClainByName(_httpContextAccessor, "UserName");
+                var predicate = PredicateBuilder.New<Customerlink>(true);
+                var user = await _userManager.FindByNameAsync(UserName);
+                switch (userRole)
+                {
+
+                    case "Teamleader":
+
+
+                        predicate = predicate.And(m => m.Customer.ApplicationUser.TeamId.ToString().Contains(user.TeamId.ToString()) || m.Customer.CSKH.TeamId.ToString().Contains(user.TeamId.ToString()));
+
+                        break;
+
+                    case "Sale":
+                        predicate = predicate.And(m => m.Customer.ApplicationUserId.Contains(user.Id));
+                        break;
+                    case "CSKH":
+                        predicate = predicate.And(m => m.Customer.CSKHId.Contains(user.Id));
+                        break;
+                    case "SUP":
+                        {
+                            var listTeam = _teamRespository.FindBy(x => x.Branch.Id == user.BranchId).ToList();
+                            foreach (var team in listTeam)
+                            {
+                                predicate = predicate.Or(x => x.Customer.ApplicationUser.TeamId == team.Id);
+                            }
+                        }
+                        break;
+                    default:
+                        break;
+                }
+
+                if (Filters != null)
+                {
+                    foreach (var filter in Filters)
+                    {
+                        switch (filter.FieldName)
+                        {
+                            case "createOn":
+                                {
+                                    string[] dateStrings = filter.Value.Split(',');
+                                    var dayStart = DateTime.ParseExact(dateStrings[0], "dd/MM/yyyy", System.Globalization.CultureInfo.InvariantCulture);
+
+                                    predicate = predicate.And(m => m.CreatedOn.Value.Date >= dayStart);
+                                    if (dateStrings[1] != null)
+                                    {
+                                        var dayEnd = DateTime.ParseExact(dateStrings[1], "dd/MM/yyyy", System.Globalization.CultureInfo.InvariantCulture);
+                                        predicate = predicate.And(m => m.CreatedOn.Value.Date <= dayEnd);
+                                    }
+                                }
+                                break;
+                            case "modifiedOn":
+                                {
+                                    string[] dateStrings = filter.Value.Split(',');
+                                    var dayStart = DateTime.ParseExact(dateStrings[0], "dd/MM/yyyy", System.Globalization.CultureInfo.InvariantCulture);
+
+                                    predicate = predicate.And(m => m.ModifiedOn.Value.Date >= dayStart);
+                                    if (dateStrings[1] != null)
+                                    {
+                                        var dayEnd = DateTime.ParseExact(dateStrings[1], "dd/MM/yyyy", System.Globalization.CultureInfo.InvariantCulture);
+                                        predicate = predicate.And(m => m.ModifiedOn.Value.Date <= dayEnd);
+                                    }
+                                }
+                                break;
+                            case "branchId":
+                                predicate = predicate.And(m => m.Customer.ApplicationUser.BranchId.Equals(Guid.Parse(filter.Value)));
+                                break;
+                            case "teamId":
+                                if (userRole == "Teamleader" || userRole == "Sale") break;
+                                predicate = predicate.And(m => m.Customer.ApplicationUser.TeamId.ToString().Contains(filter.Value));
+                                break;
+                            case "sale":
+                                predicate = predicate.And(m => m.Customer.ApplicationUserId.Contains(filter.Value));
+                                break;
+                            case "bankId":
+                                predicate = predicate.And(m => m.LinkTemplate.BankId.Equals(Guid.Parse(filter.Value)));
+                                break;
+                            case "campaignId":
+                                predicate = predicate.And(m => m.LinkTemplate.CampaignId.ToString().Contains(filter.Value));
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+                }
+
+                predicate = predicate.And(m => m.IsDeleted == false);
+                return predicate;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
     }
+
 }

@@ -18,7 +18,7 @@ namespace RefferalLinks.Service.Contract
         public Task<AppResponse<SearchResponse<CustomerLinkDto>>> Search(SearchRequest request);
         public AppResponse<List<CustomerLinkDto>> GetAll();
         public AppResponse<string> StatusChange(CustomerLinkDto request);
-
+        public Task<AppResponse<SearchResponse<StatisticalStatusDto>>> SearchUpdate(SearchRequest request);
         public Task<byte[]> ExportToExcel(SearchRequest request);
     }
 }
