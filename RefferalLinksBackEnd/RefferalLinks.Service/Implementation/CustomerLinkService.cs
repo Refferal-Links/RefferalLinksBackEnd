@@ -198,7 +198,8 @@ namespace RefferalLinks.Service.Implementation
                 }
                 if (request.SortBy == null)
                 {
-                    model = model.OrderByDescending(x => x.CreatedOn.Value);
+                    //model = model.OrderByDescending(x => x.CreatedOn.Value);
+                    model = model.OrderByDescending(x => x.Customer.Name);
                 }
                 int pageIndex = request.PageIndex ?? 1;
                 int pageSize = request.PageSize ?? 1;
@@ -893,12 +894,17 @@ namespace RefferalLinks.Service.Implementation
                 var numOfRecords = listNV.Count();
                 var model = _customerLinkRepository.FindByPredicate(query);
                 var count = model.Count();
+
+
+
+
                 if (request.SortBy != null)
                 {
                     model = AddSort(model, request.SortBy);
                 }
                 if (request.SortBy == null)
                 {
+                  
                     model = model.OrderByDescending(x => x.CreatedOn.Value);
                 }
 
@@ -1052,7 +1058,7 @@ namespace RefferalLinks.Service.Implementation
                                 }
                                 break;
                             case "branchId":
-                                predicate = predicate.And(m => m.Customer.ApplicationUser.BranchId.Equals(Guid.Parse(filter.Value)));
+                                predicate = predicate.And(m => m.Customer.ApplicationUser.TeamId.ToString().Contains(filter.Value));
                                 break;
                             case "teamId":
                                 if (userRole == "Teamleader" || userRole == "Sale") break;
