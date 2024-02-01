@@ -18,6 +18,9 @@ using RefferalLinks.Models.Dto;
 using RefferalLinks.Service.Contract;
 using static Maynghien.Common.Helpers.SearchHelper;
 using System.Text.RegularExpressions;
+using System.Collections.Generic;
+using Microsoft.AspNetCore.Server.Kestrel.Core.Internal.Infrastructure;
+
 namespace RefferalLinks.Service.Implementation
    
 {
@@ -893,6 +896,13 @@ namespace RefferalLinks.Service.Implementation
                 var numOfRecords = listNV.Count();
                 var model = _customerLinkRepository.FindByPredicate(query);
                 var count = model.Count();
+
+                int pageIndex = request.PageIndex ?? 1;
+                int pageSize = request.PageSize ?? 1;
+                int startIndex = (pageIndex - 1) * pageSize;
+
+                var teamNames = _teamRespository.GetAllTeamNames();
+                var branhNames = _teamRespository.GetAllbranhName();
                 if (request.SortBy != null)
                 {
                     model = AddSort(model, request.SortBy);
@@ -901,15 +911,6 @@ namespace RefferalLinks.Service.Implementation
                 {
                     model = model.OrderByDescending(x => x.CreatedOn.Value);
                 }
-
-                int pageIndex = request.PageIndex ?? 1;
-                int pageSize = request.PageSize ?? 1;
-                int startIndex = (pageIndex - 1) * pageSize;
-
-                var teamNames = _teamRespository.GetAllTeamNames();
-                var branhNames = _teamRespository.GetAllbranhName();
-                //var listNV = _userespository.GetListByRole("Sale");
-                //listIdNV.AddRange(model.Select(x=>x.Customer.ApplicationUserId).Distinct().ToList());
                 var searchTeam = request.Filters != null ? request.Filters.Find(x => x.FieldName == "teamId") : null;
                 if(searchTeam != null)
                 {
@@ -928,6 +929,11 @@ namespace RefferalLinks.Service.Implementation
                     listNV.Clear();
                     listNV.AddRange(_userespository.FindByPredicate(x => x.Id.Equals(searchSale.Value)).ToList());
                 }
+                if (request.SortBy != null)
+                {
+                    var listNvAfterSort = AddSort(listNV, request.SortBy,teamNames,branhNames);
+                    listNV = listNvAfterSort;
+                }
                 var List = listNV
                     .Where(c => listIdNV.Contains(c.Id))
                     .Skip(startIndex)
@@ -938,8 +944,8 @@ namespace RefferalLinks.Service.Implementation
                         TeamId = x.TeamId,
                         TeamName = x.TeamId.HasValue && teamNames.ContainsKey(x.TeamId.Value)
                                        ? teamNames[x.TeamId.Value] : string.Empty,
-                        BranchName = x.TeamId.HasValue && branhNames.ContainsKey(x.TeamId.Value)
-                       ? branhNames[x.TeamId.Value] : string.Empty,
+                        BranchName = x.TeamId.HasValue && branhNames.ContainsKey(x.BranchId.Value)
+                       ? branhNames[x.BranchId.Value] : string.Empty,
                         BranchId = x.BranchId,
                         Sale = x.UserName,
                         Approved = model.Count(y =>(y.Customer.ApplicationUserId == x.Id || y.Customer.CSKHId == x.Id) && y.Status == StatusCustomerLink.Approved),
@@ -1080,6 +1086,58 @@ namespace RefferalLinks.Service.Implementation
             {
                 throw;
             }
+        }
+        private List<ApplicationUser> AddSort(List<ApplicationUser> input, SortByInfo sortByInfo, Dictionary<Guid,string> Teams, Dictionary<Guid, string> Branchs)
+        {
+            var result = input;
+            switch (sortByInfo.FieldName)
+            {
+                case "branchName":
+                    {
+                        if (sortByInfo.Ascending != null && sortByInfo.Ascending.Value)
+                        {
+                            var sortBranch = Branchs.OrderBy(x => x.Value).ToDictionary(x => x.Key, x => x.Value);
+                            result = result.OrderBy(emp => {
+                                string branchName;
+                                if (sortBranch.TryGetValue((Guid)emp.BranchId, out branchName))
+                                {
+                                    return branchName;
+                                }
+                                return null;
+                            }).ToList();
+                        }
+                        else
+                        {
+                            var sortBranch = Branchs.OrderByDescending(x => x.Value).ToDictionary(x => x.Key, x => x.Value);
+                            result = result.OrderByDescending(emp => {
+                                string branchName;
+                                if (sortBranch.TryGetValue((Guid)emp.BranchId, out branchName))
+                                {
+                                    return branchName;
+                                }
+                                return null;
+                            }).ToList();
+                        }
+                    }
+                    break;
+                case "teamName":
+                    {
+                        if (sortByInfo.Ascending != null && sortByInfo.Ascending.Value)
+                        {
+                            var sortTeam = Teams.OrderBy(x => x.Value).ToList();
+                            result = result.OrderBy(emp => sortTeam.First(team => team.Key == emp.TeamId).Value).ToList();
+                        }
+                        else
+                        {
+                            var sortTeam = Teams.OrderByDescending(x => x.Value).ToList();
+                            result = result.OrderByDescending(emp => sortTeam.First(team => team.Key == emp.TeamId).Value).ToList();
+                        }
+                    }
+                    break;
+                default:
+                    break;
+            }
+            return result;
         }
     }
 

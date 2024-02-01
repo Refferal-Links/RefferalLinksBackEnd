@@ -44,10 +44,10 @@ namespace RefferalLinks.DAL.Implementation
         }
         public Dictionary<Guid, string> GetAllbranhName()
         {
-            var teamNames = _context.Team.Include(x => x.Branch).ToDictionary(team => team.Id, team => team.Branch.Name);
+            var branchNames = _context.Branch.ToDictionary(branch => branch.Id, team => team.Name);
             // Replace Teams, TeamId, and TeamName with your actual entity and property names
 
-            return teamNames;
+            return branchNames;
         }
     }
 }
