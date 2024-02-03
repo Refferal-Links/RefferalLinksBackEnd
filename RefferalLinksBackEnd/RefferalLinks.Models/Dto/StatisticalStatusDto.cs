@@ -24,11 +24,14 @@ namespace RefferalLinks.Models.Dto
         public int? Rejected { get; set; }
         public int? Cancel { get; set; }
         public int? Total { get; set; }
+        public string? TotalString { get; set; }
         
         public Guid? BankId { get; set; }
         public Guid? CampaignId { get; set; }
         public string? CreateOn { get; set; }
         public string? ModifiedOn { get; set;}
+
+        public double? TotalLead { get; set; }
 
     }
 }

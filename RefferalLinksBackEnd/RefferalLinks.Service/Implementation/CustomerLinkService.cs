@@ -931,6 +931,25 @@ namespace RefferalLinks.Service.Implementation
                     listNV.Clear();
                     listNV.AddRange(_userespository.FindByPredicate(x => x.Id.Equals(searchSale.Value)).ToList());
                 }
+                var searchNVActive = request.Filters != null ? request.Filters.Find(x => x.FieldName == "nvActive") : null;
+                if (searchNVActive != null)
+                {
+                    var isActive = searchNVActive.Value == "True" ? true : false;
+                    if (searchTeam != null)
+                    {
+                        listIdNV.Clear();
+                        listIdNV.AddRange(_userespository.FindByPredicate(x => x.LockoutEnabled == isActive && x.TeamId.Equals(Guid.Parse(searchTeam.Value))).Select(x => x.Id).ToList());
+                        listNV.Clear();
+                        listNV.AddRange(_userespository.FindByPredicate(x => x.LockoutEnabled == isActive && x.TeamId.Equals(Guid.Parse(searchTeam.Value))).ToList());
+                    }
+                    else
+                    {
+                        listIdNV.Clear();
+                        listIdNV.AddRange(_userespository.FindByPredicate(x => x.LockoutEnabled == isActive).Select(x => x.Id).ToList());
+                        listNV.Clear();
+                        listNV.AddRange(_userespository.FindByPredicate(x => x.LockoutEnabled == isActive).ToList());
+                    }
+                }
                 if (request.SortBy != null)
                 {
                     var listNvAfterSort = AddSort(listNV, request.SortBy,teamNames,branhNames);
@@ -955,6 +974,8 @@ namespace RefferalLinks.Service.Implementation
                         Rejected = model.Count(y => (y.Customer.ApplicationUserId == x.Id || y.Customer.CSKHId == x.Id) && y.Status == StatusCustomerLink.Rejected),
                         Cancel = model.Count(y => (y.Customer.ApplicationUserId == x.Id || y.Customer.CSKHId == x.Id) && y.Status == StatusCustomerLink.Cancel),
                         Total = model.Count(y => (y.Customer.ApplicationUserId == x.Id || y.Customer.CSKHId == x.Id)),
+                        TotalString = "<b>" + model.Count(y => (y.Customer.ApplicationUserId == x.Id || y.Customer.CSKHId == x.Id)).ToString() + "</b>",
+                        //TotalLead = model.Where(y=> (y.Customer.ApplicationUserId == x.Id || y.Customer.CSKHId == x.Id) && y.Status == StatusCustomerLink.Approved && y.LinkTemplate.ExchangeLead != null).Include(l => l.LinkTemplate).Select(lead => lead.LinkTemplate.ExchangeLead).ToList().Sum(x=> Convert.ToDouble(x))
                     })
                     .ToList();
                 List.Add(new StatisticalStatusDto
@@ -965,11 +986,12 @@ namespace RefferalLinks.Service.Implementation
                     BranchName = "",
                     BranchId = null,
                     Sale = "Tổng số trạng thái khách hàng",
-                    Approved = model.Count(y =>  y.Status == StatusCustomerLink.Approved),
-                    Pending = model.Count(y =>  (y.Status == StatusCustomerLink.Pending || y.Status == null)),
-                    Rejected = model.Count(y =>  y.Status == StatusCustomerLink.Rejected),
-                    Cancel = model.Count(y =>  y.Status == StatusCustomerLink.Cancel),
+                    Approved = model.Count(y => y.Status == StatusCustomerLink.Approved),
+                    Pending = model.Count(y => (y.Status == StatusCustomerLink.Pending || y.Status == null)),
+                    Rejected = model.Count(y => y.Status == StatusCustomerLink.Rejected),
+                    Cancel = model.Count(y => y.Status == StatusCustomerLink.Cancel),
                     Total = model.Count(),
+                    TotalString = "<b>" + model.Count() + "</b>",
                 });
                 var searchUserResult = new SearchResponse<StatisticalStatusDto>
                 {
@@ -1075,6 +1097,12 @@ namespace RefferalLinks.Service.Implementation
                             case "campaignId":
                                 predicate = predicate.And(m => m.LinkTemplate.CampaignId.ToString().Contains(filter.Value));
                                 break;
+                            case "nvActive":
+                                {
+                                    var active = filter.Value == "True" ? true : false;
+                                    predicate = predicate.And(m => m.Customer.ApplicationUser.LockoutEnabled == active || m.Customer.CSKH.LockoutEnabled == active);
+                                }
+                                break;
                             default:
                                 break;
                         }
@@ -1126,13 +1154,39 @@ namespace RefferalLinks.Service.Implementation
                     {
                         if (sortByInfo.Ascending != null && sortByInfo.Ascending.Value)
                         {
-                            var sortTeam = Teams.OrderBy(x => x.Value).ToList();
-                            result = result.OrderBy(emp => sortTeam.First(team => team.Key == emp.TeamId).Value).ToList();
+                            var sortBranch = Teams.OrderBy(x => x.Value).ToDictionary(x => x.Key, x => x.Value);
+                            result = result.OrderBy(emp => {
+                                string teamName;
+                                if (sortBranch.TryGetValue((Guid)emp.TeamId, out teamName))
+                                {
+                                    return teamName;
+                                }
+                                return null;
+                            }).ToList();
                         }
                         else
                         {
-                            var sortTeam = Teams.OrderByDescending(x => x.Value).ToList();
-                            result = result.OrderByDescending(emp => sortTeam.First(team => team.Key == emp.TeamId).Value).ToList();
+                            var sortBranch = Teams.OrderByDescending(x => x.Value).ToDictionary(x => x.Key, x => x.Value);
+                            result = result.OrderByDescending(emp => {
+                                string teamName;
+                                if (sortBranch.TryGetValue((Guid)emp.TeamId, out teamName))
+                                {
+                                    return teamName;
+                                }
+                                return null;
+                            }).ToList();
+                        }
+                    }
+                    break;
+                case "sale":
+                    {
+                        if (sortByInfo.Ascending != null && sortByInfo.Ascending.Value)
+                        {
+                            result = result.OrderBy(emp => emp.UserName).ToList();
+                        }
+                        else
+                        {
+                            result = result.OrderByDescending(emp =>emp.UserName ).ToList();
                         }
                     }
                     break;
