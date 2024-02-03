@@ -1108,7 +1108,11 @@ namespace RefferalLinks.Service.Implementation
                         }
                     }
                 }
-
+                var searchTime = Filters != null ? Filters.Where(x => x.FieldName == "modifiedOn" || x.FieldName == "createOn") : null;
+                if (searchTime == null || searchTime.Count() == 0)
+                {
+                    predicate = predicate.And(x => x.CreatedOn.Value.Month == DateTime.UtcNow.Month);
+                }
                 predicate = predicate.And(m => m.IsDeleted == false);
                 return predicate;
             }
