@@ -993,6 +993,8 @@ namespace RefferalLinks.Service.Implementation
                     Cancel = model.Count(y => y.Status == StatusCustomerLink.Cancel),
                     Total = model.Count(),
                     TotalString = "<b>" + model.Count() + "</b>",
+                    TotalLead = model.Where(y =>y.Status == StatusCustomerLink.Approved && y.LinkTemplate.ExchangeLead != null).Include(l => l.LinkTemplate)
+                        .Select(lead => lead.LinkTemplate.ExchangeLead).ToList().Sum(x => (double)Double.Parse(x))
                 });
                 var searchUserResult = new SearchResponse<StatisticalStatusDto>
                 {
