@@ -334,7 +334,7 @@ namespace RefferalLinks.Service.Implementation
             {
                 var Customeres  = _customerRespository.GetAll().Include(x => x.Province).ToList();
                 var list = Customeres.Select(x => {
-                    var code = _userespository.FindByPredicate(m => m.Id == x.ApplicationUserId).FirstOrDefault().RefferalCode;
+                    //var code = _userespository.FindByPredicate(m => m.Id == x.ApplicationUserId).FirstOrDefault().RefferalCode;
                     var customerDto = new CustomerDto();
                     customerDto = _mapper.Map<CustomerDto>(x);
                     //customerDto.CustomerLinks = new List<CustomerLinkDto>();
