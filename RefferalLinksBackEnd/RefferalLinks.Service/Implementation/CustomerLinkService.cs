@@ -859,12 +859,15 @@ namespace RefferalLinks.Service.Implementation
                     {
                         var listUser = _userespository.GetListByRole("CSKH").Where(x => x.TeamId == teamId).ToList();
                         listNV.AddRange(listUser);
-                        
+                        var leader = _userespository.GetListByRole("Teamleader").Where(x => x.TeamId == teamId).ToList();
+                        listNV.AddRange(leader);
                     }
                     else if(typeTeam == "Sale")
                     {
                         var listUser = _userespository.GetListByRole("Sale").Where(x => x.TeamId == teamId).ToList();
                         listNV.AddRange(listUser);
+                        var leader = _userespository.GetListByRole("Teamleader").Where(x => x.TeamId == teamId).ToList();
+                        listNV.AddRange(leader);
                     }
                     listIdNV.AddRange(_userespository.FindByPredicate(x => x.TeamId == teamId).Select(x => x.Id).ToList());
                 }
@@ -880,18 +883,23 @@ namespace RefferalLinks.Service.Implementation
                     Guid branchId = user.BranchId.Value;
                     var listUserSale = _userespository.GetListByRole("Sale").Where(x => x.BranchId == branchId).ToList();
                     var listUserCSKH = _userespository.GetListByRole("CSKH").Where(x => x.BranchId == branchId).ToList();
+                    var listUserLeader = _userespository.GetListByRole("Teamleader").Where(x => x.BranchId == branchId).ToList();
                     listNV.AddRange(listUserSale);
                     listNV.AddRange(listUserCSKH);
+                    listNV.AddRange(listUserLeader);
                     listIdNV.AddRange(_userespository.FindByPredicate(x => x.BranchId == branchId).Select(x => x.Id).ToList());
                 }
                 else if(role =="Admin" || role == "superadmin")
                 {
                     var listUserSale = _userespository.GetListByRole("Sale").ToList();
                     var listUserCSKH = _userespository.GetListByRole("CSKH").ToList();
+                    var listUserLeader = _userespository.GetListByRole("Teamleader").ToList();
                     listNV.AddRange(listUserSale);
                     listNV.AddRange(listUserCSKH);
+                    listNV.AddRange(listUserLeader);
                     listIdNV.AddRange(listUserSale.Select(x=>x.Id).ToList());
                     listIdNV.AddRange(listUserCSKH.Select(x=>x.Id).ToList());
+                    listIdNV.AddRange(listUserLeader.Select(x=>x.Id).ToList());
                 }
                 var query = await BuildFilterExpression3(request.Filters);
                 var numOfRecords = listNV.Count();
@@ -976,7 +984,7 @@ namespace RefferalLinks.Service.Implementation
                         Total = model.Count(y => (y.Customer.ApplicationUserId == x.Id || y.Customer.CSKHId == x.Id)),
                         TotalString = "<b>" + model.Count(y => (y.Customer.ApplicationUserId == x.Id || y.Customer.CSKHId == x.Id)).ToString() + "</b>",
                         TotalLead = model.Where(y => (y.Customer.ApplicationUserId == x.Id || y.Customer.CSKHId == x.Id) && y.Status == StatusCustomerLink.Approved && y.LinkTemplate.ExchangeLead != null).Include(l => l.LinkTemplate)
-                        .Select(lead => lead.LinkTemplate.ExchangeLead).ToList().Sum(x => (double)Double.Parse(x))
+                        .Select(lead => lead.LinkTemplate.ExchangeLead.Replace(".",",")).ToList().Sum(x => (double)Double.Parse(x))
                     })
                     .ToList();
                 List.Add(new StatisticalStatusDto
@@ -994,7 +1002,7 @@ namespace RefferalLinks.Service.Implementation
                     Total = model.Count(),
                     TotalString = "<b>" + model.Count() + "</b>",
                     TotalLead = model.Where(y =>y.Status == StatusCustomerLink.Approved && y.LinkTemplate.ExchangeLead != null).Include(l => l.LinkTemplate)
-                        .Select(lead => lead.LinkTemplate.ExchangeLead).ToList().Sum(x => (double)Double.Parse(x))
+                        .Select(lead => lead.LinkTemplate.ExchangeLead.Replace(".", ",")).ToList().Sum(x => (double)Double.Parse(x))
                 });
                 var searchUserResult = new SearchResponse<StatisticalStatusDto>
                 {
