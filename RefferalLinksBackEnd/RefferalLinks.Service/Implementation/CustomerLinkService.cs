@@ -984,7 +984,7 @@ namespace RefferalLinks.Service.Implementation
                         Total = model.Count(y => (y.Customer.ApplicationUserId == x.Id || y.Customer.CSKHId == x.Id)),
                         TotalString = "<b>" + model.Count(y => (y.Customer.ApplicationUserId == x.Id || y.Customer.CSKHId == x.Id)).ToString() + "</b>",
                         TotalLead = model.Where(y => (y.Customer.ApplicationUserId == x.Id || y.Customer.CSKHId == x.Id) && y.Status == StatusCustomerLink.Approved && y.LinkTemplate.ExchangeLead != null).Include(l => l.LinkTemplate)
-                        .Select(lead => lead.LinkTemplate.ExchangeLead.Replace(".",",")).ToList().Sum(x => (double)Double.Parse(x))
+                        .Select(lead => lead.LinkTemplate.ExchangeLead).ToList().Sum(x => (double)Double.Parse(x))
                     })
                     .ToList();
                 List.Add(new StatisticalStatusDto
@@ -1002,7 +1002,7 @@ namespace RefferalLinks.Service.Implementation
                     Total = model.Count(),
                     TotalString = "<b>" + model.Count() + "</b>",
                     TotalLead = model.Where(y =>y.Status == StatusCustomerLink.Approved && y.LinkTemplate.ExchangeLead != null).Include(l => l.LinkTemplate)
-                        .Select(lead => lead.LinkTemplate.ExchangeLead.Replace(".", ",")).ToList().Sum(x => (double)Double.Parse(x))
+                        .Select(lead => lead.LinkTemplate.ExchangeLead).ToList().Sum(x => (double)Double.Parse(x))
                 });
                 var searchUserResult = new SearchResponse<StatisticalStatusDto>
                 {
