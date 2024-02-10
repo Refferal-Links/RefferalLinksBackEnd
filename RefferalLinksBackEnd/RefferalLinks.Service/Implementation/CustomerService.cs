@@ -429,5 +429,33 @@ namespace RefferalLinks.Service.Implementation
                 throw;
             }
         }
+
+        public AppResponse<int> findPhoneNumber(PhonePassportDto customer)
+ {
+            var result = new AppResponse<int>();
+            try
+            {
+                var findcustomer = _customerRespository.FindByPredicate(x => x.PhoneNumber == customer.PhoneNumber || x.Passport == customer.Passport).FirstOrDefault();
+                if (findcustomer != null)
+                {
+                   
+                    result.BuildResult(1);
+                }
+                else
+                {
+                    
+                    result.BuildResult(0);
+                }
+
+              
+                return result;
+            }
+            catch (Exception ex)
+            {
+               
+                result.BuildError(ex.Message);
+                return result;
+            }
+        }
     }
 }

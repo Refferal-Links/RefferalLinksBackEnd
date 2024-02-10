@@ -17,5 +17,6 @@ namespace RefferalLinks.Service.Contract
         AppResponse<string> Delete(Guid Id);
         Task<AppResponse<CustomerDto>> Create(CustomerDto request);
         AppResponse<SearchResponse<CustomerDto>> Search(SearchRequest request);
+        AppResponse<int> findPhoneNumber(PhonePassportDto customer);
     }
 }

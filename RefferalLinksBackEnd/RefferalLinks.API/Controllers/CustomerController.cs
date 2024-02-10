@@ -58,5 +58,12 @@ namespace RefferalLinks.API.Controllers
 			var result =_customerService.Search(request);
 			return Ok(result);
 		}
-	}
+        [HttpPost]
+        [Route("findPhoneNumber")]
+		public IActionResult findphoneNumber(PhonePassportDto request)
+		{
+			var result = _customerService.findPhoneNumber(request);
+			return Ok(result);
+		}
+    }
 }
