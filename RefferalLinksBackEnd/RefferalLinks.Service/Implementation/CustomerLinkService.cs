@@ -610,6 +610,13 @@ namespace RefferalLinks.Service.Implementation
                     int count = CountOccurrences(customerLink.NoteCSKH, "Lần thứ ") + 1;
                     customerLink.NoteCSKH += $" / - Lần thứ {count} : {request.NoteCSKH}";
                 }
+
+                if(request.Status == StatusCustomerLink.Approved && customerLink.CountAprove == null)
+                {
+                    customerLink.CountAprove = 1;
+                    customerLink.AproveFirst = DateTime.Now;
+                }
+
                 if(userRole == "Admin" || userRole == "superadmin")
                 {
                     customerLink.Note = request.Note;
@@ -644,7 +651,7 @@ namespace RefferalLinks.Service.Implementation
 {
     "STT","Họ tên khách hàng", "PhoneNumber", "Căn cước công dân", "Email", "Ngày đăng kí thành công",
     "Dự án", "Sản phẩm", "Code Sale", "Tên Team", "Tên Quản Lý", "Tên Sale","Tên CSKH","Code CSKH",
-    "Trạng thái", "Nguồn khách hàng", "Ghi chú Sale","Ghi chú CSKH", "Ngày hỗ trợ mới nhất" , "Tỉnh thành","Quy đổi Lead",
+    "Trạng thái", "Nguồn khách hàng", "Ghi chú Sale","Ghi chú CSKH", "Ngày hỗ trợ mới nhất" , "Tỉnh thành","Quy đổi Lead","Lần đầu chuyển sang Aprove",
 };//17
                 var worksheet = package.Workbook.Worksheets.Add("SelectedRows");
                 var UserName = ClaimHelper.GetClainByName(_httpContextAccessor, "UserName");
@@ -654,7 +661,7 @@ namespace RefferalLinks.Service.Implementation
                 }
                 for (int ic = 1; ic <= 4; ic++)
                 {
-                    worksheet.Cells[1, 20 + 1 + ic].Value = $"Ảnh {ic}";
+                    worksheet.Cells[1, 21 + 1 + ic].Value = $"Ảnh {ic}";
                 }
                 int i = 0;
                 int stt = 1;
@@ -691,6 +698,7 @@ namespace RefferalLinks.Service.Implementation
                     worksheet.Cells[i + 2, 19].Value = dto.ModifiedOn;
                     worksheet.Cells[i + 2 , 20].Value = dto.ProvinceName;
                     worksheet.Cells[i + 2, 21].Value = dto.Status == StatusCustomerLink.Approved ? dto.ExchangeLead : "";
+                    worksheet.Cells[i + 2, 22].Value = dto.AproveFirst;
                     var leader = listTeamLeader.Find(x=>x.TeamId == dto.TeamId);
                     //foreach (var t in getleader)
                     //{
@@ -707,7 +715,7 @@ namespace RefferalLinks.Service.Implementation
 
                     for (int j = 0; j < GetallImg.Count; j++)
                     {
-                        worksheet.Cells[rowIndex, 21 + j + 1].Value = dto.ListCustomerlinkImage[j].LinkImage;
+                        worksheet.Cells[rowIndex, 22 + j + 1].Value = dto.ListCustomerlinkImage[j].LinkImage;
                     }
                     i++;
                     stt++;
@@ -762,7 +770,8 @@ namespace RefferalLinks.Service.Implementation
                         NoteCSKH = x.NoteCSKH,
                         ProvinceName = x.Customer.Province.Name,
                         ExchangeLead = x.LinkTemplate.ExchangeLead ,
-                    })
+                        AproveFirst = x.AproveFirst.Value.AddSeconds(1).ToString("dd/MM/yyyy-HH:mm:ss"),
+            })
                     .ToList();
 
 

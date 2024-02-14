@@ -18,6 +18,8 @@ namespace RefferalLinks.DAL.Models.Entity
 
         public string? Url { get; set; }
         public StatusCustomerLink? Status { get; set; }
+        public DateTime? AproveFirst {  get; set; }
+        public int? CountAprove {  get; set; }
         public string? Note { get; set; }
         public bool? Watched { get; set; }
         public string? NoteCSKH { get; set; }

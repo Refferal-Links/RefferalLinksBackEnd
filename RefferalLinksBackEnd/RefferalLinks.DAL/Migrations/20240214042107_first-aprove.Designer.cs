@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using RefferalLinks.DAL.Models.Context;
 
@@ -11,9 +12,10 @@ using RefferalLinks.DAL.Models.Context;
 namespace RefferalLinks.DAL.Migrations
 {
     [DbContext(typeof(RefferalLinksDbContext))]
-    partial class RefferalLinksDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240214042107_first-aprove")]
+    partial class firstaprove
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -409,9 +411,6 @@ namespace RefferalLinks.DAL.Migrations
 
                     b.Property<DateTime?>("AproveFirst")
                         .HasColumnType("datetime2");
-
-                    b.Property<int?>("CountAprove")
-                        .HasColumnType("int");
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("nvarchar(max)");
