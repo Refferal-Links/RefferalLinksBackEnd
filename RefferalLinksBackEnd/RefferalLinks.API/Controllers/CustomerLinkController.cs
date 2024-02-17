@@ -54,10 +54,10 @@ namespace RefferalLinks.API.Controllers
             return Ok(result);
         }
         [HttpPut]
-        [Route("AcceptCancel")]
-        public IActionResult AcceptCancel(Guid Id)
+        [Route("AcceptCancel/{Id}/{value}")]
+        public IActionResult AcceptCancel(Guid Id, bool value)
         {
-            var result = _customerService.AcceptCancel(Id);
+            var result = _customerService.AcceptCancel(Id,value);
             return Ok(result);
         }
 

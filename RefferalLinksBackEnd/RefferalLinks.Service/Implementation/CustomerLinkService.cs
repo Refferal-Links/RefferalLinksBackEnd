@@ -516,15 +516,23 @@ namespace RefferalLinks.Service.Implementation
                             case "statusText":
                                 {
                                     var value = int.Parse(filter.Value);
-                                    StatusCustomerLink status = (StatusCustomerLink)Enum.ToObject(typeof(StatusCustomerLink), value);
-                                    if (value == 0)
+                                    if(value == 4)
                                     {
-                                        predicate = predicate.And(m => m.Status == status || m.Status == null);
+                                        predicate = predicate.And(m => m.CustomerCancel != null && m.CustomerCancel == false);
                                     }
                                     else
                                     {
-                                        predicate = predicate.And(m => m.Status == status);
+                                        StatusCustomerLink status = (StatusCustomerLink)Enum.ToObject(typeof(StatusCustomerLink), value);
+                                        if (value == 0)
+                                        {
+                                            predicate = predicate.And(m => m.Status == status || m.Status == null);
+                                        }
+                                        else
+                                        {
+                                            predicate = predicate.And(m => m.Status == status);
+                                        }
                                     }
+                                    
                                 }
                                 break;
                             case "nvCSKH":
@@ -566,7 +574,7 @@ namespace RefferalLinks.Service.Implementation
             return matches.Count;
         }
 
-        public AppResponse<string> AcceptCancel(Guid Id)
+        public AppResponse<string> AcceptCancel(Guid Id, bool value)
         {
             var result = new AppResponse<string>();
             try
@@ -574,23 +582,20 @@ namespace RefferalLinks.Service.Implementation
                 var UserName = ClaimHelper.GetClainByName(_httpContextAccessor, "UserName");
                 var userRole = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.Role)?.Value;
                 var customerLink = _customerLinkRepository.FindByPredicate(x => x.Id == Id).FirstOrDefault(x => x.IsDeleted == false);
-                //var customerLink = _customerLinkRepository.Get(Id);
-                if (userRole == "Admin" || userRole == "superadmin")
+                
+                if (customerLink == null)
                 {
-                    if(customerLink != null)
-                    {
-                        customerLink.CustomerCancel = true;
-                        customerLink.Status = StatusCustomerLink.Cancel;
-                    }
-                    else
-                    {
-                        return result.BuildError("Khong ton tai khach hang nay");
-                    }
-                  
+                    return result.BuildError("Khong ton tai khach hang nay");
+                }
+                //var customerLink = _customerLinkRepository.Get(Id);
+                if (value == true)
+                {
+                    customerLink.CustomerCancel = true;
+                    customerLink.Status = StatusCustomerLink.Cancel;
                 }
                 else
                 {
-                    customerLink.CustomerCancel = false;
+                    customerLink.CustomerCancel = true;
                 }
                 _customerLinkRepository.Edit(customerLink);
             }
@@ -619,10 +624,10 @@ namespace RefferalLinks.Service.Implementation
                 //{
                 //    return result.BuildError("Bạn không có đủ quyền để cancle hồ sơ");
                 //}
-                //if (request.ListCustomerlinkImage == null)
-                //{
-                //    return result.BuildError("Không để trống danh sách hình ảnh");
-                //}
+                if (request.ListCustomerlinkImage == null)
+                {
+                    return result.BuildError("Không để trống danh sách hình ảnh");
+                }
                 var listCustomerLinkImage = _customerlinkImageRepository.GetAll().Where(x => x.CustomerLinkId == request.Id).ToList();
                 if (listCustomerLinkImage != null)
                 {
@@ -674,13 +679,12 @@ namespace RefferalLinks.Service.Implementation
                     }
                     else
                     {
-                        customerLink.Status = StatusCustomerLink.CustomerCancel;
                         customerLink.CustomerCancel = false;
-
                     }
                 }
                 else
                 {
+                    customerLink.CustomerCancel = true;
                     customerLink.Status = request.Status.Value;
                 }
 

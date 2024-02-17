@@ -12,6 +12,5 @@ namespace RefferalLinks.Common.Enum
         Approved,
         Rejected,
         Cancel,
-        CustomerCancel
     }
 }
