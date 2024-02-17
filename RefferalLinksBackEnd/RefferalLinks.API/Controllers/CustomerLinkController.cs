@@ -53,7 +53,15 @@ namespace RefferalLinks.API.Controllers
             var result = await _customerService.Search(request);
             return Ok(result);
         }
-		[HttpPut]
+        [HttpPut]
+        [Route("AcceptCancel")]
+        public IActionResult AcceptCancel(Guid Id)
+        {
+            var result = _customerService.AcceptCancel(Id);
+            return Ok(result);
+        }
+
+        [HttpPut]
 		[Route("StatusChange")]
 		public IActionResult StatusChange(CustomerLinkDto request)
 		{

@@ -20,5 +20,6 @@ namespace RefferalLinks.Service.Contract
         public AppResponse<string> StatusChange(CustomerLinkDto request);
         public Task<AppResponse<SearchResponse<StatisticalStatusDto>>> SearchUpdate(SearchRequest request);
         public Task<byte[]> ExportToExcel(SearchRequest request);
+        public AppResponse<string> AcceptCancel(Guid Id);
     }
 }

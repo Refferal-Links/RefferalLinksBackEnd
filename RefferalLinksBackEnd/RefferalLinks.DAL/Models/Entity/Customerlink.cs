@@ -23,7 +23,7 @@ namespace RefferalLinks.DAL.Models.Entity
         public string? Note { get; set; }
         public bool? Watched { get; set; }
         public string? NoteCSKH { get; set; }
-
+        public bool? CustomerCancel { get; set; }
 
         [ForeignKey("LinkTemplate")]
         public Guid? LinkTemplateId { get; set; }

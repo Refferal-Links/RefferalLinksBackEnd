@@ -56,5 +56,6 @@ namespace RefferalLinks.Models.Dto
         public Guid? ProvinceId { get; set; }
         public string? ProvinceName { get; set; }
         public string? ExchangeLead { get; set; }
+        public bool? CustomerCancel { get; set; }
     }
 }
