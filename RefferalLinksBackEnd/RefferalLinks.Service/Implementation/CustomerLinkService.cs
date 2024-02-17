@@ -674,7 +674,7 @@ namespace RefferalLinks.Service.Implementation
                     }
                     else
                     {
-         
+                        customerLink.Status = StatusCustomerLink.CustomerCancel;
                         customerLink.CustomerCancel = false;
 
                     }

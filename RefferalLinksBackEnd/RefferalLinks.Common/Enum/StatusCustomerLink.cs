@@ -11,6 +11,7 @@ namespace RefferalLinks.Common.Enum
         Pending,
         Approved,
         Rejected,
-        Cancel
+        Cancel,
+        CustomerCancel
     }
 }
