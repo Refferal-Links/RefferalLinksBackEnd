@@ -672,7 +672,7 @@ namespace RefferalLinks.Service.Implementation
 
                 if (request.Status == StatusCustomerLink.Cancel)
                 {
-                    if (userRole == "Admin" || userRole == "superadmin")
+                    if (userRole == "Admin" || userRole == "superadmin" || userRole == "SUP" || userRole == "Teamleader")
                     {
                         customerLink.CustomerCancel = true;
                         customerLink.Status = request.Status.Value;

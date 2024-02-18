@@ -435,10 +435,15 @@ namespace RefferalLinks.Service.Implementation
             var result = new AppResponse<int>();
             try
             {
+                var userName = ClaimHelper.GetClainByName(_httpContextAccessor, "UserName");
+                var user =_userespository.FindByPredicate(x=>x.UserName == userName).FirstOrDefault();
                 var findcustomer = _customerRespository.FindByPredicate(x => x.PhoneNumber == customer.PhoneNumber || x.Passport == customer.Passport).FirstOrDefault();
-                if (findcustomer != null)
+                if (findcustomer != null  && findcustomer.ApplicationUserId != user.Id)
                 {
-                   
+                    if(findcustomer.CSKHId == user.Id)
+                    {
+                        return result.BuildResult(0);
+                    }
                     result.BuildResult(1);
                 }
                 else
