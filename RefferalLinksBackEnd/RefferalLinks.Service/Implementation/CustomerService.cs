@@ -90,7 +90,11 @@ namespace RefferalLinks.Service.Implementation
                     {
                         customer.ApplicationUserId = sale.Id;
                     }
-                    
+                    if(sale == null)
+                    {
+                        var temp =(await _userManager.FindByNameAsync("testsale@msfn.com.vn"));
+                        customer.ApplicationUserId = temp.Id;
+                    }
                 }
                 customer.Email = customer.Email != null ?  customer.Email + "@gmail.com" : null ;
                 customer.Name = customer.Name.ToUpper();
