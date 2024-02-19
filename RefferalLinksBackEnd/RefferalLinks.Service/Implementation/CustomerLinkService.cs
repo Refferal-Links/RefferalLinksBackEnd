@@ -204,8 +204,8 @@ namespace RefferalLinks.Service.Implementation
                 }
                 if (request.SortBy == null)
                 {
-                    //model = model.OrderByDescending(x => x.CreatedOn.Value);
-                    model = model.OrderByDescending(x => x.Customer.Name);
+                    model = model.OrderByDescending(x => x.CreatedOn.Value);
+                    //model = model.OrderByDescending(x => x.Customer.Name);
                 }
                 int pageIndex = request.PageIndex ?? 1;
                 int pageSize = request.PageSize ?? 1;
@@ -548,7 +548,8 @@ namespace RefferalLinks.Service.Implementation
                 predicate = predicate.And(m => m.IsDeleted == false);
                 if (Filters == null)
                 {
-                    predicate = predicate.And(x => x.CreatedOn.Value.Month == DateTime.UtcNow.Month);
+                    var day = new DateTime(DateTime.UtcNow.Year, DateTime.UtcNow.Month,1);
+                    predicate = predicate.And(x => x.CreatedOn >= day);
                 }
                 return predicate;
 
