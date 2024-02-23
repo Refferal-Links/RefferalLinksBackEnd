@@ -431,10 +431,10 @@ namespace RefferalLinks.Service.Implementation
                         break;
 
                     case "Sale":
-                        predicate = predicate.And(m => m.Customer.ApplicationUserId.Contains(user.Id));
+                        predicate = predicate.And(m => m.Customer.ApplicationUserId.Contains(user.Id) || m.Customer.CSKHId.Contains(user.Id));
                         break;
                     case "CSKH":
-                        predicate = predicate.And(m => m.Customer.CSKHId.Contains(user.Id));
+                        predicate = predicate.And(m => m.Customer.CSKHId.Contains(user.Id) || m.Customer.ApplicationUserId.Contains(user.Id));
                         break;
                     case "SUP":
                         {
@@ -1114,10 +1114,10 @@ namespace RefferalLinks.Service.Implementation
                         break;
 
                     case "Sale":
-                        predicate = predicate.And(m => m.Customer.ApplicationUserId.Contains(user.Id));
+                        predicate = predicate.And(m => m.Customer.ApplicationUserId.Contains(user.Id) || m.Customer.CSKHId.Contains(user.Id));
                         break;
                     case "CSKH":
-                        predicate = predicate.And(m => m.Customer.CSKHId.Contains(user.Id));
+                        predicate = predicate.And(m => m.Customer.CSKHId.Contains(user.Id) || m.Customer.ApplicationUserId.Contains(user.Id));
                         break;
                     case "SUP":
                         {
