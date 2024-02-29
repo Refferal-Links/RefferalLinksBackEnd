@@ -85,7 +85,8 @@ namespace RefferalLinks.Service.Implementation
                 else if(role == "CSKH" || typeTeam=="CSKH")
                 {
                     customer.CSKHId = user.Id;
-                    var sale = _userespository.UserWithCustomerCount();
+
+                    var sale = _userespository.UserWithCustomerCount(user.BranchId.Value);
                     if (sale != null)
                     {
                         customer.ApplicationUserId = sale.Id;

@@ -79,11 +79,11 @@ namespace RefferalLinks.DAL.Implementation
             _context.SaveChanges();
         }
 
-        public ApplicationUser UserWithCustomerCount()
+        public ApplicationUser UserWithCustomerCount(Guid IdChiNhanh)
         {
             var role = _context.Roles.Where(x => x.Name == "Sale").First();
             var userWithMinCustomers = _context.Users
-            .Where(x=>x.IsReceiveAllocation == true && x.LockoutEnabled == true)
+            .Where(x=>x.IsReceiveAllocation == true && x.LockoutEnabled == true && x.BranchId == IdChiNhanh)
             .Select(user => new
             {
                 User = user,

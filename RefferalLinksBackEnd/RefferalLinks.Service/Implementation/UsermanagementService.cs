@@ -572,7 +572,9 @@ namespace RefferalLinks.Service.Implementation
                             case "teamId":
                                 predicate = predicate.And(m=>m.TeamId.Equals(Guid.Parse(filter.Value)));
                                 break;
-
+                            case "branchId":
+                                predicate = predicate.And(m => m.BranchId.Equals(Guid.Parse(filter.Value)));
+                                break;
                             default:
 								break;
 						}
