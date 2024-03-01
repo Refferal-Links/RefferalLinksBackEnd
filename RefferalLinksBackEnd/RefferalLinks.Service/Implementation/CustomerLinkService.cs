@@ -546,7 +546,8 @@ namespace RefferalLinks.Service.Implementation
                     }
 
                 predicate = predicate.And(m => m.IsDeleted == false);
-                if (Filters == null)
+                var createon= Filters != null ? Filters.Where(x => x.FieldName == "createOn").FirstOrDefault() : null;
+                if (createon == null)
                 {
                     var day = new DateTime(DateTime.UtcNow.Year, DateTime.UtcNow.Month,1);
                     predicate = predicate.And(x => x.CreatedOn >= day);
@@ -744,9 +745,9 @@ namespace RefferalLinks.Service.Implementation
                     worksheet.Cells[rowIndex, 1].Value = stt;
                     worksheet.Cells[rowIndex, 2].Value = dto.Name.ToUpper();
                     worksheet.Cells[rowIndex, 3].Value = dto.PhoneNumber;
-                    worksheet.Cells[i + 2, 3].Value = dto.PhoneNumber;
+                    worksheet.Cells[i + 2, 3].Value = dto.PhoneNumber.Length < 6 ? dto.PhoneNumber : dto.PhoneNumber.Substring(0, 3) + "XXX" + dto.PhoneNumber.Substring(6);
                     worksheet.Cells[i + 2, 4].Value = dto.Passport;
-                    worksheet.Cells[i + 2, 5].Value = dto.Email;
+                    worksheet.Cells[i + 2, 5].Value = MaskEmail(dto.Email);
                     worksheet.Cells[i + 2, 6].Value = dto.CreatedOn.Value.AddHours(7).ToString("dd/MM/yyyy-HH:mm:ss");
                     worksheet.Cells[i + 2, 7].Value = dto.BankName;
                     worksheet.Cells[i + 2, 8].Value = dto.CamPaignName;
@@ -1281,6 +1282,20 @@ namespace RefferalLinks.Service.Implementation
                     break;
             }
             return result;
+        }
+
+        static string MaskEmail(string email)
+        {
+            int atIndex = email.IndexOf('@');
+            if (atIndex > 0)
+            {
+                int lengthToShow = Math.Min(atIndex, 3); // Số ký tự hiển thị là 3 hoặc ít hơn
+                string visiblePart = email.Substring(0, atIndex - lengthToShow); // Phần trước dấu '@' trừ đi số ký tự cần hiển thị
+                string maskedPart = new string('X', lengthToShow); // Phần bị ẩn
+                string domainPart = email.Substring(atIndex); // Phần sau dấu '@'
+                return visiblePart + maskedPart + domainPart;
+            }
+            return email;
         }
     }
 
