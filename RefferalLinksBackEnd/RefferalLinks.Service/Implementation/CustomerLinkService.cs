@@ -709,6 +709,7 @@ namespace RefferalLinks.Service.Implementation
         {
             request.Filters = request.Filters.Where(x => x.Value != "" && x.Value != null).ToList();
             var data = await Export(request);
+            var userRole = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.Role)?.Value;
             using (var package = new ExcelPackage())
             {
                 var columnHeaders = new string[]
@@ -745,9 +746,9 @@ namespace RefferalLinks.Service.Implementation
                     worksheet.Cells[rowIndex, 1].Value = stt;
                     worksheet.Cells[rowIndex, 2].Value = dto.Name.ToUpper();
                     worksheet.Cells[rowIndex, 3].Value = dto.PhoneNumber;
-                    worksheet.Cells[i + 2, 3].Value = dto.PhoneNumber.Length < 6 ? dto.PhoneNumber : dto.PhoneNumber.Substring(0, 3) + "XXX" + dto.PhoneNumber.Substring(6);
+                    worksheet.Cells[i + 2, 3].Value = userRole == "superadmin" ? dto.PhoneNumber : dto.PhoneNumber.Substring(0, 3) + "XXX" + dto.PhoneNumber.Substring(6);
                     worksheet.Cells[i + 2, 4].Value = dto.Passport;
-                    worksheet.Cells[i + 2, 5].Value = MaskEmail(dto.Email);
+                    worksheet.Cells[i + 2, 5].Value = userRole == "superadmin"? dto.Email : MaskEmail(dto.Email);
                     worksheet.Cells[i + 2, 6].Value = dto.CreatedOn.Value.AddHours(7).ToString("dd/MM/yyyy-HH:mm:ss");
                     worksheet.Cells[i + 2, 7].Value = dto.BankName;
                     worksheet.Cells[i + 2, 8].Value = dto.CamPaignName;
