@@ -253,7 +253,7 @@ namespace RefferalLinks.Service.Implementation
                     .ToList();
                 foreach (var item in List)
                 {
-                    var listImage = _customerlinkImageRepository.FindBy(x => x.CustomerLinkId == item.Id).ToList();
+                    var listImage = _customerlinkImageRepository.FindBy(x => x.CustomerLinkId == item.Id).OrderBy(x=>x.CreatedOn).ToList();
                     var count = listImage.Count();
                     item.Image1 = count >= 1 ? listImage[0].LinkImage : "";
                     item.Image2 = count >= 2 ? listImage[1].LinkImage : "";
