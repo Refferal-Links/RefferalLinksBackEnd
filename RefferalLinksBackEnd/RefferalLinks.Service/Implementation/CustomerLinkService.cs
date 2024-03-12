@@ -992,8 +992,17 @@ namespace RefferalLinks.Service.Implementation
                 }
                 if (request.SortBy == null)
                 {
-                  
+
                     model = model.OrderByDescending(x => x.CreatedOn.Value);
+                }
+                var searchBranch = request.Filters != null ? request.Filters.Find(x => x.FieldName == "branchId") : null;
+                if(searchBranch != null)
+                {
+                    //var test = _userespository.FindByPredicate(x => x.TeamId.Equals(Guid.Parse(searchTeam.Value))).Select(x => new {id= x.Id, name =x.UserName }).ToList();
+                    listIdNV.Clear();
+                    listIdNV.AddRange(_userespository.FindByPredicate(x => x.BranchId.Equals(Guid.Parse(searchBranch.Value))).Select(x => x.Id).ToList());
+                    listNV.Clear();
+                    listNV.AddRange(_userespository.FindByPredicate(x => x.BranchId.Equals(Guid.Parse(searchBranch.Value))).ToList());
                 }
                 var searchTeam = request.Filters != null ? request.Filters.Find(x => x.FieldName == "teamId") : null;
                 if(searchTeam != null)
@@ -1167,7 +1176,7 @@ namespace RefferalLinks.Service.Implementation
                                 }
                                 break;
                             case "branchId":
-                                predicate = predicate.And(m => m.Customer.ApplicationUser.TeamId.ToString().Contains(filter.Value));
+                                predicate = predicate.And(m => m.Customer.ApplicationUser.BranchId.Equals(Guid.Parse(filter.Value)) || m.Customer.CSKH.BranchId.Equals(Guid.Parse(filter.Value)));
                                 break;
                             case "teamId":
                                 if (userRole == "Teamleader" || userRole == "Sale") break;
