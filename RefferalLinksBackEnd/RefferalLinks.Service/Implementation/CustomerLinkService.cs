@@ -1026,20 +1026,14 @@ namespace RefferalLinks.Service.Implementation
                 if (searchNVActive != null)
                 {
                     var isActive = searchNVActive.Value == "True" ? true : false;
-                    if (searchTeam != null)
-                    {
-                        listIdNV.Clear();
-                        listIdNV.AddRange(_userespository.FindByPredicate(x => x.LockoutEnabled == isActive && x.TeamId.Equals(Guid.Parse(searchTeam.Value))).Select(x => x.Id).ToList());
-                        listNV.Clear();
-                        listNV.AddRange(_userespository.FindByPredicate(x => x.LockoutEnabled == isActive && x.TeamId.Equals(Guid.Parse(searchTeam.Value))).ToList());
-                    }
-                    else
-                    {
-                        listIdNV.Clear();
-                        listIdNV.AddRange(_userespository.FindByPredicate(x => x.LockoutEnabled == isActive).Select(x => x.Id).ToList());
-                        listNV.Clear();
-                        listNV.AddRange(_userespository.FindByPredicate(x => x.LockoutEnabled == isActive).ToList());
-                    }
+                    listNV = listNV.Where(x => x.LockoutEnabled == isActive).ToList();
+                    listIdNV = listNV.Select(x => x.Id).ToList();
+                }
+                else
+                {
+                    var isActive =  true;
+                    listNV = listNV.Where(x=>x.LockoutEnabled == isActive).ToList();
+                    listIdNV = listNV.Select(x=>x.Id).ToList();
                 }
                 if (request.SortBy != null)
                 {
