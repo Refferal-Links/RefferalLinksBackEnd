@@ -97,6 +97,10 @@ namespace RefferalLinks.Service.Implementation
                         customer.ApplicationUserId = temp.Id;
                     }
                 }
+                else if(role == "Admin" || role == "superadmin")
+                {
+                    customer.ApplicationUserId = request.SaleId.Value.ToString();
+                }
                 customer.Email = customer.Email != null ?  customer.Email + "@gmail.com" : null ;
                 customer.Name = customer.Name.ToUpper();
                 _customerRespository.Add(customer);

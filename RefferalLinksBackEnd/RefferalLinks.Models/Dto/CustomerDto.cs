@@ -19,8 +19,8 @@ namespace RefferalLinks.Models.Dto
         public string? Job { get; set; }
         public string Source { get; set; }
 
-        public string RefferalCode { get; set; }
-        public string TpBank { get; set; }
+        public string? RefferalCode { get; set; }
+        public string? TpBank { get; set; }
 
         public string? NameProvice { get; set; }
         public Guid? ProvinceId { get; set; }
@@ -29,5 +29,7 @@ namespace RefferalLinks.Models.Dto
 
         public Guid? CSKHId { get; set; }
         public string? CSKHName { get; set; }
+        public Guid? SaleId { get; set; }
+        public string? SaleName { get; set; }
     }
 }
