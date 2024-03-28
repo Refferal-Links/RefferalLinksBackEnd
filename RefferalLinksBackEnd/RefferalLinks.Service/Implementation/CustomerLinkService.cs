@@ -549,8 +549,12 @@ namespace RefferalLinks.Service.Implementation
                 var createon= Filters != null ? Filters.Where(x => x.FieldName == "createOn").FirstOrDefault() : null;
                 if (createon == null)
                 {
-                    var day = new DateTime(DateTime.UtcNow.Year, DateTime.UtcNow.Month,1);
-                    predicate = predicate.And(x => x.CreatedOn >= day);
+                    var modifiedOn = Filters != null ? Filters.Where(x => x.FieldName == "modifiedOn").FirstOrDefault() : null;
+                    if (modifiedOn == null)
+                    {
+                         var day = new DateTime(DateTime.UtcNow.Year, DateTime.UtcNow.Month,1);
+                        predicate = predicate.And(x => x.CreatedOn >= day);
+                    }
                 }
                 return predicate;
 

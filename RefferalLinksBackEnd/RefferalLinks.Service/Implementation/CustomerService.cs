@@ -58,7 +58,7 @@ namespace RefferalLinks.Service.Implementation
                     return result.BuildError("Không để trống mã giớ thiệu");
                 }
                 var user = _userespository.FindByPredicate(x => x.RefferalCode == request.RefferalCode).FirstOrDefault(x => x.RefferalCode == request.RefferalCode);
-                if (user == null)
+                if (user == null && (role != "superadmin") && role != "Admin")
                 {
                     return result.BuildError("không tìm thấy mã giới thiệu");
                 }
